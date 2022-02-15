@@ -25,3 +25,17 @@ TEST(ScriptExecutionContext, RunScriptWhichReturnsEmptyString_ReturnEmptyString)
         std::get<std::string>(result).empty()
     );
 }
+
+TEST(ScriptExecutionContext, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
+{
+    const std::string JSON = R"( 1 + 2; )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    auto result = ctx.runScript();
+
+    EXPECT_EQ(
+        1 + 2,
+        std::get<int>(result)
+    );
+}
