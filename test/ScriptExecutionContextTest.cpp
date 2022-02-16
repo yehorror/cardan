@@ -4,7 +4,7 @@
 using namespace testing;
 using namespace cardan;
 
-TEST(ScriptExecutionContext, CtorWithEmptyScriptDoesntThrow)
+TEST(ScriptExecutionContextTest, CtorWithEmptyScriptDoesntThrow)
 {
     const std::string JSON = "";
 
@@ -13,7 +13,7 @@ TEST(ScriptExecutionContext, CtorWithEmptyScriptDoesntThrow)
     );
 }
 
-TEST(ScriptExecutionContext, RunScriptWhichReturnsEmptyString_ReturnEmptyString)
+TEST(ScriptExecutionContextTest, RunScriptWhichReturnsEmptyString_ReturnEmptyString)
 {
     const std::string JSON = R"( "" )";
 
