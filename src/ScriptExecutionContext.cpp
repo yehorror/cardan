@@ -29,22 +29,31 @@ namespace cardan
     {
     }
 
-    std::variant<std::string, int> ScriptExecutionContext::runScript()
+    std::variant<std::string, int, JSException> ScriptExecutionContext::runScript()
     {
         v8::Local<v8::String> source =
             v8::String::NewFromUtf8(m_isolate.get(), m_jsCode.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
 
         v8::Local<v8::Script> script = v8::Script::Compile(m_context, source).ToLocalChecked();
 
-        v8::Local<v8::Value> result = script->Run(m_context).ToLocalChecked();
+        v8::TryCatch tryCatchHandler(m_isolate.get());
 
-        if (result->IsInt32())
+        auto scriptRunResult = script->Run(m_context);
+
+        if (tryCatchHandler.HasCaught())
         {
-            return result->ToInt32(m_context).ToLocalChecked()->Value();
+            return JSException();
         }
-        else if (result->IsString())
+
+        auto resultValue = scriptRunResult.ToLocalChecked();
+
+        if (resultValue->IsInt32())
         {
-            v8::String::Utf8Value utf8String(m_isolate.get(), result);
+            return resultValue->ToInt32(m_context).ToLocalChecked()->Value();
+        }
+        else if (resultValue->IsString())
+        {
+            v8::String::Utf8Value utf8String(m_isolate.get(), resultValue);
             return *utf8String;
         }
     }

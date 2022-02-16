@@ -39,3 +39,16 @@ TEST(ScriptExecutionContext, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
         std::get<int>(result)
     );
 }
+
+TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ReturnException)
+{
+    const std::string JSON = R"( throw 'This is exception'; )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    auto result = ctx.runScript();
+
+    EXPECT_TRUE(
+        std::holds_alternative<JSException>(result)
+    );
+}

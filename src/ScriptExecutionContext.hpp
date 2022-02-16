@@ -8,12 +8,16 @@
 
 namespace cardan
 {
+    class JSException : public std::exception
+    {
+    };
+
     class ScriptExecutionContext
     {
     public:
         ScriptExecutionContext(const std::string& src);
 
-        std::variant<std::string, int> runScript();
+        std::variant<std::string, int, JSException> runScript();
 
     private:
         const std::string m_jsCode;
