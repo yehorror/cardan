@@ -12,10 +12,15 @@ namespace cardan
     {
     };
 
+    struct ScriptExecutionContextConfig
+    {
+        bool rethrowExceptions = false;
+    };
+
     class ScriptExecutionContext
     {
     public:
-        ScriptExecutionContext(const std::string& src);
+        ScriptExecutionContext(const std::string& src, const ScriptExecutionContextConfig& config = {});
 
         std::variant<std::string, int, JSException> runScript();
 
@@ -35,5 +40,7 @@ namespace cardan
 
         v8::Local<v8::Context> m_context;
         v8::Context::Scope m_contextScope;
+
+        ScriptExecutionContextConfig m_config;
     };
 }

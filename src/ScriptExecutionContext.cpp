@@ -18,7 +18,7 @@ namespace cardan
         isolate->Dispose();
     }
 
-    ScriptExecutionContext::ScriptExecutionContext(const std::string& src)
+    ScriptExecutionContext::ScriptExecutionContext(const std::string& src, const ScriptExecutionContextConfig& config)
         : m_jsCode(src)
         , m_arrayBufferAllocator(v8::ArrayBuffer::Allocator::NewDefaultAllocator())
         , m_isolate(createIsolate(m_arrayBufferAllocator.get()))
@@ -26,6 +26,7 @@ namespace cardan
         , m_handleScope(m_isolate.get())
         , m_context(v8::Context::New(m_isolate.get()))
         , m_contextScope(m_context)
+        , m_config(config)
     {
     }
 
@@ -42,6 +43,10 @@ namespace cardan
 
         if (tryCatchHandler.HasCaught())
         {
+            if (m_config.rethrowExceptions)
+            {
+                throw JSException();
+            }
             return JSException();
         }
 

@@ -52,3 +52,18 @@ TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ReturnException)
         std::holds_alternative<JSException>(result)
     );
 }
+
+TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ConfiguredToRethrowException_ThrowException)
+{
+    const std::string JSON = R"( throw 'This is exception'; )";
+
+    ScriptExecutionContextConfig config;
+    config.rethrowExceptions = true;
+
+    ScriptExecutionContext ctx(JSON, config);
+
+    EXPECT_THROW(
+        ctx.runScript(),
+        JSException
+    );
+}
