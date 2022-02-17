@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "ScriptExecutionContext.hpp"
 
 using namespace testing;
@@ -65,5 +66,21 @@ TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ConfiguredToRethrowEx
     EXPECT_THROW(
         ctx.runScript(),
         JSException
+    );
+}
+
+TEST(ScriptExecutionContext, AddFunctionWithNoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+{
+    const std::string JSON = R"( testFunction(); )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<void()> mockFunction;
+    ctx.addFunction("testFunction", mockFunction.AsStdFunction());
+
+    EXPECT_CALL(mockFunction, Call());
+
+    EXPECT_NO_THROW(
+        ctx.runScript()
     );
 }

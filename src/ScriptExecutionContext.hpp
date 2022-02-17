@@ -3,6 +3,7 @@
 #include <string>
 #include <variant>
 
+#include <functional>
 #include <v8.h>
 #include <libplatform/libplatform.h>
 
@@ -23,6 +24,30 @@ namespace cardan
         ScriptExecutionContext(const std::string& src, const ScriptExecutionContextConfig& config = {});
 
         std::variant<std::string, int, JSException> runScript();
+
+    public: // Template methods, which needs to be defined inline
+
+        void addFunction(const std::string& funcName, std::function<void()> func)
+        {
+            auto funcTemplate = v8::FunctionTemplate::New(
+                m_isolate.get(), callCppFunction, v8::External::New(m_isolate.get(), &func)
+            );
+
+            m_context->Global()->Set(
+                m_context,
+                v8::String::NewFromUtf8(m_isolate.get(), funcName.c_str()).ToLocalChecked(),
+                funcTemplate->GetFunction(m_context).ToLocalChecked()
+            );
+        }
+
+    private:
+
+        static void callCppFunction(const v8::FunctionCallbackInfo<v8::Value>& info)
+        {
+            auto funcPtr = info.Data().As<v8::External>()->Value();
+            auto& function = *static_cast<std::function<void()>*>(funcPtr);
+            function();
+        }
 
     private:
         const std::string m_jsCode;
