@@ -9,4 +9,4 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/googletest googletest)
 add_executable(cardan-test ScriptExecutionContextTest.cpp CardanTest.cpp)
 
 target_include_directories(cardan-test PRIVATE ../src googletest/googletest/include)
-target_link_libraries(cardan-test PRIVATE cardan-lib gtest)
+target_link_libraries(cardan-test PRIVATE cardan-lib gtest gmock)
