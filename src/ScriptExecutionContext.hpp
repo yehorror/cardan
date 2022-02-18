@@ -37,7 +37,14 @@ namespace cardan
                 auto funcPtr = info.Data().As<v8::External>()->Value();
                 auto& function = *static_cast<std::function<FuncReturnType(FuncArgs...)>*>(funcPtr);
 
-                std::apply(function, details::packArguments<FuncArgs...>(info));
+                if constexpr (std::is_same_v<void, FuncReturnType>)
+                {
+                    std::apply(function, details::packArguments<FuncArgs...>(info));
+                }
+                else
+                {
+                    info.GetReturnValue().Set(std::apply(function, details::packArguments<FuncArgs...>(info)));
+                }
             };
 
             auto funcTemplate = v8::FunctionTemplate::New(

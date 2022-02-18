@@ -187,3 +187,26 @@ TEST(ScriptExecutionContext, AddTwoFunctions_CallThemFromJavascript_BothFunction
         ctx.runScript()
     );
 }
+
+TEST(ScriptExecutionContext, AddFunctionWhichReturnsIntValue_RunScriptWhichCallsThisFunction_ValueIsReturned)
+{
+    const std::string JSON = R"( testFunction(); )";
+
+    const int RETURNED_VALUE = 123;
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<int()> mockFunction;
+
+    auto stdFunction = mockFunction.AsStdFunction();
+    ctx.addFunction("testFunction", stdFunction);
+
+    EXPECT_CALL(mockFunction, Call()).WillOnce(Return(RETURNED_VALUE));
+
+    auto result = ctx.runScript();
+
+    EXPECT_EQ(
+        RETURNED_VALUE,
+        std::get<int>(result)
+    );
+}
