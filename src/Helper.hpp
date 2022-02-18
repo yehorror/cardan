@@ -4,6 +4,7 @@
 
 namespace cardan::details
 {
+    // TODO Consider moving convert functions into separate header
     static void convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value, int& out)
     {
         out = value->Int32Value(context).ToChecked();
@@ -43,9 +44,12 @@ namespace cardan::details
         return std::tuple<>();
     }
 
+    // TODO Consider moving convert functions into separate header
     template <class T>
     static void convertValueToV8ReturnValue(v8::Isolate* isolate, T value, v8::ReturnValue<v8::Value>& returnValue)
     {
+        // We can rely on SFINAE here
+        // It won't be a compile error if substitution of value type fails
         returnValue.Set(value);
     }
 
