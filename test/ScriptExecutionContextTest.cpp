@@ -140,3 +140,50 @@ TEST(ScriptExecutionContext, AddFunctionWithStringArgument_RunScriptWhichCallsTh
         ctx.runScript()
     );
 }
+
+TEST(ScriptExecutionContext, AddFunctionWithStringAndIntArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+{
+    const std::string JSON = R"( testFunction('hello', 123); )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<void(std::string, int)> mockFunction;
+
+    auto stdFunction = mockFunction.AsStdFunction();
+    ctx.addFunction("testFunction", stdFunction);
+
+    EXPECT_CALL(mockFunction, Call("hello", 123));
+
+    EXPECT_NO_THROW(
+        ctx.runScript()
+    );
+}
+
+TEST(ScriptExecutionContext, AddTwoFunctions_CallThemFromJavascript_BothFunctionsCalled)
+{
+    const std::string JSON = R"(
+        firstFunction('hello');
+        secondFunction(123);
+    )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<void(std::string)> mockFunction1;
+    MockFunction<void(int)> mockFunction2;
+
+    auto stdFunction1 = mockFunction1.AsStdFunction();
+    auto stdFunction2 = mockFunction2.AsStdFunction();
+
+    ctx.addFunction("firstFunction", stdFunction1);
+    ctx.addFunction("secondFunction", stdFunction2);
+
+    {
+        InSequence sequenceGuard;
+        EXPECT_CALL(mockFunction1, Call("hello"));
+        EXPECT_CALL(mockFunction2, Call(123));
+    }
+
+    EXPECT_NO_THROW(
+        ctx.runScript()
+    );
+}
