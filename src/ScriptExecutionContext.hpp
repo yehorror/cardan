@@ -10,9 +10,14 @@
 namespace cardan
 {
     // TODO Move all these helper methods to another header
-    static int convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    static void convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value, int& out)
     {
-        return value->Int32Value(context).ToChecked();
+        out = value->Int32Value(context).ToChecked();
+    }
+
+    static void convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value, std::string& out)
+    {
+        out = *v8::String::Utf8Value(context->GetIsolate(), value);
     }
 
     template <size_t Idx=0, class... Args>
@@ -20,7 +25,7 @@ namespace cardan
         std::tuple<Args...>& tuple, const v8::FunctionCallbackInfo<v8::Value>& info
     )
     {
-        std::get<Idx>(tuple) = convertArgumentFromV8Value(info.GetIsolate()->GetCurrentContext(), info[Idx]);
+        convertArgumentFromV8Value(info.GetIsolate()->GetCurrentContext(), info[Idx], std::get<Idx>(tuple));
         if constexpr (Idx < (std::tuple_size<std::tuple<Args...>>::value - 1))
         {
             packArgumentsHelper<Idx + 1, Args...>(tuple, info);
@@ -74,8 +79,6 @@ namespace cardan
 
                 std::apply(function, packArguments<FuncArgs...>(info));
             };
-
-
 
             auto funcTemplate = v8::FunctionTemplate::New(
                 m_isolate.get(), funcCallLambda, v8::External::New(m_isolate.get(), &func)
