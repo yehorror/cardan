@@ -42,4 +42,15 @@ namespace cardan::details
     {
         return std::tuple<>();
     }
+
+    template <class T>
+    static void convertValueToV8ReturnValue(v8::Isolate* isolate, T value, v8::ReturnValue<v8::Value>& returnValue)
+    {
+        returnValue.Set(value);
+    }
+
+    static void convertValueToV8ReturnValue(v8::Isolate* isolate, const std::string& value, v8::ReturnValue<v8::Value>& returnValue)
+    {
+        returnValue.Set(v8::String::NewFromUtf8(isolate, value.c_str()).ToLocalChecked());
+    }
 }

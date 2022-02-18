@@ -210,3 +210,26 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsIntValue_RunScriptWhichCalls
         std::get<int>(result)
     );
 }
+
+TEST(ScriptExecutionContext, AddFunctionWhichReturnsString_RunScriptWhichCallsThisFunction_StringIsReturned)
+{
+    const std::string JSON = R"( testFunction(); )";
+
+    const std::string RETURNED_VALUE = "some test value";
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<std::string()> mockFunction;
+
+    auto stdFunction = mockFunction.AsStdFunction();
+    ctx.addFunction("testFunction", stdFunction);
+
+    EXPECT_CALL(mockFunction, Call()).WillOnce(Return(RETURNED_VALUE));
+
+    auto result = ctx.runScript();
+
+    EXPECT_EQ(
+        RETURNED_VALUE,
+        std::get<std::string>(result)
+    );
+}
