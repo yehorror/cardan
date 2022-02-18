@@ -61,5 +61,7 @@ namespace cardan
             v8::String::Utf8Value utf8String(m_isolate.get(), resultValue);
             return *utf8String;
         }
+
+        return "";
     }
 }

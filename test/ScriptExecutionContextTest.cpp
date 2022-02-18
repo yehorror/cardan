@@ -71,12 +71,14 @@ TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ConfiguredToRethrowEx
 
 TEST(ScriptExecutionContext, AddFunctionWithNoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
 {
-    const std::string JSON = R"( testFunction(); )";
+    const std::string JSON = R"( testFunction1(); )";
 
     ScriptExecutionContext ctx(JSON);
 
     MockFunction<void()> mockFunction;
-    ctx.addFunction("testFunction", mockFunction.AsStdFunction());
+
+    auto stdFunction = mockFunction.AsStdFunction();
+    ctx.addFunction("testFunction1", stdFunction);
 
     EXPECT_CALL(mockFunction, Call());
 
@@ -84,3 +86,22 @@ TEST(ScriptExecutionContext, AddFunctionWithNoArguments_RunScriptWhichCallsThisF
         ctx.runScript()
     );
 }
+
+TEST(ScriptExecutionContext, AddFunctionWithOneArgument_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+{
+    const std::string JSON = R"( testFunction(123); )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<void(int)> mockFunction;
+
+    auto stdFunction = mockFunction.AsStdFunction();
+    ctx.addFunction("testFunction", stdFunction);
+
+    EXPECT_CALL(mockFunction, Call(123));
+
+    EXPECT_NO_THROW(
+        ctx.runScript()
+    );
+}
+
