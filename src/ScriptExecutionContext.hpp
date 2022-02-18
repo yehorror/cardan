@@ -6,19 +6,21 @@
 #include <functional>
 #include <v8.h>
 #include <libplatform/libplatform.h>
-#include <iostream>
 
 namespace cardan
 {
-    static int convertArgumentFromV8Value(v8::Local<v8::Value> /*value*/)
+    // TODO Move all these helper methods to another header
+    static int convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
     {
-        return 123;
+        return value->Int32Value(context).ToChecked();
     }
 
     template <size_t Idx=0, class... Args>
-    static void packArgumentsHelper(std::tuple<Args...>& tuple, const v8::FunctionCallbackInfo<v8::Value>& info)
+    static void packArgumentsHelper(
+        std::tuple<Args...>& tuple, const v8::FunctionCallbackInfo<v8::Value>& info
+    )
     {
-        std::get<Idx>(tuple) = convertArgumentFromV8Value(info[Idx]);
+        std::get<Idx>(tuple) = convertArgumentFromV8Value(info.GetIsolate()->GetCurrentContext(), info[Idx]);
         if constexpr (Idx < (std::tuple_size<std::tuple<Args...>>::value - 1))
         {
             packArgumentsHelper<Idx + 1, Args...>(tuple, info);
@@ -72,6 +74,8 @@ namespace cardan
 
                 std::apply(function, packArguments<FuncArgs...>(info));
             };
+
+
 
             auto funcTemplate = v8::FunctionTemplate::New(
                 m_isolate.get(), funcCallLambda, v8::External::New(m_isolate.get(), &func)

@@ -105,3 +105,20 @@ TEST(ScriptExecutionContext, AddFunctionWithOneArgument_RunScriptWhichCallsThisF
     );
 }
 
+TEST(ScriptExecutionContext, AddFunctionWithTwoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+{
+    const std::string JSON = R"( testFunction(123, 456); )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<void(int, int)> mockFunction;
+
+    auto stdFunction = mockFunction.AsStdFunction();
+    ctx.addFunction("testFunction", stdFunction);
+
+    EXPECT_CALL(mockFunction, Call(123, 456));
+
+    EXPECT_NO_THROW(
+        ctx.runScript()
+    );
+}
