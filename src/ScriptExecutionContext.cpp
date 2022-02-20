@@ -35,7 +35,14 @@ namespace cardan
         v8::Local<v8::String> source =
             v8::String::NewFromUtf8(m_isolate.get(), m_jsCode.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
 
-        v8::Local<v8::Script> script = v8::Script::Compile(m_context, source).ToLocalChecked();
+        v8::MaybeLocal<v8::Script> scriptCompileResult = v8::Script::Compile(m_context, source);
+
+        if (scriptCompileResult.IsEmpty())
+        {
+            throw InvalidJSCodeException();
+        }
+
+        v8::Local<v8::Script> script = scriptCompileResult.ToLocalChecked();
 
         v8::TryCatch tryCatchHandler(m_isolate.get());
 

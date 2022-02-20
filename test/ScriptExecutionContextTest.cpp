@@ -257,3 +257,15 @@ TEST(ScriptExecutionContext, RunScriptWithUndefinedResult_UndefinedIsReturned)
         std::holds_alternative<ScriptExecutionContext::Undefined>(result)
     );
 }
+
+TEST(ScriptExecutionContext, RunScriptWithInvalidJSCode_ThrowException)
+{
+    const std::string JSON = R"( definitely invalid js code )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    EXPECT_THROW(
+        ctx.runScript(),
+        InvalidJSCodeException
+    );
+}

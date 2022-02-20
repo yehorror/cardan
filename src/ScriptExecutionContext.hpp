@@ -15,6 +15,10 @@ namespace cardan
     {
     };
 
+    class InvalidJSCodeException : public std::exception
+    {
+    };
+
     struct ScriptExecutionContextConfig
     {
         bool rethrowExceptions = false;
