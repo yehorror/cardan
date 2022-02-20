@@ -18,7 +18,6 @@ namespace cardan::details
     }
 
     // Function overloads to convert C++ return values into JS return values
-
     template <class T>
     static void convertValueToV8ReturnValue(v8::Isolate* isolate, T value, v8::ReturnValue<v8::Value>& returnValue)
     {

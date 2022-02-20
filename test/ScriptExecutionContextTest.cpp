@@ -233,3 +233,27 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsString_RunScriptWhichCallsTh
         std::get<std::string>(result)
     );
 }
+
+TEST(ScriptExecutionContext, RunScriptWhichAddsTwoRealNumbers_DoubleIsReturned)
+{
+    const std::string JSON = R"( 0.1 + 0.2 )";
+
+    ScriptExecutionContext ctx(JSON);
+
+    auto result = ctx.runScript();
+
+    EXPECT_DOUBLE_EQ(0.3, std::get<double>(result));
+}
+
+TEST(ScriptExecutionContext, RunScriptWithUndefinedResult_UndefinedIsReturned)
+{
+    const std::string JSON = R"()";
+
+    ScriptExecutionContext ctx(JSON);
+
+    auto result = ctx.runScript();
+
+    EXPECT_TRUE(
+        std::holds_alternative<ScriptExecutionContext::Undefined>(result)
+    );
+}

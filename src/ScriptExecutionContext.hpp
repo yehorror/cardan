@@ -23,9 +23,13 @@ namespace cardan
     class ScriptExecutionContext
     {
     public:
+        using Undefined = std::monostate;
+        using ScriptRunResult = std::variant<std::string, int, double, JSException, Undefined>;
+
+    public:
         ScriptExecutionContext(const std::string& src, const ScriptExecutionContextConfig& config = {});
 
-        std::variant<std::string, int, JSException> runScript();
+        ScriptRunResult runScript();
 
     public: // Template methods, which needs to be defined inline
 
@@ -40,7 +44,7 @@ namespace cardan
                 m_context,
                 v8::String::NewFromUtf8(m_isolate.get(), funcName.c_str()).ToLocalChecked(),
                 funcTemplate->GetFunction(m_context).ToLocalChecked()
-            );
+            ).Check();
         }
 
     private:

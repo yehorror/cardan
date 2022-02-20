@@ -30,7 +30,7 @@ namespace cardan
     {
     }
 
-    std::variant<std::string, int, JSException> ScriptExecutionContext::runScript()
+    ScriptExecutionContext::ScriptRunResult ScriptExecutionContext::runScript()
     {
         v8::Local<v8::String> source =
             v8::String::NewFromUtf8(m_isolate.get(), m_jsCode.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
@@ -61,7 +61,11 @@ namespace cardan
             v8::String::Utf8Value utf8String(m_isolate.get(), resultValue);
             return *utf8String;
         }
+        else if (resultValue->IsNumber())
+        {
+            return resultValue->ToNumber(m_context).ToLocalChecked()->Value();
+        }
 
-        return "";
+        return ScriptExecutionContext::Undefined();
     }
 }
