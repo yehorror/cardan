@@ -38,7 +38,7 @@ namespace cardan
     public: // Template methods, which needs to be defined inline
 
         // TODO Move definition out of here (.inl file?)
-        template<class FuncReturnType, class... FuncArgs>
+        template <class FuncReturnType, class... FuncArgs>
         void addFunction(const std::string& funcName, std::function<FuncReturnType(FuncArgs...)>& func)
         {
             auto funcTemplate = v8::FunctionTemplate::New(

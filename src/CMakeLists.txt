@@ -10,6 +10,9 @@ add_library(cardan-lib
 
     Exceptions.hpp
 
+    Value.cpp
+    Value.hpp
+
     Helper.hpp
 )
 
