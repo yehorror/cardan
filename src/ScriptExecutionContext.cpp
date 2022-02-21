@@ -48,6 +48,7 @@ namespace cardan
 
         auto scriptRunResult = script->Run(m_context);
 
+        // TODO Maybe extract some information about exception from JS and put it in JSException here?
         if (tryCatchHandler.HasCaught())
         {
             if (m_config.rethrowExceptions)

@@ -11,6 +11,7 @@
 
 namespace cardan
 {
+    // TODO Move exceptions to separate header
     class JSException : public std::exception
     {
     };
@@ -19,15 +20,22 @@ namespace cardan
     {
     };
 
+    // TODO Think about compile-time configuration for it
     struct ScriptExecutionContextConfig
     {
         bool rethrowExceptions = false;
     };
 
+    // Context of script execution
+    // TODO:
+    // * JS function calling from C++
+    // * C++ classes binding into JS
+    // * Consider moving of script compilation out of this class
     class ScriptExecutionContext
     {
     public:
         using Undefined = std::monostate;
+        // TODO Don't use plain std::variant for script execution result; move to separate class
         using ScriptRunResult = std::variant<std::string, int, double, JSException, Undefined>;
 
     public:
@@ -37,6 +45,7 @@ namespace cardan
 
     public: // Template methods, which needs to be defined inline
 
+        // TODO Move definition out of here (.inl file?)
         template<class FuncReturnType, class... FuncArgs>
         void addFunction(const std::string& funcName, std::function<FuncReturnType(FuncArgs...)>& func)
         {
@@ -53,6 +62,7 @@ namespace cardan
 
     private:
 
+        // TODO Move definition out of here (.inl file?)
         template<class FuncReturnType, class... FuncArgs>
         static void callCppFunctionFromJS(const v8::FunctionCallbackInfo<v8::Value>& info)
         {
@@ -75,9 +85,11 @@ namespace cardan
         }
 
     private:
+        // Shouldn't we keep here compiled v8::Script?
         const std::string m_jsCode;
         std::unique_ptr<v8::ArrayBuffer::Allocator> m_arrayBufferAllocator;
 
+        // TODO Move isolate's guard declaration out of here
         struct IsolateDisposer
         {
             void operator() (v8::Isolate* isolate);
