@@ -1,5 +1,5 @@
 # cardan
-Simple adaptor for easy embedding of Javascript into C++ via V8
+A simple V8 wrapper for easy embedding of Javascript into C++
 
 ## TODO
 * Implement calling of JS functions from C++ code
