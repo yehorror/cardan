@@ -8,18 +8,10 @@
 #include <libplatform/libplatform.h>
 
 #include "Helper.hpp"
+#include "Exceptions.hpp"
 
 namespace cardan
 {
-    // TODO Move exceptions to separate header
-    class JSException : public std::exception
-    {
-    };
-
-    class InvalidJSCodeException : public std::exception
-    {
-    };
-
     // TODO Think about compile-time configuration for it
     struct ScriptExecutionContextConfig
     {

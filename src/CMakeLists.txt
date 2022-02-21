@@ -8,6 +8,8 @@ add_library(cardan-lib
     ScriptExecutionContext.cpp
     ScriptExecutionContext.hpp
 
+    Exceptions.hpp
+
     Helper.hpp
 )
 
