@@ -48,6 +48,14 @@ namespace cardan
 
         auto scriptRunResult = script->Run(m_context);
 
+        return processRunResult(scriptRunResult, tryCatchHandler);
+    }
+
+    ScriptExecutionContext::ScriptRunResult ScriptExecutionContext::processRunResult(
+        v8::MaybeLocal<v8::Value>& scriptRunResult,
+        v8::TryCatch& tryCatchHandler
+    )
+    {
         // TODO Maybe extract some information about exception from JS and put it in JSException here?
         if (tryCatchHandler.HasCaught())
         {

@@ -77,6 +77,10 @@ namespace cardan
         }
 
     private:
+
+        ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);
+
+    private:
         // Shouldn't we keep here compiled v8::Script?
         const std::string m_jsCode;
         std::unique_ptr<v8::ArrayBuffer::Allocator> m_arrayBufferAllocator;
