@@ -234,6 +234,29 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsString_RunScriptWhichCallsTh
     );
 }
 
+TEST(ScriptExecutionContext, AddFunctionWhichReturnsDouble_RunScriptWhichCallsThisFunction_DoubleIsReturned)
+{
+    const std::string JSON = R"( testFunction(); )";
+
+    const double RETURNED_VALUE = 0.5;
+
+    ScriptExecutionContext ctx(JSON);
+
+    MockFunction<double()> mockFunction;
+
+    auto stdFunction = mockFunction.AsStdFunction();
+    ctx.addFunction("testFunction", stdFunction);
+
+    EXPECT_CALL(mockFunction, Call()).WillOnce(Return(RETURNED_VALUE));
+
+    auto result = ctx.runScript();
+
+    EXPECT_DOUBLE_EQ(
+        RETURNED_VALUE,
+        std::get<double>(result)
+    );
+}
+
 TEST(ScriptExecutionContext, RunScriptWhichAddsTwoRealNumbers_DoubleIsReturned)
 {
     const std::string JSON = R"( 0.1 + 0.2 )";
