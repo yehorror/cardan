@@ -1,30 +1,34 @@
+#include <stdexcept>
 #include "Value.hpp"
 
 namespace cardan
 {
     std::string Value::asString()
     {
-        if (m_value->IsString())
+        if (isString())
         {
             v8::String::Utf8Value utf8String(m_isolate, m_value);
             return std::string(*utf8String, utf8String.length());
         }
+        throw std::runtime_error("Invalid value type");
     }
 
     int Value::asInt()
     {
-        if (m_value->IsInt32())
+        if (isInt())
         {
             return m_value->ToInt32(m_context).ToLocalChecked()->Value();
         }
+        throw std::runtime_error("Invalid value type");
     }
 
     double Value::asDouble()
     {
-        if (m_value->IsNumber())
+        if (isDouble())
         {
             return m_value->ToNumber(m_context).ToLocalChecked()->Value();
         }
+        throw std::runtime_error("Invalid value type");
     }
 
     bool Value::isUndefined()

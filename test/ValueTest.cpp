@@ -56,6 +56,33 @@ TEST(ValueTest, CreateDoubleValue_asDoubleReturnsValueWhichItWasCreatedWith)
     EXPECT_DOUBLE_EQ(123.456, value.asDouble());
 }
 
+TEST(ValueTest, CreateStringValue_TryToGetDouble_ExceptionOfWrongTypeIsThrown)
+{
+    ScriptExecutionContext ctx(" 'definitely not a double' ");
+    Value value = ctx.runScript();
+
+    ASSERT_FALSE(value.isDouble());
+    EXPECT_THROW(value.asDouble(), std::runtime_error);
+}
+
+TEST(ValueTest, CreateStringValue_TryToGetInt_ExceptionOfWrongTypeIsThrown)
+{
+    ScriptExecutionContext ctx(" 'definitely not an integer' ");
+    Value value = ctx.runScript();
+
+    ASSERT_FALSE(value.isInt());
+    EXPECT_THROW(value.asInt(), std::runtime_error);
+}
+
+TEST(ValueTest, CreateIntValue_TryToGetString_ExceptionOfWrongTypeIsThrown)
+{
+    ScriptExecutionContext ctx("123");
+    Value value = ctx.runScript();
+
+    ASSERT_FALSE(value.isString());
+    EXPECT_THROW(value.asString(), std::runtime_error);
+}
+
 TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)
 {
     ScriptExecutionContext ctx("undefined");
