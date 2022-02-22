@@ -83,6 +83,21 @@ TEST(ValueTest, CreateIntValue_TryToGetString_ExceptionOfWrongTypeIsThrown)
     EXPECT_THROW(value.asString(), std::runtime_error);
 }
 
+TEST(ValueTest, CreateArray_isArrayReturnsTrue)
+{
+    ScriptExecutionContext ctx("[12, 34]");
+    Value value = ctx.runScript();
+
+    EXPECT_TRUE(value.isArray());
+}
+
+TEST(ValueTest, CreateNotEmptyArray_isEmptyReturnsFalse)
+{
+    ScriptExecutionContext ctx("[12, 34]");
+    Value value = ctx.runScript();
+    v8::Local<v8::Value> val;
+}
+
 TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)
 {
     ScriptExecutionContext ctx("undefined");

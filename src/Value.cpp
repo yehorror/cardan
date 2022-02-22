@@ -51,10 +51,23 @@ namespace cardan
         return m_value->IsNumber();
     }
 
+    bool Value::isArray()
+    {
+        return m_value->IsArray();
+    }
+
     Value::Value(v8::Local<v8::Value> value, v8::Isolate* isolate, v8::Local<v8::Context>& context)
         : m_value(std::move(value))
         , m_isolate(isolate)
         , m_context(context)
     {
     }
+
+    Array::Array(v8::Local<v8::Array> array, v8::Isolate* isolate, v8::Local<v8::Context>& context)
+        : m_array(array)
+        , m_isolate(isolate)
+        , m_context(context)
+    {
+    }
+
 }
