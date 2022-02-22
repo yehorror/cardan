@@ -63,25 +63,11 @@ namespace cardan
             {
                 throw JSException();
             }
-            return JSException();
+            //return Value(JSException(), m_isolate.get(), m_context);
         }
 
         auto resultValue = scriptRunResult.ToLocalChecked();
 
-        if (resultValue->IsInt32())
-        {
-            return resultValue->ToInt32(m_context).ToLocalChecked()->Value();
-        }
-        else if (resultValue->IsString())
-        {
-            v8::String::Utf8Value utf8String(m_isolate.get(), resultValue);
-            return *utf8String;
-        }
-        else if (resultValue->IsNumber())
-        {
-            return resultValue->ToNumber(m_context).ToLocalChecked()->Value();
-        }
-
-        return ScriptExecutionContext::Undefined();
+        return Value(resultValue, m_isolate.get(), m_context);
     }
 }

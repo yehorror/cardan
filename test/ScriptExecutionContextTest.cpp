@@ -14,19 +14,6 @@ TEST(ScriptExecutionContextTest, CtorWithEmptyScriptDoesntThrow)
     );
 }
 
-TEST(ScriptExecutionContextTest, RunScriptWhichReturnsEmptyString_ReturnEmptyString)
-{
-    const std::string JSON = R"( "" )";
-
-    ScriptExecutionContext ctx(JSON);
-
-    auto result = ctx.runScript();
-
-    EXPECT_TRUE(
-        std::get<std::string>(result).empty()
-    );
-}
-
 TEST(ScriptExecutionContext, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
 {
     const std::string JSON = R"( 1 + 2; )";
@@ -37,20 +24,7 @@ TEST(ScriptExecutionContext, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
 
     EXPECT_EQ(
         1 + 2,
-        std::get<int>(result)
-    );
-}
-
-TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ReturnException)
-{
-    const std::string JSON = R"( throw 'This is exception'; )";
-
-    ScriptExecutionContext ctx(JSON);
-
-    auto result = ctx.runScript();
-
-    EXPECT_TRUE(
-        std::holds_alternative<JSException>(result)
+        result.asInt()
     );
 }
 
@@ -207,7 +181,7 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsIntValue_RunScriptWhichCalls
 
     EXPECT_EQ(
         RETURNED_VALUE,
-        std::get<int>(result)
+        result.asInt()
     );
 }
 
@@ -230,7 +204,7 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsString_RunScriptWhichCallsTh
 
     EXPECT_EQ(
         RETURNED_VALUE,
-        std::get<std::string>(result)
+        result.asString()
     );
 }
 
@@ -253,7 +227,7 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsDouble_RunScriptWhichCallsTh
 
     EXPECT_DOUBLE_EQ(
         RETURNED_VALUE,
-        std::get<double>(result)
+        result.asDouble()
     );
 }
 
@@ -265,20 +239,7 @@ TEST(ScriptExecutionContext, RunScriptWhichAddsTwoRealNumbers_DoubleIsReturned)
 
     auto result = ctx.runScript();
 
-    EXPECT_DOUBLE_EQ(0.3, std::get<double>(result));
-}
-
-TEST(ScriptExecutionContext, RunScriptWithUndefinedResult_UndefinedIsReturned)
-{
-    const std::string JSON = R"()";
-
-    ScriptExecutionContext ctx(JSON);
-
-    auto result = ctx.runScript();
-
-    EXPECT_TRUE(
-        std::holds_alternative<ScriptExecutionContext::Undefined>(result)
-    );
+    EXPECT_DOUBLE_EQ(0.3, result.asDouble());
 }
 
 TEST(ScriptExecutionContext, RunScriptWithInvalidJSCode_ThrowException)

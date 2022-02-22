@@ -9,6 +9,7 @@
 
 #include "Helper.hpp"
 #include "Exceptions.hpp"
+#include "Value.hpp"
 
 namespace cardan
 {
@@ -26,9 +27,7 @@ namespace cardan
     class ScriptExecutionContext
     {
     public:
-        using Undefined = std::monostate;
-        // TODO Don't use plain std::variant for script execution result; move to separate class
-        using ScriptRunResult = std::variant<std::string, int, double, JSException, Undefined>;
+        using ScriptRunResult = Value;
 
     public:
         ScriptExecutionContext(const std::string& src, const ScriptExecutionContextConfig& config = {});
