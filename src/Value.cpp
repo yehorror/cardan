@@ -40,6 +40,15 @@ namespace cardan
         throw std::runtime_error("Invalid value type");
     }
 
+    Object Value::asObject()
+    {
+        if (isObject())
+        {
+            return Object(m_value.As<v8::Object>(), m_isolate, m_context);
+        }
+        throw std::runtime_error("Invalid value type");
+    }
+
     bool Value::isUndefined()
     {
         return m_value->IsUndefined();
@@ -63,6 +72,11 @@ namespace cardan
     bool Value::isArray()
     {
         return m_value->IsArray();
+    }
+
+    bool Value::isObject()
+    {
+        return m_value->IsObject();
     }
 
     Value::Value(v8::Local<v8::Value> value, v8::Isolate* isolate, v8::Local<v8::Context>& context)

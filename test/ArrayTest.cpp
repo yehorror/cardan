@@ -5,8 +5,7 @@
 using namespace testing;
 using namespace cardan;
 
-namespace
-{
+namespace {
     // Values are valid objects untill context is destroyed
     // So, we need to keep it alive during testing values
     struct ArrayWithContext

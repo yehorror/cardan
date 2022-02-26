@@ -16,6 +16,9 @@ add_library(cardan-lib
     Array.cpp
     Array.hpp
 
+    Object.cpp
+    Object.hpp
+
     Helper.hpp
 )
 

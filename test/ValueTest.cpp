@@ -109,6 +109,32 @@ TEST(ValueTest, CreateIntValue_TryToGetArray_ExceptionOfWrongTypeIsThrown)
     EXPECT_THROW(value.asArray(), std::runtime_error);
 }
 
+TEST(ValueTest, CreateObject_isObjectReturnsTrue)
+{
+    ScriptExecutionContext ctx(R"( JSON.parse("{\"some_key\": \"some_value\"}") )");
+    Value value = ctx.runScript();
+
+    EXPECT_TRUE(value.isObject());
+}
+
+TEST(ValueTest, CreateObject_asObject_DoesntThrow)
+{
+    ScriptExecutionContext ctx(R"( JSON.parse("{\"some_key\": \"some_value\"}") )");
+    Value value = ctx.runScript();
+
+    ASSERT_TRUE(value.isObject());
+    EXPECT_NO_THROW(value.asObject());
+}
+
+TEST(ValueTest, CreateIntValue_TryToGetObject_ExceptionOfWrongTypeIsThrown)
+{
+    ScriptExecutionContext ctx("123");
+    Value value = ctx.runScript();
+
+    ASSERT_FALSE(value.isObject());
+    EXPECT_THROW(value.asObject(), std::runtime_error);
+}
+
 TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)
 {
     ScriptExecutionContext ctx("undefined");
