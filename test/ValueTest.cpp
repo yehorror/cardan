@@ -91,11 +91,22 @@ TEST(ValueTest, CreateArray_isArrayReturnsTrue)
     EXPECT_TRUE(value.isArray());
 }
 
-TEST(ValueTest, CreateNotEmptyArray_isEmptyReturnsFalse)
+TEST(ValueTest, CreateArray_asArray_DoesntThrow)
 {
     ScriptExecutionContext ctx("[12, 34]");
     Value value = ctx.runScript();
-    v8::Local<v8::Value> val;
+
+    ASSERT_TRUE(value.isArray());
+    EXPECT_NO_THROW(value.asArray());
+}
+
+TEST(ValueTest, CreateIntValue_TryToGetArray_ExceptionOfWrongTypeIsThrown)
+{
+    ScriptExecutionContext ctx("123");
+    Value value = ctx.runScript();
+
+    ASSERT_FALSE(value.isArray());
+    EXPECT_THROW(value.asArray(), std::runtime_error);
 }
 
 TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)

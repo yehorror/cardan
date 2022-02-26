@@ -31,6 +31,15 @@ namespace cardan
         throw std::runtime_error("Invalid value type");
     }
 
+    Array Value::asArray()
+    {
+        if (isArray())
+        {
+            return Array(m_value.As<v8::Array>(), m_isolate, m_context);
+        }
+        throw std::runtime_error("Invalid value type");
+    }
+
     bool Value::isUndefined()
     {
         return m_value->IsUndefined();
@@ -62,12 +71,4 @@ namespace cardan
         , m_context(context)
     {
     }
-
-    Array::Array(v8::Local<v8::Array> array, v8::Isolate* isolate, v8::Local<v8::Context>& context)
-        : m_array(array)
-        , m_isolate(isolate)
-        , m_context(context)
-    {
-    }
-
 }

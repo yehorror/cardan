@@ -13,6 +13,9 @@ add_library(cardan-lib
     Value.cpp
     Value.hpp
 
+    Array.cpp
+    Array.hpp
+
     Helper.hpp
 )
 
