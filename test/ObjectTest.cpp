@@ -52,3 +52,20 @@ TEST(ObjectTest, CreateObjectWithMultipleFields_AccessTheseFields_ValuesCorrespo
     ASSERT_TRUE(ageValue.isInt());
     EXPECT_EQ(35, ageValue.asInt());
 }
+
+
+TEST(ObjectTest, CreateObjectWithMultipleFields_getKeys_ReturnArrayOfKeys)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("\
+    {\
+        \"name\": \"John Smith\",\
+        \"age\":  35\
+    }"
+    ))");
+
+    auto keysArray = object.getKeys();
+
+    ASSERT_EQ(2, keysArray.length());
+    EXPECT_EQ("name", keysArray[0].asString());
+    EXPECT_EQ("age", keysArray[1].asString());
+}

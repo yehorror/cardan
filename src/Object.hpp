@@ -1,16 +1,19 @@
 #pragma once
 
 #include "Value.hpp"
+#include "Array.hpp"
 
 namespace cardan
 {
     class Value;
+    class Array;
 
     class Object
     {
     public:
 
         Value operator[](const std::string& key);
+        Array getKeys();
 
     private:
 
