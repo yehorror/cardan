@@ -1,4 +1,6 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
 #include "ScriptExecutionContext.hpp"
 #include "Array.hpp"
 
@@ -71,3 +73,35 @@ TEST(ArrayTest, CreateArrayWith3ElementsOfDifferentTypes_TypesOfTakenValuesCorre
     EXPECT_TRUE(array.at(1).isString());
     EXPECT_TRUE(array.at(2).isDouble());
 }
+
+TEST(ArrayTest, CreateArrayWith3Elements_CallBeginWithDereference_ReturnedFirstElement)
+{
+    auto [ctx, array] = makeArrayFromJSCode("[1,2,3]");
+
+    auto arrayBegin = array.begin();
+    EXPECT_EQ(1, (*arrayBegin).asInt());
+}
+
+TEST(ArrayTest, DISABLED_CreateArrayWith3Elements_IterateOverItViaStdFor_each_PredicateCalledWithCorrespondingValues)
+{
+    auto [ctx, array] = makeArrayFromJSCode("[1,2,3]");
+
+    MockFunction<void(const cardan::Value&)> mockPredicate;
+
+    {
+        InSequence seq;
+        EXPECT_CALL(mockPredicate, Call(_))/*.WillOnce(([](const cardan::Value& val) { EXPECT_EQ(1, val.asInt()); }))*/;
+        //EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(2, val.asInt()); }));
+        //EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(3, val.asInt()); }));
+    }
+
+    std::for_each(array.begin(), array.end(), mockPredicate.AsStdFunction());
+}
+/*
+TEST(ArrayTest, CreateArrayWith3Lements_Begin_DereferencingReturnsFirstValue)
+{
+    auto [ctx, array] = makeArrayFromJSCode("[1,2,3]");
+
+    EXPECT_EQ();
+}
+*/

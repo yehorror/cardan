@@ -18,10 +18,43 @@ namespace cardan
         return m_array->Length();
     }
 
+    ArrayIterator Array::begin()
+    {
+        return ArrayIterator(*this, 0);
+    }
+
+    ArrayIterator Array::end()
+    {
+        return ArrayIterator(*this, length());
+    }
+
     Array::Array(v8::Local<v8::Array> array, v8::Isolate* isolate, v8::Local<v8::Context>& context)
         : m_array(array)
         , m_isolate(isolate)
         , m_context(context)
     {
     }
+
+    Value ArrayIterator::operator*()
+    {
+        return m_array[m_idx];
+    }
+
+    void ArrayIterator::operator++()
+    {
+        ++m_idx;
+    }
+
+    bool ArrayIterator::operator !=(const ArrayIterator& rhs) const
+    {
+        return  rhs.m_idx    != m_idx
+             && &rhs.m_array != &m_array;  // also make sure iterators points to same arrays
+    }
+
+    ArrayIterator::ArrayIterator(Array& array, uint32_t idx)
+        : m_array(array)
+        , m_idx(idx)
+    {
+    }
+
 }

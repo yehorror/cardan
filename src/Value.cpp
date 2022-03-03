@@ -13,7 +13,7 @@ namespace cardan
         throw std::runtime_error("Invalid value type");
     }
 
-    int Value::asInt()
+    int Value::asInt() const
     {
         if (isInt())
         {
@@ -59,7 +59,7 @@ namespace cardan
         return m_value->IsString();
     }
 
-    bool Value::isInt()
+    bool Value::isInt() const
     {
         return m_value->IsInt32();
     }

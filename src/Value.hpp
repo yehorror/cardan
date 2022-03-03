@@ -21,14 +21,14 @@ namespace cardan
     {
     public:
         std::string asString();
-        int asInt();
+        int asInt() const;
         double asDouble();
         Array asArray();
         Object asObject();
 
         bool isUndefined();
         bool isString();
-        bool isInt();
+        bool isInt() const;
         bool isDouble();
         bool isArray();
         bool isObject();
