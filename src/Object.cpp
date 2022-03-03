@@ -41,9 +41,7 @@ namespace cardan
 
     std::pair<std::string, Value> ObjectIterator::operator *()
     {
-        std::string key = m_object.getKeys().at(m_idx).asString();
-        Value value = m_object[key];
-        return {key, value};
+        return m_object.getByIndex(m_idx);
     }
 
     void ObjectIterator::operator++()
