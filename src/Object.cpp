@@ -14,6 +14,14 @@ namespace cardan
         return Array(array, m_isolate, m_context);
     }
 
+    std::pair<std::string, Value> Object::getByIndex(uint32_t idx)
+    {
+        std::string key = getKeys().at(idx).asString();
+        Value value = (*this)[key];
+
+        return {key, value};
+    }
+
     ObjectIterator Object::begin()
     {
         return ObjectIterator(*this, 0);

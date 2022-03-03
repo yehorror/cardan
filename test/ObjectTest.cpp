@@ -98,3 +98,22 @@ TEST(ObjectTest, CreateObjectWithMultipleFields_IterateViaForEach_PredicateCalle
 
     std::for_each(object.begin(), object.end(), mockPredicate.AsStdFunction());
 }
+
+TEST(ObjectTest, CreateObjectWithMultipleFields_getByIndex_ReturnFildsByTheirIndices)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("\
+    {\
+        \"name\": \"John Smith\",\
+        \"age\":  35\
+    }"
+    ))");
+
+    auto [firstFieldName, firstFieldValue] = object.getByIndex(0);
+    auto [secondFieldName, secondFieldValue] = object.getByIndex(1);
+
+    EXPECT_EQ("name", firstFieldName);
+    EXPECT_EQ("John Smith", firstFieldValue.asString());
+
+    EXPECT_EQ("age", secondFieldName);
+    EXPECT_EQ(35, secondFieldValue.asInt());
+}

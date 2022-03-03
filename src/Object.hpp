@@ -30,6 +30,7 @@ namespace cardan
     public:
         Value operator[](const std::string& key);
         Array getKeys();
+        std::pair<std::string, Value> getByIndex(uint32_t idx);
 
         // for iterating
         ObjectIterator begin();
