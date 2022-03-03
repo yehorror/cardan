@@ -113,3 +113,22 @@ TEST(ArrayTest, CreateArrayWith3Elements_IterateOverItViaStdFor_each_PredicateCa
 
     std::for_each(array.begin(), array.end(), mockPredicate.AsStdFunction());
 }
+
+TEST(ArrayTest, CreateArrayWith3Elements_IterateOverItViaRangeBasedFor_PredicateCalledWithCorrespondingValues)
+{
+    auto [ctx, array] = makeArrayFromJSCode("[1,2,3]");
+
+    MockFunction<void(const cardan::Value&)> mockPredicate;
+
+    {
+        InSequence seq;
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(1, val.asInt()); }));
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(2, val.asInt()); }));
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(3, val.asInt()); }));
+    }
+
+    for (const auto& value : array)
+    {
+        mockPredicate.Call(value);
+    }
+}
