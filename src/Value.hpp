@@ -20,14 +20,14 @@ namespace cardan
     class Value
     {
     public:
-        std::string asString();
+        std::string asString() const;
         int asInt() const;
         double asDouble();
         Array asArray();
         Object asObject();
 
         bool isUndefined();
-        bool isString();
+        bool isString() const;
         bool isInt() const;
         bool isDouble();
         bool isArray();

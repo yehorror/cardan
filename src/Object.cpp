@@ -14,10 +14,45 @@ namespace cardan
         return Array(array, m_isolate, m_context);
     }
 
+    ObjectIterator Object::begin()
+    {
+        return ObjectIterator(*this, 0);
+    }
+
+    ObjectIterator Object::end()
+    {
+        return ObjectIterator(*this, getKeys().length());
+    }
+
     Object::Object(v8::Local<v8::Object> object, v8::Isolate* isolate, v8::Local<v8::Context>& context)
         : m_object(object)
         , m_isolate(isolate)
         , m_context(context)
     {
     }
+
+    std::pair<std::string, Value> ObjectIterator::operator *()
+    {
+        std::string key = m_object.getKeys().at(m_idx).asString();
+        Value value = m_object[key];
+        return {key, value};
+    }
+
+    void ObjectIterator::operator++()
+    {
+        ++m_idx;
+    }
+
+    bool ObjectIterator::operator !=(const ObjectIterator& rhs) const
+    {
+        return rhs.m_idx != m_idx
+            || &rhs.m_object != &m_object;
+    }
+
+    ObjectIterator::ObjectIterator(Object& object, uint32_t idx)
+        : m_object(object)
+        , m_idx(idx)
+    {
+    }
+
 }

@@ -3,7 +3,7 @@
 
 namespace cardan
 {
-    std::string Value::asString()
+    std::string Value::asString() const
     {
         if (isString())
         {
@@ -54,7 +54,7 @@ namespace cardan
         return m_value->IsUndefined();
     }
 
-    bool Value::isString()
+    bool Value::isString() const
     {
         return m_value->IsString();
     }

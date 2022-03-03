@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "ScriptExecutionContext.hpp"
 #include "Object.hpp"
 
@@ -53,7 +54,6 @@ TEST(ObjectTest, CreateObjectWithMultipleFields_AccessTheseFields_ValuesCorrespo
     EXPECT_EQ(35, ageValue.asInt());
 }
 
-
 TEST(ObjectTest, CreateObjectWithMultipleFields_getKeys_ReturnArrayOfKeys)
 {
     auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("\
@@ -68,4 +68,33 @@ TEST(ObjectTest, CreateObjectWithMultipleFields_getKeys_ReturnArrayOfKeys)
     ASSERT_EQ(2, keysArray.length());
     EXPECT_EQ("name", keysArray[0].asString());
     EXPECT_EQ("age", keysArray[1].asString());
+}
+
+TEST(ObjectTest, CreateObjectWithMultipleFields_IterateViaForEach_PredicateCalledWithCorrespondingValues)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("\
+    {\
+        \"name\": \"John Smith\",\
+        \"age\":  35\
+    }"
+    ))");
+
+    MockFunction<void(const std::pair<std::string, cardan::Value>&)> mockPredicate;
+
+    {
+        InSequence seq;
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const std::pair<std::string, cardan::Value>& field)
+        {
+            EXPECT_EQ("name", field.first);
+            EXPECT_EQ("John Smith", field.second.asString());
+        });
+
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const std::pair<std::string, cardan::Value>& field)
+        {
+            EXPECT_EQ("age", field.first);
+            EXPECT_EQ(35, field.second.asInt());
+        });
+    }
+
+    std::for_each(object.begin(), object.end(), mockPredicate.AsStdFunction());
 }
