@@ -79,6 +79,11 @@ namespace cardan
         return m_value->IsObject();
     }
 
+    bool Value::isFunction()
+    {
+        return m_value->IsFunction();
+    }
+
     Value::Value(v8::Local<v8::Value> value, v8::Isolate* isolate, v8::Local<v8::Context>& context)
         : m_value(std::move(value))
         , m_isolate(isolate)

@@ -32,6 +32,7 @@ namespace cardan
         bool isDouble();
         bool isArray();
         bool isObject();
+        bool isFunction();
 
     private:
         Value(v8::Local<v8::Value> value, v8::Isolate* isolate, v8::Local<v8::Context>& context);

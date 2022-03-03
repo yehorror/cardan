@@ -135,6 +135,14 @@ TEST(ValueTest, CreateIntValue_TryToGetObject_ExceptionOfWrongTypeIsThrown)
     EXPECT_THROW(value.asObject(), std::runtime_error);
 }
 
+TEST(ValueTest, CreateFunction_isFunctionReturnsTrue)
+{
+    ScriptExecutionContext ctx("function test() { return 'test function'; }; test");
+    Value value = ctx.runScript();
+
+    EXPECT_TRUE(value.isFunction());
+}
+
 TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)
 {
     ScriptExecutionContext ctx("undefined");

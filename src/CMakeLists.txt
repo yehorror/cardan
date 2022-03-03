@@ -19,6 +19,9 @@ add_library(cardan-lib
     Object.cpp
     Object.hpp
 
+    Function.cpp
+    Function.hpp
+
     Helper.hpp
 )
 
