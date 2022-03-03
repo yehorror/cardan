@@ -48,7 +48,7 @@ namespace cardan
     bool ArrayIterator::operator !=(const ArrayIterator& rhs) const
     {
         return  rhs.m_idx    != m_idx
-             && &rhs.m_array != &m_array;  // also make sure iterators points to same arrays
+             || &rhs.m_array != &m_array;  // also make sure iterators points to same arrays
     }
 
     ArrayIterator::ArrayIterator(Array& array, uint32_t idx)
