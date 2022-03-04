@@ -8,6 +8,7 @@ namespace cardan
     class Value;
     class Array;
     class Object;
+    class Function;
 
     class ObjectIterator
     {

@@ -143,6 +143,24 @@ TEST(ValueTest, CreateFunction_isFunctionReturnsTrue)
     EXPECT_TRUE(value.isFunction());
 }
 
+TEST(ValueTest, CreateFunction_asFunction_DoesntThrow)
+{
+    ScriptExecutionContext ctx("function test() { return 'test function'; }; test");
+    Value value = ctx.runScript();
+
+    ASSERT_TRUE(value.isFunction());
+    EXPECT_NO_THROW(value.asFunction());
+}
+
+TEST(ValueTest, CreateIntObject_TryToGetFunction_ExceptionOfWrongTypeIsThrown)
+{
+    ScriptExecutionContext ctx("123");
+    Value value = ctx.runScript();
+
+    ASSERT_FALSE(value.isFunction());
+    EXPECT_THROW(value.asFunction(), std::runtime_error);
+}
+
 TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)
 {
     ScriptExecutionContext ctx("undefined");

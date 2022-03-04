@@ -6,7 +6,14 @@ set(CMAKE_CXX_FLAGS "-DV8_COMPRESS_POINTERS")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/googletest googletest)
 
-add_executable(cardan-test ScriptExecutionContextTest.cpp CardanTest.cpp ValueTest.cpp ArrayTest.cpp ObjectTest.cpp)
+add_executable(cardan-test
+    ScriptExecutionContextTest.cpp
+    CardanTest.cpp
+    ValueTest.cpp
+    ArrayTest.cpp
+    ObjectTest.cpp
+    FunctionTest.cpp
+)
 
 target_include_directories(cardan-test PRIVATE ../src googletest/googletest/include)
 target_link_libraries(cardan-test PRIVATE cardan-lib gtest gmock pthread)

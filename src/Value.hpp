@@ -8,12 +8,14 @@
 #include "Exceptions.hpp"
 #include "Array.hpp"
 #include "Object.hpp"
+#include "Function.hpp"
 
 namespace cardan
 {
     class ScriptExecutionContext;
     class Array;
     class Object;
+    class Function;
 
     // Value represents Javascript value
     // Is valid ONLY when ScriptExecutionContext in which it was created exists
@@ -25,6 +27,7 @@ namespace cardan
         double asDouble();
         Array asArray();
         Object asObject();
+        Function asFunction();
 
         bool isUndefined();
         bool isString() const;
@@ -40,6 +43,7 @@ namespace cardan
         friend class ScriptExecutionContext;
         friend class Array;
         friend class Object;
+        friend class Function;
 
     private:
         v8::Local<v8::Value> m_value;

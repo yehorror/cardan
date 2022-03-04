@@ -49,6 +49,15 @@ namespace cardan
         throw std::runtime_error("Invalid value type");
     }
 
+    Function Value::asFunction()
+    {
+        if (isFunction())
+        {
+            return Function(m_value.As<v8::Function>(), m_isolate, m_context);
+        }
+        throw std::runtime_error("Invalid value type");
+    }
+
     bool Value::isUndefined()
     {
         return m_value->IsUndefined();
