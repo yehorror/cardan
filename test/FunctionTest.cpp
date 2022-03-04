@@ -53,3 +53,12 @@ TEST(FunctionTest, CreateJsFunctionWhichReturnsSumOfArguments_CallFunctionWith1A
 
     EXPECT_EQ(1 + 2, result.asInt());
 }
+
+TEST(FunctionTest, CreateJsFunctionWhichReturnsSumOfArguments_CallFunctionWithTwoStrings_ReturnConcatenatedStrings)
+{
+    auto [ctx, function] = makeFunctionFromJSCode("function test(a, b) { return a + b; } test;");
+
+    auto result = function.call("hello, ", "world");
+
+    EXPECT_EQ("hello, world", result.asString());
+}

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "Helper.hpp"
 #include "Value.hpp"
@@ -10,6 +11,11 @@ namespace cardan
     static v8::Local<v8::Value> convertArgumentToV8Value(v8::Isolate* isolate, int argument)
     {
         return v8::Integer::New(isolate, argument);
+    }
+
+    static v8::Local<v8::Value> convertArgumentToV8Value(v8::Isolate* isolate, const std::string& argument)
+    {
+        return v8::String::NewFromUtf8(isolate, argument.c_str()).ToLocalChecked();
     }
 
     template <size_t Idx=0, class... TupleT>
