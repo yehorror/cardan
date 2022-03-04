@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include "Value.hpp"
+#include "Function.hpp"
 
 namespace cardan
 {

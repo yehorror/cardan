@@ -8,7 +8,6 @@
 #include "Exceptions.hpp"
 #include "Array.hpp"
 #include "Object.hpp"
-#include "Function.hpp"
 
 namespace cardan
 {

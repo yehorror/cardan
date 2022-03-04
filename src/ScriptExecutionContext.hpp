@@ -10,6 +10,7 @@
 #include "Helper.hpp"
 #include "Exceptions.hpp"
 #include "Value.hpp"
+#include "Function.hpp"
 
 namespace cardan
 {

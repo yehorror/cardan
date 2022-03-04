@@ -44,3 +44,12 @@ TEST(FunctionTest, CreateJsFunctionWhichReturnsSumOf1And2_CallIt_ReturnedValueIs
 
     EXPECT_EQ(1 + 2, result.asInt());
 }
+
+TEST(FunctionTest, CreateJsFunctionWhichReturnsSumOfArguments_CallFunctionWith1And2_ReturnedValueIs3)
+{
+    auto [ctx, function] = makeFunctionFromJSCode("function test(a, b) { return a + b; } test;");
+
+    auto result = function.call(1, 2);
+
+    EXPECT_EQ(1 + 2, result.asInt());
+}
