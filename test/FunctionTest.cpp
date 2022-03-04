@@ -36,7 +36,7 @@ TEST(FunctionTest, CreateJsFunctionWhichReturns42_CallIt_ReturnedValueIs42)
     EXPECT_EQ(42, result.asInt());
 }
 
-TEST(FunctionTest, CreateJsFunctionWhichReturnsSumOf1And2_CallIt_ReturnedValueIs42)
+TEST(FunctionTest, CreateJsFunctionWhichReturnsSumOf1And2_CallIt_ReturnedValueIs3)
 {
     auto [ctx, function] = makeFunctionFromJSCode("function test() { return 1 + 2; } test;");
 
