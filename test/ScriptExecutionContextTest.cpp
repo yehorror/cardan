@@ -14,7 +14,7 @@ TEST(ScriptExecutionContextTest, CtorWithEmptyScriptDoesntThrow)
     );
 }
 
-TEST(ScriptExecutionContext, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
+TEST(ScriptExecutionContextTest, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
 {
     const std::string JSON = R"( 1 + 2; )";
 
@@ -28,7 +28,7 @@ TEST(ScriptExecutionContext, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
     );
 }
 
-TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ConfiguredToRethrowException_ThrowException)
+TEST(ScriptExecutionContextTest, RunScriptWhichThrowsException_ConfiguredToRethrowException_ThrowException)
 {
     const std::string JSON = R"( throw 'This is exception'; )";
 
@@ -43,7 +43,7 @@ TEST(ScriptExecutionContext, RunScriptWhichThrowsException_ConfiguredToRethrowEx
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWithNoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+TEST(ScriptExecutionContextTest, AddFunctionWithNoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
 {
     const std::string JSON = R"( testFunction1(); )";
 
@@ -61,7 +61,7 @@ TEST(ScriptExecutionContext, AddFunctionWithNoArguments_RunScriptWhichCallsThisF
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWithOneArgument_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+TEST(ScriptExecutionContextTest, AddFunctionWithOneArgument_RunScriptWhichCallsThisFunction_FunctionWasCalled)
 {
     const std::string JSON = R"( testFunction(123); )";
 
@@ -79,7 +79,7 @@ TEST(ScriptExecutionContext, AddFunctionWithOneArgument_RunScriptWhichCallsThisF
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWithTwoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+TEST(ScriptExecutionContextTest, AddFunctionWithTwoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
 {
     const std::string JSON = R"( testFunction(123, 456); )";
 
@@ -97,7 +97,7 @@ TEST(ScriptExecutionContext, AddFunctionWithTwoArguments_RunScriptWhichCallsThis
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWithStringArgument_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+TEST(ScriptExecutionContextTest, AddFunctionWithStringArgument_RunScriptWhichCallsThisFunction_FunctionWasCalled)
 {
     const std::string JSON = R"( testFunction('hello'); )";
 
@@ -115,7 +115,7 @@ TEST(ScriptExecutionContext, AddFunctionWithStringArgument_RunScriptWhichCallsTh
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWithStringAndIntArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
+TEST(ScriptExecutionContextTest, AddFunctionWithStringAndIntArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
 {
     const std::string JSON = R"( testFunction('hello', 123); )";
 
@@ -133,7 +133,7 @@ TEST(ScriptExecutionContext, AddFunctionWithStringAndIntArguments_RunScriptWhich
     );
 }
 
-TEST(ScriptExecutionContext, AddTwoFunctions_CallThemFromJavascript_BothFunctionsCalled)
+TEST(ScriptExecutionContextTest, AddTwoFunctions_CallThemFromJavascript_BothFunctionsCalled)
 {
     const std::string JSON = R"(
         firstFunction('hello');
@@ -162,7 +162,7 @@ TEST(ScriptExecutionContext, AddTwoFunctions_CallThemFromJavascript_BothFunction
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWhichReturnsIntValue_RunScriptWhichCallsThisFunction_ValueIsReturned)
+TEST(ScriptExecutionContextTest, AddFunctionWhichReturnsIntValue_RunScriptWhichCallsThisFunction_ValueIsReturned)
 {
     const std::string JSON = R"( testFunction(); )";
 
@@ -185,7 +185,7 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsIntValue_RunScriptWhichCalls
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWhichReturnsString_RunScriptWhichCallsThisFunction_StringIsReturned)
+TEST(ScriptExecutionContextTest, AddFunctionWhichReturnsString_RunScriptWhichCallsThisFunction_StringIsReturned)
 {
     const std::string JSON = R"( testFunction(); )";
 
@@ -208,7 +208,7 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsString_RunScriptWhichCallsTh
     );
 }
 
-TEST(ScriptExecutionContext, AddFunctionWhichReturnsDouble_RunScriptWhichCallsThisFunction_DoubleIsReturned)
+TEST(ScriptExecutionContextTest, AddFunctionWhichReturnsDouble_RunScriptWhichCallsThisFunction_DoubleIsReturned)
 {
     const std::string JSON = R"( testFunction(); )";
 
@@ -231,7 +231,7 @@ TEST(ScriptExecutionContext, AddFunctionWhichReturnsDouble_RunScriptWhichCallsTh
     );
 }
 
-TEST(ScriptExecutionContext, RunScriptWhichAddsTwoRealNumbers_DoubleIsReturned)
+TEST(ScriptExecutionContextTest, RunScriptWhichAddsTwoRealNumbers_DoubleIsReturned)
 {
     const std::string JSON = R"( 0.1 + 0.2 )";
 
@@ -242,7 +242,7 @@ TEST(ScriptExecutionContext, RunScriptWhichAddsTwoRealNumbers_DoubleIsReturned)
     EXPECT_DOUBLE_EQ(0.3, result.asDouble());
 }
 
-TEST(ScriptExecutionContext, RunScriptWithInvalidJSCode_ThrowException)
+TEST(ScriptExecutionContextTest, RunScriptWithInvalidJSCode_ThrowException)
 {
     const std::string JSON = R"( definitely invalid js code )";
 
@@ -254,7 +254,7 @@ TEST(ScriptExecutionContext, RunScriptWithInvalidJSCode_ThrowException)
     );
 }
 
-TEST(ScriptExecutionContext, RunScriptWhichCreatesVariable_getValue_ReturnValueOfThisVariable)
+TEST(ScriptExecutionContextTest, RunScriptWhichCreatesVariable_getValue_ReturnValueOfThisVariable)
 {
     const std::string JSON = R"(var variable = 43;)";
 
