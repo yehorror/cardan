@@ -51,6 +51,14 @@ namespace cardan
         return processRunResult(scriptRunResult, tryCatchHandler);
     }
 
+    Value ScriptExecutionContext::getValue(const std::string& valueName)
+    {
+        v8::Local<v8::String> valueNameV8 = v8::String::NewFromUtf8(m_isolate.get(), valueName.c_str()).ToLocalChecked();
+        v8::Local<v8::Value> value = m_context->Global()->Get(m_context, valueNameV8).ToLocalChecked();
+
+        return Value(value, m_isolate.get(), m_context);
+    }
+
     ScriptExecutionContext::ScriptRunResult ScriptExecutionContext::processRunResult(
         v8::MaybeLocal<v8::Value>& scriptRunResult,
         v8::TryCatch& tryCatchHandler

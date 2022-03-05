@@ -35,6 +35,8 @@ namespace cardan
 
         ScriptRunResult runScript();
 
+        Value getValue(const std::string& valueName);
+
     public: // Template methods, which needs to be defined inline
 
         // TODO Move definition out of here (.inl file?)

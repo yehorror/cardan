@@ -253,3 +253,16 @@ TEST(ScriptExecutionContext, RunScriptWithInvalidJSCode_ThrowException)
         InvalidJSCodeException
     );
 }
+
+TEST(ScriptExecutionContext, RunScriptWhichCreatesVariable_getValue_ReturnValueOfThisVariable)
+{
+    const std::string JSON = R"(var variable = 43;)";
+
+    ScriptExecutionContext ctx(JSON);
+
+    ctx.runScript();
+
+    cardan::Value variableValue = ctx.getValue("variable");
+
+    EXPECT_EQ(43, variableValue.asInt());
+}
