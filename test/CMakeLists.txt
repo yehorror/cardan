@@ -13,6 +13,7 @@ add_executable(cardan-test
     ArrayTest.cpp
     ObjectTest.cpp
     FunctionTest.cpp
+    Scenarios.cpp
 )
 
 target_include_directories(cardan-test PRIVATE ../src googletest/googletest/include)

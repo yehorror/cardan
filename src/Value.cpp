@@ -56,6 +56,10 @@ namespace cardan
         {
             return Function(m_value.As<v8::Function>(), m_isolate, m_context);
         }
+        auto type = m_value->TypeOf(m_isolate);
+
+        std::string typeString = *v8::String::Utf8Value(m_isolate, type);
+
         throw std::runtime_error("Invalid value type");
     }
 
