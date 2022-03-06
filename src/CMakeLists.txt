@@ -23,6 +23,9 @@ add_library(cardan-lib
     Value/Function.cpp
     Value/Function.hpp
 
+    Converters.cpp
+    Converters.hpp
+
     Helper.hpp
 )
 

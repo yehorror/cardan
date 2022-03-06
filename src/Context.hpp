@@ -37,6 +37,10 @@ namespace cardan
 
     private:
 
+        inline void setInternal(v8::Local<v8::String> funcName, int value);
+
+        inline void setInternal(v8::Local<v8::String> funcName, const std::string& value);
+
         template <class FuncReturnType, class... FuncArgs>
         void setInternal(v8::Local<v8::String> funcName, std::function<FuncReturnType(FuncArgs...)>& func);
 
