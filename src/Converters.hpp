@@ -12,6 +12,7 @@ namespace cardan::converters
     v8::Local<v8::Value> convert(v8::Isolate* isolate, v8::Local<v8::Context> context, double value);
     v8::Local<v8::Value> convert(v8::Isolate* isolate, v8::Local<v8::Context> context, const std::string& value);
 
+    // TODO Move out of here (maybe FunctionConverter.h/.inl)
     template <class FuncReturnType, class... FuncArgs>
     v8::Local<v8::Value> convert(v8::Isolate* isolate, v8::Local<v8::Context> context, std::function<FuncReturnType(FuncArgs...)>& func)
     {
