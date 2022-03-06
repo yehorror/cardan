@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "ScriptExecutionContext.hpp"
+#include "Context.hpp"
 
 using namespace testing;
 using namespace cardan;
@@ -17,7 +17,7 @@ TEST(Scenarios, ScriptHasMultipleFunctionsDeclarations_GetEachOfThem_CallEachFun
         }
     )JS";
 
-    ScriptExecutionContext context(JS);
+    Context context(JS);
     context.runScript();
 
     Function intValueFunc = context.get("intValueFunc").asFunction();
@@ -40,7 +40,7 @@ TEST(Scenarios, ScriptHasFunctionWhichCallToCppFunction_CallThisFunction_CppFunc
     MockFunction<void()> cppMockFunction;
     auto stdFunction = cppMockFunction.AsStdFunction();
 
-    ScriptExecutionContext context(JS);
+    Context context(JS);
     context.addFunction("cppFunction", stdFunction);
     context.runScript();
 

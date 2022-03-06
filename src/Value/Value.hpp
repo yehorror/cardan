@@ -10,13 +10,13 @@
 
 namespace cardan
 {
-    class ScriptExecutionContext;
+    class Context;
     class Array;
     class Object;
     class Function;
 
     // Value represents Javascript value
-    // Is valid ONLY when ScriptExecutionContext in which it was created exists
+    // Is valid ONLY when Context in which it was created exists
     class Value
     {
     public:
@@ -38,7 +38,7 @@ namespace cardan
     private:
         Value(v8::Local<v8::Value> value, v8::Isolate* isolate, v8::Local<v8::Context>& context);
 
-        friend class ScriptExecutionContext;
+        friend class Context;
         friend class Array;
         friend class Object;
         friend class Function;

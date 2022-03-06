@@ -1,17 +1,18 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "ScriptExecutionContext.hpp"
+#include "Context.hpp"
 #include "Value/Object.hpp"
 
 using namespace testing;
 using namespace cardan;
 
-namespace {
+namespace
+{
     // Values are valid objects untill context is destroyed
     // So, we need to keep it alive during testing values
     struct ObjectWithContext
     {
-        ScriptExecutionContext context;
+        Context context;
         Object object;
 
         ObjectWithContext(const std::string& jsCode)

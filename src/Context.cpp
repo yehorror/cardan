@@ -1,4 +1,4 @@
-#include "ScriptExecutionContext.hpp"
+#include "Context.hpp"
 
 namespace
 {
@@ -13,12 +13,12 @@ namespace
 
 namespace cardan
 {
-    void ScriptExecutionContext::IsolateDisposer::operator() (v8::Isolate* isolate)
+    void Context::IsolateDisposer::operator() (v8::Isolate* isolate)
     {
         isolate->Dispose();
     }
 
-    ScriptExecutionContext::ScriptExecutionContext(const std::string& src, const ScriptExecutionContextConfig& config)
+    Context::Context(const std::string& src, const ContextConfig& config)
         : m_jsCode(src)
         , m_arrayBufferAllocator(v8::ArrayBuffer::Allocator::NewDefaultAllocator())
         , m_isolate(createIsolate(m_arrayBufferAllocator.get()))
@@ -30,7 +30,7 @@ namespace cardan
     {
     }
 
-    ScriptExecutionContext::ScriptRunResult ScriptExecutionContext::runScript()
+    Context::ScriptRunResult Context::runScript()
     {
         v8::Local<v8::String> source =
             v8::String::NewFromUtf8(m_isolate.get(), m_jsCode.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
@@ -51,7 +51,7 @@ namespace cardan
         return processRunResult(scriptRunResult, tryCatchHandler);
     }
 
-    Value ScriptExecutionContext::get(const std::string& valueName)
+    Value Context::get(const std::string& valueName)
     {
         v8::Local<v8::String> valueNameV8 = v8::String::NewFromUtf8(m_isolate.get(), valueName.c_str()).ToLocalChecked();
         v8::Local<v8::Value> value = m_context->Global()->Get(m_context, valueNameV8).ToLocalChecked();
@@ -59,7 +59,7 @@ namespace cardan
         return Value(value, m_isolate.get(), m_context);
     }
 
-    ScriptExecutionContext::ScriptRunResult ScriptExecutionContext::processRunResult(
+    Context::ScriptRunResult Context::processRunResult(
         v8::MaybeLocal<v8::Value>& scriptRunResult,
         v8::TryCatch& tryCatchHandler
     )

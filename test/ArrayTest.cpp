@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "ScriptExecutionContext.hpp"
+#include "Context.hpp"
 #include "Value/Array.hpp"
 
 using namespace testing;
@@ -13,7 +13,7 @@ namespace
     // So, we need to keep it alive during testing values
     struct ArrayWithContext
     {
-        ScriptExecutionContext context;
+        Context context;
         Array array;
 
         ArrayWithContext(const std::string& jsCode)

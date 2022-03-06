@@ -5,8 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-DV8_COMPRESS_POINTERS")
 
 add_library(cardan-lib
-    ScriptExecutionContext.cpp
-    ScriptExecutionContext.hpp
+    Context.cpp
+    Context.hpp
 
     Exceptions.hpp
 

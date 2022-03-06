@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "ScriptExecutionContext.hpp"
+#include "Context.hpp"
 #include "Value/Function.hpp"
 
 using namespace testing;
@@ -11,7 +11,7 @@ namespace
     // So, we need to keep it alive during testing values
     struct FunctionWithContext
     {
-        ScriptExecutionContext context;
+        Context context;
         Function function;
 
         FunctionWithContext(const std::string& jsCode)

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "ScriptExecutionContext.hpp"
+#include "Context.hpp"
 #include "Value/Value.hpp"
 
 using namespace testing;
@@ -7,7 +7,7 @@ using namespace cardan;
 
 TEST(ValueTest, CreateStringValue_ValueStoresString)
 {
-    ScriptExecutionContext ctx(" 'string value' ");
+    Context ctx(" 'string value' ");
     Value value = ctx.runScript();
 
     EXPECT_TRUE(value.isString());
@@ -15,7 +15,7 @@ TEST(ValueTest, CreateStringValue_ValueStoresString)
 
 TEST(ValueTest, CreateStringvalue_asStringReturnsValueWhichItWasCreatedWith)
 {
-    ScriptExecutionContext ctx(" 'string value' ");
+    Context ctx(" 'string value' ");
     Value value = ctx.runScript();
 
     ASSERT_TRUE(value.isString());
@@ -24,7 +24,7 @@ TEST(ValueTest, CreateStringvalue_asStringReturnsValueWhichItWasCreatedWith)
 
 TEST(ValueTest, CreateIntegerValue_ValueStoresInt)
 {
-    ScriptExecutionContext ctx("123");
+    Context ctx("123");
     Value value = ctx.runScript();
 
     EXPECT_TRUE(value.isInt());
@@ -32,7 +32,7 @@ TEST(ValueTest, CreateIntegerValue_ValueStoresInt)
 
 TEST(ValueTest, CreateIntegerValue_asIntReturnsValueWhichItWasCreatedWith)
 {
-    ScriptExecutionContext ctx("123");
+    Context ctx("123");
     Value value = ctx.runScript();
 
     ASSERT_TRUE(value.isInt());
@@ -41,7 +41,7 @@ TEST(ValueTest, CreateIntegerValue_asIntReturnsValueWhichItWasCreatedWith)
 
 TEST(ValueTest, CreateDoubleValue_ValueStoresDouble)
 {
-    ScriptExecutionContext ctx("123.456");
+    Context ctx("123.456");
     Value value = ctx.runScript();
 
     EXPECT_TRUE(value.isDouble());
@@ -49,7 +49,7 @@ TEST(ValueTest, CreateDoubleValue_ValueStoresDouble)
 
 TEST(ValueTest, CreateDoubleValue_asDoubleReturnsValueWhichItWasCreatedWith)
 {
-    ScriptExecutionContext ctx("123.456");
+    Context ctx("123.456");
     Value value = ctx.runScript();
 
     ASSERT_TRUE(value.isDouble());
@@ -58,7 +58,7 @@ TEST(ValueTest, CreateDoubleValue_asDoubleReturnsValueWhichItWasCreatedWith)
 
 TEST(ValueTest, CreateStringValue_TryToGetDouble_ExceptionOfWrongTypeIsThrown)
 {
-    ScriptExecutionContext ctx(" 'definitely not a double' ");
+    Context ctx(" 'definitely not a double' ");
     Value value = ctx.runScript();
 
     ASSERT_FALSE(value.isDouble());
@@ -67,7 +67,7 @@ TEST(ValueTest, CreateStringValue_TryToGetDouble_ExceptionOfWrongTypeIsThrown)
 
 TEST(ValueTest, CreateStringValue_TryToGetInt_ExceptionOfWrongTypeIsThrown)
 {
-    ScriptExecutionContext ctx(" 'definitely not an integer' ");
+    Context ctx(" 'definitely not an integer' ");
     Value value = ctx.runScript();
 
     ASSERT_FALSE(value.isInt());
@@ -76,7 +76,7 @@ TEST(ValueTest, CreateStringValue_TryToGetInt_ExceptionOfWrongTypeIsThrown)
 
 TEST(ValueTest, CreateIntValue_TryToGetString_ExceptionOfWrongTypeIsThrown)
 {
-    ScriptExecutionContext ctx("123");
+    Context ctx("123");
     Value value = ctx.runScript();
 
     ASSERT_FALSE(value.isString());
@@ -85,7 +85,7 @@ TEST(ValueTest, CreateIntValue_TryToGetString_ExceptionOfWrongTypeIsThrown)
 
 TEST(ValueTest, CreateArray_isArrayReturnsTrue)
 {
-    ScriptExecutionContext ctx("[12, 34]");
+    Context ctx("[12, 34]");
     Value value = ctx.runScript();
 
     EXPECT_TRUE(value.isArray());
@@ -93,7 +93,7 @@ TEST(ValueTest, CreateArray_isArrayReturnsTrue)
 
 TEST(ValueTest, CreateArray_asArray_DoesntThrow)
 {
-    ScriptExecutionContext ctx("[12, 34]");
+    Context ctx("[12, 34]");
     Value value = ctx.runScript();
 
     ASSERT_TRUE(value.isArray());
@@ -102,7 +102,7 @@ TEST(ValueTest, CreateArray_asArray_DoesntThrow)
 
 TEST(ValueTest, CreateIntValue_TryToGetArray_ExceptionOfWrongTypeIsThrown)
 {
-    ScriptExecutionContext ctx("123");
+    Context ctx("123");
     Value value = ctx.runScript();
 
     ASSERT_FALSE(value.isArray());
@@ -111,7 +111,7 @@ TEST(ValueTest, CreateIntValue_TryToGetArray_ExceptionOfWrongTypeIsThrown)
 
 TEST(ValueTest, CreateObject_isObjectReturnsTrue)
 {
-    ScriptExecutionContext ctx(R"( JSON.parse("{\"some_key\": \"some_value\"}") )");
+    Context ctx(R"( JSON.parse("{\"some_key\": \"some_value\"}") )");
     Value value = ctx.runScript();
 
     EXPECT_TRUE(value.isObject());
@@ -119,7 +119,7 @@ TEST(ValueTest, CreateObject_isObjectReturnsTrue)
 
 TEST(ValueTest, CreateObject_asObject_DoesntThrow)
 {
-    ScriptExecutionContext ctx(R"( JSON.parse("{\"some_key\": \"some_value\"}") )");
+    Context ctx(R"( JSON.parse("{\"some_key\": \"some_value\"}") )");
     Value value = ctx.runScript();
 
     ASSERT_TRUE(value.isObject());
@@ -128,7 +128,7 @@ TEST(ValueTest, CreateObject_asObject_DoesntThrow)
 
 TEST(ValueTest, CreateIntValue_TryToGetObject_ExceptionOfWrongTypeIsThrown)
 {
-    ScriptExecutionContext ctx("123");
+    Context ctx("123");
     Value value = ctx.runScript();
 
     ASSERT_FALSE(value.isObject());
@@ -137,7 +137,7 @@ TEST(ValueTest, CreateIntValue_TryToGetObject_ExceptionOfWrongTypeIsThrown)
 
 TEST(ValueTest, CreateFunction_isFunctionReturnsTrue)
 {
-    ScriptExecutionContext ctx("function test() { return 'test function'; }; test");
+    Context ctx("function test() { return 'test function'; }; test");
     Value value = ctx.runScript();
 
     EXPECT_TRUE(value.isFunction());
@@ -145,7 +145,7 @@ TEST(ValueTest, CreateFunction_isFunctionReturnsTrue)
 
 TEST(ValueTest, CreateFunction_asFunction_DoesntThrow)
 {
-    ScriptExecutionContext ctx("function test() { return 'test function'; }; test");
+    Context ctx("function test() { return 'test function'; }; test");
     Value value = ctx.runScript();
 
     ASSERT_TRUE(value.isFunction());
@@ -154,7 +154,7 @@ TEST(ValueTest, CreateFunction_asFunction_DoesntThrow)
 
 TEST(ValueTest, CreateIntObject_TryToGetFunction_ExceptionOfWrongTypeIsThrown)
 {
-    ScriptExecutionContext ctx("123");
+    Context ctx("123");
     Value value = ctx.runScript();
 
     ASSERT_FALSE(value.isFunction());
@@ -163,7 +163,7 @@ TEST(ValueTest, CreateIntObject_TryToGetFunction_ExceptionOfWrongTypeIsThrown)
 
 TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)
 {
-    ScriptExecutionContext ctx("undefined");
+    Context ctx("undefined");
     auto result = ctx.runScript();
 
     EXPECT_TRUE(result.isUndefined());
