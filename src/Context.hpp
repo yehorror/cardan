@@ -32,10 +32,13 @@ namespace cardan
 
     public:
 
-        template <class FuncReturnType, class... FuncArgs>
-        void addFunction(const std::string& funcName, std::function<FuncReturnType(FuncArgs...)>& func);
+        template <class ValueType>
+        void set(const std::string& name, ValueType&& value);
 
     private:
+
+        template <class FuncReturnType, class... FuncArgs>
+        void setInternal(v8::Local<v8::String> funcName, std::function<FuncReturnType(FuncArgs...)>& func);
 
         template<class FuncReturnType, class... FuncArgs>
         static void callCppFunctionFromJS(const v8::FunctionCallbackInfo<v8::Value>& info);

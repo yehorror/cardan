@@ -1,9 +1,19 @@
 #pragma once
 
+#include "Context.hpp"
+
 namespace cardan
 {
+
+    template <class ValueType>
+    void Context::set(const std::string& name, ValueType&& value)
+    {
+        v8::Local<v8::String> v8Name = v8::String::NewFromUtf8(m_isolate.get(), name.c_str()).ToLocalChecked();
+        setInternal(v8Name, std::forward<ValueType>(value));
+    }
+
     template <class FuncReturnType, class... FuncArgs>
-    void Context::addFunction(const std::string& funcName, std::function<FuncReturnType(FuncArgs...)>& func)
+    void Context::setInternal(v8::Local<v8::String> funcName, std::function<FuncReturnType(FuncArgs...)>& func)
     {
         auto funcTemplate = v8::FunctionTemplate::New(
             m_isolate.get(), callCppFunctionFromJS<FuncReturnType, FuncArgs...>, v8::External::New(m_isolate.get(), &func)
@@ -11,7 +21,7 @@ namespace cardan
 
         m_context->Global()->Set(
             m_context,
-            v8::String::NewFromUtf8(m_isolate.get(), funcName.c_str()).ToLocalChecked(),
+            funcName,
             funcTemplate->GetFunction(m_context).ToLocalChecked()
         ).Check();
     }

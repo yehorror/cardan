@@ -41,7 +41,7 @@ TEST(Scenarios, ScriptHasFunctionWhichCallToCppFunction_CallThisFunction_CppFunc
     auto stdFunction = cppMockFunction.AsStdFunction();
 
     Context context(JS);
-    context.addFunction("cppFunction", stdFunction);
+    context.set("cppFunction", stdFunction);
     context.runScript();
 
     Function jsFunction = context.get("callCppFunction").asFunction();
