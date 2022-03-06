@@ -2,7 +2,7 @@
 #include <gmock/gmock.h>
 
 #include "ScriptExecutionContext.hpp"
-#include "Array.hpp"
+#include "Value/Array.hpp"
 
 using namespace testing;
 using namespace cardan;

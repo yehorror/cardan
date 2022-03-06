@@ -5,7 +5,6 @@
 #include <string>
 #include <optional>
 
-#include "Exceptions.hpp"
 #include "Array.hpp"
 #include "Object.hpp"
 

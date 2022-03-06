@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include "ScriptExecutionContext.hpp"
-#include "Value.hpp"
+#include "Value/Value.hpp"
 
 using namespace testing;
 using namespace cardan;

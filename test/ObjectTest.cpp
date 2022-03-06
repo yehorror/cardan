@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "ScriptExecutionContext.hpp"
-#include "Object.hpp"
+#include "Value/Object.hpp"
 
 using namespace testing;
 using namespace cardan;

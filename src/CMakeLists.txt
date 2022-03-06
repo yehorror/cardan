@@ -10,20 +10,21 @@ add_library(cardan-lib
 
     Exceptions.hpp
 
-    Value.cpp
-    Value.hpp
+    Value/Value.cpp
+    Value/Value.hpp
 
-    Array.cpp
-    Array.hpp
+    Value/Array.cpp
+    Value/Array.hpp
 
-    Object.cpp
-    Object.hpp
+    Value/Object.cpp
+    Value/Object.hpp
 
-    Function.cpp
-    Function.hpp
+    Value/Function.cpp
+    Value/Function.hpp
 
     Helper.hpp
 )
 
 target_include_directories(cardan-lib PUBLIC ${CMAKE_SOURCE_DIR}/v8/include)
+target_include_directories(cardan-lib PRIVATE src/)
 target_link_libraries(cardan-lib PRIVATE pthread ${CMAKE_SOURCE_DIR}/v8/out.gn/x64.release.sample/obj/libv8_monolith.a ${CMAKE_DL_LIBS})
