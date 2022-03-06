@@ -20,8 +20,8 @@ TEST(Scenarios, ScriptHasMultipleFunctionsDeclarations_GetEachOfThem_CallEachFun
     ScriptExecutionContext context(JS);
     context.runScript();
 
-    Function intValueFunc = context.getValue("intValueFunc").asFunction();
-    Function stringValueFunc = context.getValue("stringValueFunc").asFunction();
+    Function intValueFunc = context.get("intValueFunc").asFunction();
+    Function stringValueFunc = context.get("stringValueFunc").asFunction();
 
     EXPECT_EQ(123,      intValueFunc.call().asInt());
     EXPECT_EQ("string", stringValueFunc.call().asString());
@@ -44,7 +44,7 @@ TEST(Scenarios, ScriptHasFunctionWhichCallToCppFunction_CallThisFunction_CppFunc
     context.addFunction("cppFunction", stdFunction);
     context.runScript();
 
-    Function jsFunction = context.getValue("callCppFunction").asFunction();
+    Function jsFunction = context.get("callCppFunction").asFunction();
 
     EXPECT_CALL(cppMockFunction, Call());
 

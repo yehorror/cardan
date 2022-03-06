@@ -22,7 +22,6 @@ namespace cardan
 
     // Context of script execution
     // TODO:
-    // * JS function calling from C++
     // * C++ classes binding into JS
     // * Consider moving of script compilation out of this class
     class ScriptExecutionContext
@@ -35,7 +34,7 @@ namespace cardan
 
         ScriptRunResult runScript();
 
-        Value getValue(const std::string& valueName);
+        Value get(const std::string& valueName);
 
     public: // Template methods, which needs to be defined inline
 
