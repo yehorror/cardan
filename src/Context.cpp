@@ -18,7 +18,7 @@ namespace cardan
         isolate->Dispose();
     }
 
-    Context::Context(const std::string& src, const ContextConfig& config)
+    Context::Context(const std::string& src)
         : m_jsCode(src)
         , m_arrayBufferAllocator(v8::ArrayBuffer::Allocator::NewDefaultAllocator())
         , m_isolate(createIsolate(m_arrayBufferAllocator.get()))
@@ -26,7 +26,6 @@ namespace cardan
         , m_handleScope(m_isolate.get())
         , m_context(v8::Context::New(m_isolate.get()))
         , m_contextScope(m_context)
-        , m_config(config)
     {
     }
 
@@ -67,11 +66,7 @@ namespace cardan
         // TODO Maybe extract some information about exception from JS and put it in JSException here?
         if (tryCatchHandler.HasCaught())
         {
-            if (m_config.rethrowExceptions)
-            {
-                throw JSException();
-            }
-            //return Value(JSException(), m_isolate.get(), m_context);
+            throw JSException();
         }
 
         auto resultValue = scriptRunResult.ToLocalChecked();

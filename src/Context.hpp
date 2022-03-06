@@ -14,12 +14,6 @@
 
 namespace cardan
 {
-    // TODO Think about compile-time configuration for it
-    struct ContextConfig
-    {
-        bool rethrowExceptions = false;
-    };
-
     // Context of script execution
     // TODO:
     // * C++ classes binding into JS
@@ -30,7 +24,7 @@ namespace cardan
         using ScriptRunResult = Value;
 
     public:
-        Context(const std::string& src, const ContextConfig& config = {});
+        Context(const std::string& src);
 
         ScriptRunResult runScript();
 
@@ -66,8 +60,6 @@ namespace cardan
 
         v8::Local<v8::Context> m_context;
         v8::Context::Scope m_contextScope;
-
-        ContextConfig m_config;
     };
 }
 
