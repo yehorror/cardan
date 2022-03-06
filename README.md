@@ -2,7 +2,7 @@
 A simple V8 wrapper for easy embedding of Javascript into C++
 
 ## TODO
-* Implement calling of JS functions from C++ code
+* ~~Implement calling of JS functions from C++ code~~
 * Implement adding of C++ classes into JS
 * Implement more tests with corner cases covered
 * Integrate ClangFormat
