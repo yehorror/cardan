@@ -15,8 +15,7 @@ namespace
         Function function;
 
         FunctionWithContext(const std::string& jsCode)
-            : context(jsCode)
-            , function(context.runScript().asFunction())
+            : function(context.runScript(jsCode).asFunction())
         {
         }
     };

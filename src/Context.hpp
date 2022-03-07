@@ -24,9 +24,9 @@ namespace cardan
         using ScriptRunResult = Value;
 
     public:
-        Context(const std::string& src);
+        Context();
 
-        ScriptRunResult runScript(const std::string& code = "");
+        ScriptRunResult runScript(const std::string& code);
 
         Value get(const std::string& valueName);
 
@@ -50,8 +50,6 @@ namespace cardan
         ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);
 
     private:
-        // Shouldn't we keep here compiled v8::Script?
-        const std::string m_jsCode;
         std::unique_ptr<v8::ArrayBuffer::Allocator> m_arrayBufferAllocator;
 
         // TODO Move isolate's guard declaration out of here

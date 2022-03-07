@@ -18,9 +18,8 @@ namespace cardan
         isolate->Dispose();
     }
 
-    Context::Context(const std::string& src)
-        : m_jsCode(src)
-        , m_arrayBufferAllocator(v8::ArrayBuffer::Allocator::NewDefaultAllocator())
+    Context::Context()
+        : m_arrayBufferAllocator(v8::ArrayBuffer::Allocator::NewDefaultAllocator())
         , m_isolate(createIsolate(m_arrayBufferAllocator.get()))
         , m_isolateScope(m_isolate.get())
         , m_handleScope(m_isolate.get())
@@ -31,15 +30,7 @@ namespace cardan
 
     Context::ScriptRunResult Context::runScript(const std::string& code)
     {
-        v8::Local<v8::String> source;
-        if (code.empty())
-        {
-            source = v8::String::NewFromUtf8(m_isolate.get(), m_jsCode.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
-        }
-        else
-        {
-            source = v8::String::NewFromUtf8(m_isolate.get(), code.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
-        }
+        v8::Local<v8::String> source = converters::convert(m_isolate.get(), m_context, code).As<v8::String>();
 
         v8::MaybeLocal<v8::Script> scriptCompileResult = v8::Script::Compile(m_context, source);
 

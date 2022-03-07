@@ -17,8 +17,7 @@ namespace
         Array array;
 
         ArrayWithContext(const std::string& jsCode)
-            : context(jsCode)
-            , array(context.runScript().asArray())
+            : array(context.runScript(jsCode).asArray())
         {
         }
     };

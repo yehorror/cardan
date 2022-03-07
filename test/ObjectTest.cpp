@@ -16,8 +16,7 @@ namespace
         Object object;
 
         ObjectWithContext(const std::string& jsCode)
-            : context(jsCode)
-            , object(context.runScript().asObject())
+            : object(context.runScript(jsCode).asObject())
         {
         }
     };

@@ -17,8 +17,8 @@ TEST(Scenarios, ScriptHasMultipleFunctionsDeclarations_GetEachOfThem_CallEachFun
         }
     )JS";
 
-    Context context(JS);
-    context.runScript();
+    Context context;
+    context.runScript(JS);
 
     Function intValueFunc = context.get("intValueFunc").asFunction();
     Function stringValueFunc = context.get("stringValueFunc").asFunction();
@@ -40,9 +40,9 @@ TEST(Scenarios, ScriptHasFunctionWhichCallToCppFunction_CallThisFunction_CppFunc
     MockFunction<void()> cppMockFunction;
     auto stdFunction = cppMockFunction.AsStdFunction();
 
-    Context context(JS);
+    Context context;
     context.set("cppFunction", stdFunction);
-    context.runScript();
+    context.runScript(JS);
 
     Function jsFunction = context.get("callCppFunction").asFunction();
 
