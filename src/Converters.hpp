@@ -3,6 +3,7 @@
 #include <v8.h>
 #include <string>
 #include <functional>
+#include "Exceptions.hpp"
 
 #include "Helper.hpp"
 
@@ -21,15 +22,24 @@ namespace cardan::converters
             auto funcPtr = info.Data().As<v8::External>()->Value();
             auto& function = *static_cast<std::function<FuncReturnType(FuncArgs...)>*>(funcPtr);
 
+            auto tupleWithArguments = details::packArguments<FuncArgs...>(info);
+
+            if (std::tuple_size<decltype(tupleWithArguments)>::value != info.Length())
+            {
+                auto isolate = info.GetIsolate();
+                isolate->ThrowException(converters::convert(isolate, isolate->GetCurrentContext(), "Invalid number of arguments"));
+                return;
+            }
+
             if constexpr (std::is_same_v<void, FuncReturnType>)
             {
                 // If bound function has 'void' return type, just call function and don't bother about result
-                std::apply(function, details::packArguments<FuncArgs...>(info));
+                std::apply(function, tupleWithArguments);
             }
             else
             {
                 // Otherwise, convert this value to V8's return value
-                auto funcExecutionResult = std::apply(function, details::packArguments<FuncArgs...>(info));
+                auto funcExecutionResult = std::apply(function, tupleWithArguments);
                 auto returnValue = info.GetReturnValue();
 
                 details::convertValueToV8ReturnValue(info.GetIsolate(), funcExecutionResult, returnValue);
