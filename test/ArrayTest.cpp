@@ -106,9 +106,9 @@ TEST(ArrayTest, CreateArrayWith3Elements_IterateOverItViaStdFor_each_PredicateCa
 
     {
         InSequence seq;
-        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(1, val.asInt()); }));
-        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(2, val.asInt()); }));
-        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(3, val.asInt()); }));
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const cardan::Value& val) { EXPECT_EQ(1, val.asInt()); });
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const cardan::Value& val) { EXPECT_EQ(2, val.asInt()); });
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const cardan::Value& val) { EXPECT_EQ(3, val.asInt()); });
     }
 
     std::for_each(array.begin(), array.end(), mockPredicate.AsStdFunction());
@@ -122,9 +122,9 @@ TEST(ArrayTest, CreateArrayWith3Elements_IterateOverItViaRangeBasedFor_Predicate
 
     {
         InSequence seq;
-        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(1, val.asInt()); }));
-        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(2, val.asInt()); }));
-        EXPECT_CALL(mockPredicate, Call(_)).WillOnce(([](const cardan::Value& val) { EXPECT_EQ(3, val.asInt()); }));
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const cardan::Value& val) { EXPECT_EQ(1, val.asInt()); });
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const cardan::Value& val) { EXPECT_EQ(2, val.asInt()); });
+        EXPECT_CALL(mockPredicate, Call(_)).WillOnce([](const cardan::Value& val) { EXPECT_EQ(3, val.asInt()); });
     }
 
     for (const auto& value : array)
