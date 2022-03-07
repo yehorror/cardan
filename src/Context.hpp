@@ -26,7 +26,7 @@ namespace cardan
     public:
         Context(const std::string& src);
 
-        ScriptRunResult runScript();
+        ScriptRunResult runScript(const std::string& code = "");
 
         Value get(const std::string& valueName);
 

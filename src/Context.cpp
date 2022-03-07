@@ -29,10 +29,17 @@ namespace cardan
     {
     }
 
-    Context::ScriptRunResult Context::runScript()
+    Context::ScriptRunResult Context::runScript(const std::string& code)
     {
-        v8::Local<v8::String> source =
-            v8::String::NewFromUtf8(m_isolate.get(), m_jsCode.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
+        v8::Local<v8::String> source;
+        if (code.empty())
+        {
+            source = v8::String::NewFromUtf8(m_isolate.get(), m_jsCode.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
+        }
+        else
+        {
+            source = v8::String::NewFromUtf8(m_isolate.get(), code.c_str(), v8::NewStringType::kNormal).ToLocalChecked();
+        }
 
         v8::MaybeLocal<v8::Script> scriptCompileResult = v8::Script::Compile(m_context, source);
 
