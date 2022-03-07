@@ -23,6 +23,7 @@ namespace cardan
         std::string asString() const;
         int asInt() const;
         double asDouble();
+        bool asBool() const;
         Array asArray();
         Object asObject();
         Function asFunction();
@@ -31,6 +32,7 @@ namespace cardan
         bool isString() const;
         bool isInt() const;
         bool isDouble();
+        bool isBool() const;
         bool isArray();
         bool isObject();
         bool isFunction();

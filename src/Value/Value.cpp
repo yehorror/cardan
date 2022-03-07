@@ -32,6 +32,15 @@ namespace cardan
         throw std::runtime_error("Invalid value type");
     }
 
+    bool Value::asBool() const
+    {
+        if (isBool())
+        {
+            return m_value->ToBoolean(m_isolate)->Value();
+        }
+        throw std::runtime_error("Invalid value type");
+    }
+
     Array Value::asArray()
     {
         if (isArray())
@@ -77,6 +86,11 @@ namespace cardan
     bool Value::isDouble()
     {
         return m_value->IsNumber();
+    }
+
+    bool Value::isBool() const
+    {
+        return m_value->IsBoolean();
     }
 
     bool Value::isArray()

@@ -79,6 +79,37 @@ TEST(ValueTest, CreateStringValue_TryToGetDouble_ExceptionOfWrongTypeIsThrown)
     EXPECT_THROW(value.asDouble(), std::runtime_error);
 }
 
+TEST(ValueTest, CreateBoolValue_ValueStoresBool)
+{
+    auto [ctx, value] = makeValueFromJSCode("true");
+
+    EXPECT_TRUE(value.isBool());
+}
+
+TEST(ValueTest, CreateTrueBoolValue_asBoolReturnsTrue)
+{
+    auto [ctx, value] = makeValueFromJSCode("true");
+
+    ASSERT_TRUE(value.isBool());
+    EXPECT_EQ(true, value.asBool());
+}
+
+TEST(ValueTest, CreateFalseBoolValue_asBoolReturnsFalse)
+{
+    auto [ctx, value] = makeValueFromJSCode("false");
+
+    ASSERT_TRUE(value.isBool());
+    EXPECT_EQ(false, value.asBool());
+}
+
+TEST(ValueTest, CreateStringValue_TryToGetBool_ExceptionOfWrongTypeIsThrown)
+{
+    auto [ctx, value] = makeValueFromJSCode(" 'definitely not a bool' ");
+
+    ASSERT_FALSE(value.isBool());
+    EXPECT_THROW(value.asBool(), std::runtime_error);
+}
+
 TEST(ValueTest, CreateStringValue_TryToGetInt_ExceptionOfWrongTypeIsThrown)
 {
     auto [ctx, value] = makeValueFromJSCode(" 'definitely not an integer' ");

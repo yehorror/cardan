@@ -3,7 +3,6 @@
 #include <v8.h>
 #include <string>
 #include <functional>
-#include "Exceptions.hpp"
 
 #include "Helper.hpp"
 
@@ -23,26 +22,33 @@ namespace cardan::converters
             auto& function = *static_cast<std::function<FuncReturnType(FuncArgs...)>*>(funcPtr);
 
             auto tupleWithArguments = details::packArguments<FuncArgs...>(info);
+            auto isolate = info.GetIsolate();
 
             if (std::tuple_size<decltype(tupleWithArguments)>::value != info.Length())
             {
-                auto isolate = info.GetIsolate();
                 isolate->ThrowException(converters::convert(isolate, isolate->GetCurrentContext(), "Invalid number of arguments"));
                 return;
             }
 
-            if constexpr (std::is_same_v<void, FuncReturnType>)
+            try
             {
-                // If bound function has 'void' return type, just call function and don't bother about result
-                std::apply(function, tupleWithArguments);
-            }
-            else
-            {
-                // Otherwise, convert this value to V8's return value
-                auto funcExecutionResult = std::apply(function, tupleWithArguments);
-                auto returnValue = info.GetReturnValue();
+                if constexpr (std::is_same_v<void, FuncReturnType>)
+                {
+                    // If bound function has 'void' return type, just call function and don't bother about result
+                    std::apply(function, tupleWithArguments);
+                }
+                else
+                {
+                    // Otherwise, convert this value to V8's return value
+                    auto funcExecutionResult = std::apply(function, tupleWithArguments);
+                    auto returnValue = info.GetReturnValue();
 
-                details::convertValueToV8ReturnValue(info.GetIsolate(), funcExecutionResult, returnValue);
+                    details::convertValueToV8ReturnValue(info.GetIsolate(), funcExecutionResult, returnValue);
+                }
+            }
+            catch (const std::exception& exception)
+            {
+                isolate->ThrowException(converters::convert(isolate, isolate->GetCurrentContext(), exception.what()));
             }
         };
 
