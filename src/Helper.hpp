@@ -1,20 +1,32 @@
 #pragma once
 
 #include "v8.h"
+#include "Value/Function.hpp"
 
 namespace cardan::details
 {
     // TODO Consider moving convert functions into separate header
 
     // Function overloads to convert JS call arguments into C++ functions arguments
-    static void convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value, int& out)
+    template <class Type>
+    static Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
+
+    template <>
+    int convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
     {
-        out = value->Int32Value(context).ToChecked();
+        return value->Int32Value(context).ToChecked();
     }
 
-    static void convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value, std::string& out)
+    template <>
+    std::string convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
     {
-        out = *v8::String::Utf8Value(context->GetIsolate(), value);
+        return *v8::String::Utf8Value(context->GetIsolate(), value);
+    }
+
+    template <>
+    Function convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    {
+        return Function(value.As<v8::Function>(), context->GetIsolate(), context);
     }
 
     // Function overloads to convert C++ return values into JS return values
@@ -32,22 +44,33 @@ namespace cardan::details
 
     //------------------------------------------------------------------------------------
 
-    template <size_t Idx=0, class... Args>
-    static void packArgumentsHelper(std::tuple<Args...>& tuple, const v8::FunctionCallbackInfo<v8::Value>& info)
+    template <size_t N, class... Types>
+    struct getType;
+
+    template <size_t N, class T, class... Tail>
+    struct getType<N, T, Tail...>
     {
-        convertArgumentFromV8Value(info.GetIsolate()->GetCurrentContext(), info[Idx], std::get<Idx>(tuple));
-        if constexpr (Idx < (std::tuple_size<std::tuple<Args...>>::value - 1))
-        {
-            packArgumentsHelper<Idx + 1, Args...>(tuple, info);
-        }
+        using type = typename getType<N - 1, Tail...>::type;
+    };
+
+    template <class T, class... Tail>
+    struct getType<0, T, Tail...>
+    {
+        using type = T;
+    };
+
+    template <class... Args, size_t... I>
+    static std::tuple<Args...> packArgumentsImpl(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<I...>)
+    {
+        return std::make_tuple<Args...>(
+            convertArgumentFromV8Value<typename getType<I, Args...>::type>(info.GetIsolate()->GetCurrentContext(), info[I])...
+        );
     }
 
     template <class... Args>
     static std::tuple<Args...> packArguments(const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        std::tuple<Args...> result;
-        packArgumentsHelper(result, info);
-        return result;
+        return packArgumentsImpl<Args...>(info, std::make_index_sequence<std::tuple_size<std::tuple<Args...>>::value> {});
     }
 
     template <>

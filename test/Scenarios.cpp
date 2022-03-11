@@ -50,3 +50,31 @@ TEST(Scenarios, ScriptHasFunctionWhichCallToCppFunction_CallThisFunction_CppFunc
 
     jsFunction.call();
 }
+
+TEST(Scenarios, CppFunctionCallsBackToJS_CallThisFunctionFromJSCode_CallbackFunctionCalled)
+{
+    const std::string JS = R"JS(
+
+        var functionWasCalled = false;
+
+        function callback() {
+            functionWasCalled = true;
+        }
+
+        cppFunctionWithCallback(callback);
+
+    )JS";
+
+    std::function<void(Function)> cppFunction = [] (Function callback)
+    {
+        callback.call();
+    };
+
+    Context context;
+    context.set("cppFunctionWithCallback", cppFunction);
+    context.runScript(JS);
+
+    auto wasFunctionCalled = context.get("functionWasCalled");
+
+    EXPECT_EQ(true, wasFunctionCalled.asBool());
+}
