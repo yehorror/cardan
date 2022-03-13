@@ -12,9 +12,8 @@ namespace cardan
         return at(idx);
     }
 
-    size_t Array::length()
+    uint32_t Array::length()
     {
-        // TODO This method returns uint32; should we use size_t as return type of this function?
         return m_array->Length();
     }
 

@@ -30,7 +30,7 @@ namespace cardan
     public:
         Value at(int idx);
         Value operator[](int idx);
-        size_t length();
+        uint32_t length();
 
         // for iterating:
         ArrayIterator begin();
