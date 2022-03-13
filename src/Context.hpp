@@ -37,16 +37,6 @@ namespace cardan
 
     private:
 
-        inline void setInternal(v8::Local<v8::String> funcName, int value);
-
-        inline void setInternal(v8::Local<v8::String> funcName, const std::string& value);
-
-        template <class FuncReturnType, class... FuncArgs>
-        void setInternal(v8::Local<v8::String> funcName, std::function<FuncReturnType(FuncArgs...)>& func);
-
-        template<class FuncReturnType, class... FuncArgs>
-        static void callCppFunctionFromJS(const v8::FunctionCallbackInfo<v8::Value>& info);
-
         ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);
 
     private:

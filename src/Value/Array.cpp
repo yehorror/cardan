@@ -4,7 +4,7 @@ namespace cardan
 {
     Value Array::at(int idx)
     {
-        return Value(m_array->Get(m_context, idx).ToLocalChecked(), m_isolate, m_context);
+        return Value(m_array->Get(m_context, idx).ToLocalChecked(), m_context);
     }
 
     Value Array::operator[](int idx)
@@ -28,9 +28,8 @@ namespace cardan
         return ArrayIterator(*this, length());
     }
 
-    Array::Array(v8::Local<v8::Array> array, v8::Isolate* isolate, v8::Local<v8::Context>& context)
+    Array::Array(v8::Local<v8::Array> array, v8::Local<v8::Context>& context)
         : m_array(array)
-        , m_isolate(isolate)
         , m_context(context)
     {
     }

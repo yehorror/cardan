@@ -55,7 +55,7 @@ namespace cardan
 
             auto argsTuple = std::make_tuple(args...);
 
-            argumentsToVector(argsTuple, argumentsVector, m_isolate);
+            argumentsToVector(argsTuple, argumentsVector, m_context->GetIsolate());
 
             auto result = m_function->Call(m_context, m_context->Global(), argumentsVector.size(), argumentsVector.data()).ToLocalChecked();
             return makeValue(result);
@@ -73,13 +73,12 @@ namespace cardan
 
         friend Function details::convertArgumentFromV8Value<>(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
 
-        Function(v8::Local<v8::Function> function, v8::Isolate* isolate, v8::Local<v8::Context>& context);
+        Function(v8::Local<v8::Function> function, v8::Local<v8::Context>& context);
 
         Value makeValue(v8::Local<v8::Value> value);
 
     public:
         v8::Local<v8::Function> m_function;
-        v8::Isolate* m_isolate;
         v8::Local<v8::Context> m_context;
     };
 }

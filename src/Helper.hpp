@@ -26,7 +26,7 @@ namespace cardan::details
     template <>
     Function convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
     {
-        return Function(value.As<v8::Function>(), context->GetIsolate(), context);
+        return Function(value.As<v8::Function>(), context);
     }
 
     // Function overloads to convert C++ return values into JS return values
