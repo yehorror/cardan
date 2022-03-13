@@ -13,7 +13,7 @@ namespace cardan
     {
     public:
         Value operator*();
-        void operator++();
+        ArrayIterator& operator++();
         bool operator != (const ArrayIterator& rhs) const;
 
     private:

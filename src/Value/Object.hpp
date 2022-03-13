@@ -14,7 +14,7 @@ namespace cardan
     {
     public:
         std::pair<std::string, Value> operator*();
-        void operator++();
+        ObjectIterator& operator ++();
         bool operator != (const ObjectIterator& rhs) const;
 
     private:

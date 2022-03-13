@@ -39,9 +39,10 @@ namespace cardan
         return m_array[m_idx];
     }
 
-    void ArrayIterator::operator++()
+    ArrayIterator& ArrayIterator::operator++()
     {
         ++m_idx;
+        return *this;
     }
 
     bool ArrayIterator::operator !=(const ArrayIterator& rhs) const

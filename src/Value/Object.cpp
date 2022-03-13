@@ -43,9 +43,10 @@ namespace cardan
         return m_object.getByIndex(m_idx);
     }
 
-    void ObjectIterator::operator++()
+    ObjectIterator& ObjectIterator::operator++()
     {
         ++m_idx;
+        return *this;
     }
 
     bool ObjectIterator::operator !=(const ObjectIterator& rhs) const
