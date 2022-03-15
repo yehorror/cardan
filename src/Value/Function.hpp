@@ -71,6 +71,7 @@ namespace cardan
         //  - Make constructors public;
         //  - Somehow make possible creation of these things via Context class (shall it lead to less "friend"liness?)
         //  - Re-design everything in library?
+        // Need to get rid of this
 
         friend Function details::convertArgumentFromV8Value<>(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
 
