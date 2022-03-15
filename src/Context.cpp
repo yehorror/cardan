@@ -56,6 +56,11 @@ namespace cardan
         return Value(value, m_context);
     }
 
+    Value Context::makeValue(int value)
+    {
+        return Value(v8::Integer::New(m_isolate.get() , value), m_context);
+    }
+
     Context::ScriptRunResult Context::processRunResult(
         v8::MaybeLocal<v8::Value>& scriptRunResult,
         v8::TryCatch& tryCatchHandler

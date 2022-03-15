@@ -348,3 +348,14 @@ TEST(ContextTest, AddCppFunctionWhichThrowsException_CallFunctionFromJSCode_Exce
 
     EXPECT_TRUE(value.asBool());
 }
+
+TEST(ContextTest, MakeIntegerValue_asInt_ReturnsValueItWasMadeWith)
+{
+    const int VALUE = 52375;
+
+    Context ctx;
+    cardan::Value value = ctx.makeValue(VALUE);
+
+    ASSERT_TRUE(value.isInt());
+    EXPECT_EQ(VALUE, value.asInt());
+}
