@@ -381,3 +381,19 @@ TEST(ContextTest, MakeDoubleValue_asDouble_ReturnsValueItWasMadeWith)
     ASSERT_TRUE(value.isDouble());
     EXPECT_DOUBLE_EQ(VALUE, value.asDouble());
 }
+
+TEST(ContextTest, MakeFunctionValue_asFunction_ReturnsFunctionWhichCanBeCalled)
+{
+    MockFunction<void(int)> mockFunction;
+
+    auto mockStdFunction = mockFunction.AsStdFunction();
+
+    Context ctx;
+    cardan::Value value = ctx.makeValue(mockStdFunction);
+
+    ASSERT_TRUE(value.isFunction());
+
+    EXPECT_CALL(mockFunction, Call(42));
+
+    value.asFunction().call(42);
+}

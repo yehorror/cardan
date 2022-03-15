@@ -30,7 +30,7 @@ namespace cardan
 
     Context::ScriptRunResult Context::runScript(const std::string& code)
     {
-        v8::Local<v8::String> source = converters::convert(m_isolate.get(), m_context, code).As<v8::String>();
+        v8::Local<v8::String> source = converters::convert(m_context, code).As<v8::String>();
 
         v8::MaybeLocal<v8::Script> scriptCompileResult = v8::Script::Compile(m_context, source);
 
@@ -54,21 +54,6 @@ namespace cardan
         v8::Local<v8::Value> value = m_context->Global()->Get(m_context, valueNameV8).ToLocalChecked();
 
         return Value(value, m_context);
-    }
-
-    Value Context::makeValue(int value)
-    {
-        return Value(v8::Integer::New(m_isolate.get(), value), m_context);
-    }
-
-    Value Context::makeValue(const std::string& value)
-    {
-        return Value(v8::String::NewFromUtf8(m_isolate.get(), value.c_str()).ToLocalChecked(), m_context);
-    }
-
-    Value Context::makeValue(double value)
-    {
-        return Value(v8::Number::New(m_isolate.get(), value), m_context);
     }
 
     Context::ScriptRunResult Context::processRunResult(

@@ -30,9 +30,8 @@ namespace cardan
 
         Value get(const std::string& valueName);
 
-        Value makeValue(int value);
-        Value makeValue(const std::string& value);
-        Value makeValue(double value);
+        template <class ValueType>
+        Value makeValue(ValueType&& value);
 
     public:
 
