@@ -359,3 +359,25 @@ TEST(ContextTest, MakeIntegerValue_asInt_ReturnsValueItWasMadeWith)
     ASSERT_TRUE(value.isInt());
     EXPECT_EQ(VALUE, value.asInt());
 }
+
+TEST(ContextTest, MakeStringValue_asString_ReturnsValueItWasMadeWith)
+{
+    const std::string VALUE = "some value";
+
+    Context ctx;
+    cardan::Value value = ctx.makeValue(VALUE);
+
+    ASSERT_TRUE(value.isString());
+    EXPECT_EQ(VALUE, value.asString());
+}
+
+TEST(ContextTest, MakeDoubleValue_asDouble_ReturnsValueItWasMadeWith)
+{
+    const double VALUE = 2.71828;
+
+    Context ctx;
+    cardan::Value value = ctx.makeValue(VALUE);
+
+    ASSERT_TRUE(value.isDouble());
+    EXPECT_DOUBLE_EQ(VALUE, value.asDouble());
+}

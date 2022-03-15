@@ -31,6 +31,8 @@ namespace cardan
         Value get(const std::string& valueName);
 
         Value makeValue(int value);
+        Value makeValue(const std::string& value);
+        Value makeValue(double value);
 
     public:
 

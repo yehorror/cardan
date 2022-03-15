@@ -58,7 +58,17 @@ namespace cardan
 
     Value Context::makeValue(int value)
     {
-        return Value(v8::Integer::New(m_isolate.get() , value), m_context);
+        return Value(v8::Integer::New(m_isolate.get(), value), m_context);
+    }
+
+    Value Context::makeValue(const std::string& value)
+    {
+        return Value(v8::String::NewFromUtf8(m_isolate.get(), value.c_str()).ToLocalChecked(), m_context);
+    }
+
+    Value Context::makeValue(double value)
+    {
+        return Value(v8::Number::New(m_isolate.get(), value), m_context);
     }
 
     Context::ScriptRunResult Context::processRunResult(
