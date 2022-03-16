@@ -33,6 +33,8 @@ namespace cardan
         template <class ValueType>
         Value makeValue(ValueType&& value);
 
+        Object global();
+
     public:
 
         template <class ValueType>

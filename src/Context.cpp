@@ -56,6 +56,11 @@ namespace cardan
         return Value(value, m_context);
     }
 
+    Object Context::global()
+    {
+        return Value(m_context->Global(), m_context).asObject();
+    }
+
     Context::ScriptRunResult Context::processRunResult(
         v8::MaybeLocal<v8::Value>& scriptRunResult,
         v8::TryCatch& tryCatchHandler

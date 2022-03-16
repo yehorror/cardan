@@ -397,3 +397,11 @@ TEST(ContextTest, MakeFunctionValue_asFunction_ReturnsFunctionWhichCanBeCalled)
 
     value.asFunction().call(42);
 }
+
+TEST(ContextTest, CreateEmptyContext_global_ReturnsEmptyObject)
+{
+    Context ctx;
+    Object global = ctx.global();
+
+    EXPECT_EQ(0, global.getKeys().length());
+}
