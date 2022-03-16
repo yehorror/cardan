@@ -117,3 +117,12 @@ TEST(ObjectTest, CreateObjectWithMultipleFields_getByIndex_ReturnFildsByTheirInd
     EXPECT_EQ("age", secondFieldName);
     EXPECT_EQ(35, secondFieldValue.asInt());
 }
+
+TEST(ObjectTest, CreateEmptyObject_setIntegerValueBySomeName_getValueByThatNameReturnsValueWhichWasSet)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("{}") )");
+
+    object.set("some_value", 23);
+
+    EXPECT_EQ(23, object["some_value"].asInt());
+}
