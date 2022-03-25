@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Value.hpp"
+#include "Converters/Converters.hpp"
 
 namespace cardan
 {
@@ -13,21 +14,11 @@ namespace cardan
         Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
     }
 
-    static v8::Local<v8::Value> convertArgumentToV8Value(v8::Isolate* isolate, int argument)
-    {
-        return v8::Integer::New(isolate, argument);
-    }
-
-    static v8::Local<v8::Value> convertArgumentToV8Value(v8::Isolate* isolate, const std::string& argument)
-    {
-        return v8::String::NewFromUtf8(isolate, argument.c_str()).ToLocalChecked();
-    }
-
     template <size_t Idx=0, class... TupleT>
     static void argumentsToVector(const std::tuple<TupleT...>& arguments, std::vector<v8::Local<v8::Value>>& values, v8::Isolate* isolate)
     {
         values.push_back(
-            convertArgumentToV8Value(isolate, std::get<Idx>(arguments))
+            converters::convert(isolate->GetCurrentContext(), std::get<Idx>(arguments))
         );
 
         if constexpr (Idx < (std::tuple_size<std::tuple<TupleT...>>::value - 1))
@@ -44,6 +35,8 @@ namespace cardan
     class Function;
     class Value;
 
+    // TODO This whole class consists on 90% of template functions
+    // Consider removal of cpp file (it has only one simple method + constructr) and move it here or .inl file
     class Function
     {
     public:

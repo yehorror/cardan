@@ -6,6 +6,11 @@
 
 #include "Helper.hpp"
 
+namespace cardan
+{
+    class Function;
+}
+
 namespace cardan::converters
 {
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, int value);
