@@ -6,14 +6,6 @@
 
 namespace cardan::details
 {
-    template <class T>
-    static void convertValueToV8ReturnValue(v8::Isolate* isolate, T value, v8::ReturnValue<v8::Value>& returnValue)
-    {
-        returnValue.Set(converters::convert(isolate->GetCurrentContext(), value));
-    }
-
-    //------------------------------------------------------------------------------------
-
     template <size_t N, class... Types>
     struct getType;
 
