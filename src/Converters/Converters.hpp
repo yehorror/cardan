@@ -4,8 +4,6 @@
 #include <string>
 #include <functional>
 
-#include "Helper.hpp"
-
 namespace cardan
 {
     class Function;

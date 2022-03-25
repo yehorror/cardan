@@ -5,6 +5,7 @@
 
 #include "Value.hpp"
 #include "Converters/Converters.hpp"
+#include "Helper.hpp"
 
 namespace cardan
 {
@@ -13,26 +14,6 @@ namespace cardan
         template <class Type>
         Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
     }
-
-    template <size_t Idx=0, class... TupleT>
-    static void argumentsToVector(const std::tuple<TupleT...>& arguments, std::vector<v8::Local<v8::Value>>& values, v8::Isolate* isolate)
-    {
-        values.push_back(
-            converters::convert(isolate->GetCurrentContext(), std::get<Idx>(arguments))
-        );
-
-        if constexpr (Idx < (std::tuple_size<std::tuple<TupleT...>>::value - 1))
-        {
-            argumentsToVector<Idx + 1, TupleT...>(arguments, values, isolate);
-        }
-    }
-
-    template <>
-    void argumentsToVector(const std::tuple<>&, std::vector<v8::Local<v8::Value>>&, v8::Isolate*)
-    {
-    }
-
-    class Function;
     class Value;
 
     // TODO This whole class consists on 90% of template functions
@@ -49,7 +30,7 @@ namespace cardan
 
             auto argsTuple = std::make_tuple(args...);
 
-            argumentsToVector(argsTuple, argumentsVector, m_context->GetIsolate());
+            details::argumentsToVector(argsTuple, argumentsVector, m_context->GetIsolate());
 
             auto result = m_function->Call(m_context, m_context->Global(), argumentsVector.size(), argumentsVector.data()).ToLocalChecked();
             return makeValue(result);

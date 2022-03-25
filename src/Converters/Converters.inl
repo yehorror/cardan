@@ -1,4 +1,8 @@
-#include "Converters.hpp"
+namespace cardan::details
+{
+    template <class... Args>
+    static std::tuple<Args...> packArguments(const v8::FunctionCallbackInfo<v8::Value>& info);
+}
 
 namespace cardan::converters
 {
@@ -33,7 +37,7 @@ namespace cardan::converters
                     auto funcExecutionResult = std::apply(function, tupleWithArguments);
                     auto returnValue = info.GetReturnValue();
 
-                    details::convertValueToV8ReturnValue(info.GetIsolate(), funcExecutionResult, returnValue);
+                    returnValue.Set(converters::convert(info.GetIsolate()->GetCurrentContext(), funcExecutionResult));
                 }
             }
             catch (const std::exception& exception)

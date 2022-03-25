@@ -1,21 +1,15 @@
 #pragma once
 
 #include "v8.h"
+#include "Converters/Converters.hpp"
 #include "Converters/ConvertersFromV8.hpp"
 
 namespace cardan::details
 {
-    // Function overloads to convert C++ return values into JS return values
     template <class T>
     static void convertValueToV8ReturnValue(v8::Isolate* isolate, T value, v8::ReturnValue<v8::Value>& returnValue)
     {
-        // We can rely on SFINAE here
-        returnValue.Set(value);
-    }
-
-    static void convertValueToV8ReturnValue(v8::Isolate* isolate, const std::string& value, v8::ReturnValue<v8::Value>& returnValue)
-    {
-        returnValue.Set(v8::String::NewFromUtf8(isolate, value.c_str()).ToLocalChecked());
+        returnValue.Set(converters::convert(isolate->GetCurrentContext(), value));
     }
 
     //------------------------------------------------------------------------------------
@@ -54,4 +48,25 @@ namespace cardan::details
     {
         return std::tuple<>();
     }
+
+    //------------------------------------------------------------------------------------
+
+    template <size_t Idx=0, class... TupleT>
+    static void argumentsToVector(const std::tuple<TupleT...>& arguments, std::vector<v8::Local<v8::Value>>& values, v8::Isolate* isolate)
+    {
+        values.push_back(
+            converters::convert(isolate->GetCurrentContext(), std::get<Idx>(arguments))
+        );
+
+        if constexpr (Idx < (std::tuple_size<std::tuple<TupleT...>>::value - 1))
+        {
+            argumentsToVector<Idx + 1, TupleT...>(arguments, values, isolate);
+        }
+    }
+
+    template <>
+    void argumentsToVector(const std::tuple<>&, std::vector<v8::Local<v8::Value>>&, v8::Isolate*)
+    {
+    }
+
 }
