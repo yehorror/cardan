@@ -7,6 +7,8 @@ namespace cardan::details
 namespace cardan::converters
 {
     // TODO Research if we can implement same functions for lambdas, etc
+    // Can we have some internal storage for these functions objects? And delete them when objects are deleted in JS context
+    // TODO Also this method is too big. It is better to refactor it somehow
     template <class FuncReturnType, class... FuncArgs>
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, std::function<FuncReturnType(FuncArgs...)>& func)
     {
