@@ -23,8 +23,11 @@ add_library(cardan-lib
     Value/Function.cpp
     Value/Function.hpp
 
-    Converters.cpp
-    Converters.hpp
+    Converters/Converters.cpp
+    Converters/Converters.hpp
+
+    Converters/ConvertersFromV8.cpp
+    #Converters/ConvertersFromV8.hpp
 
     Helper.hpp
 )

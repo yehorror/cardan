@@ -7,10 +7,10 @@
 
 namespace cardan
 {
-    namespace details
+    namespace converters
     {
         template <class Type>
-        static Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
+        Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
     }
 
     static v8::Local<v8::Value> convertArgumentToV8Value(v8::Isolate* isolate, int argument)
@@ -73,7 +73,7 @@ namespace cardan
         //  - Re-design everything in library?
         // Need to get rid of this
 
-        friend Function details::convertArgumentFromV8Value<>(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
+        friend Function converters::convertArgumentFromV8Value<>(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
 
         Function(v8::Local<v8::Function> function, v8::Local<v8::Context>& context);
 

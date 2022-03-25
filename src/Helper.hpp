@@ -2,33 +2,10 @@
 
 #include "v8.h"
 #include "Value/Function.hpp"
+#include "Converters/ConvertersFromV8.hpp"
 
 namespace cardan::details
 {
-    // TODO Consider moving convert functions into separate header
-
-    // Function overloads to convert JS call arguments into C++ functions arguments
-    template <class Type>
-    static Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
-
-    template <>
-    int convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
-    {
-        return value->Int32Value(context).ToChecked();
-    }
-
-    template <>
-    std::string convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
-    {
-        return *v8::String::Utf8Value(context->GetIsolate(), value);
-    }
-
-    template <>
-    Function convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
-    {
-        return Function(value.As<v8::Function>(), context);
-    }
-
     // Function overloads to convert C++ return values into JS return values
     template <class T>
     static void convertValueToV8ReturnValue(v8::Isolate* isolate, T value, v8::ReturnValue<v8::Value>& returnValue)
@@ -63,7 +40,7 @@ namespace cardan::details
     static std::tuple<Args...> packArgumentsImpl(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<I...>)
     {
         return std::make_tuple<Args...>(
-            convertArgumentFromV8Value<typename getType<I, Args...>::type>(info.GetIsolate()->GetCurrentContext(), info[I])...
+            cardan::converters::convertArgumentFromV8Value<typename getType<I, Args...>::type>(info.GetIsolate()->GetCurrentContext(), info[I])...
         );
     }
 
