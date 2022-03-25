@@ -1,4 +1,5 @@
 #include "Context.hpp"
+#include "Value/Object.hpp"
 
 namespace
 {

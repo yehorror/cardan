@@ -2,6 +2,8 @@
 
 #include "Value.hpp"
 #include "Array.hpp"
+#include "Function.hpp"
+#include "Converters.hpp"
 
 namespace cardan
 {
@@ -37,6 +39,9 @@ namespace cardan
         ObjectIterator begin();
         ObjectIterator end();
 
+        template <class ValueType>
+        void set(const std::string& name, ValueType&& value);
+
     private:
 
         Object(v8::Local<v8::Object> object, v8::Local<v8::Context>& context);
@@ -47,4 +52,17 @@ namespace cardan
         v8::Local<v8::Object> m_object;
         v8::Local<v8::Context> m_context;
     };
+
+    template <class ValueType>
+    void Object::set(const std::string& name, ValueType&& value)
+    {
+        v8::Local<v8::String> v8Name = v8::String::NewFromUtf8(m_context->GetIsolate(), name.c_str()).ToLocalChecked();
+        v8::Local<v8::Value> v8Value = converters::convert(m_context, std::forward<ValueType>(value));
+
+        m_object->Set(
+            m_context,
+            v8Name,
+            v8Value
+        ).Check();
+    }
 }

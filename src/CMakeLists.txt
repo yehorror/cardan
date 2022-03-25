@@ -30,5 +30,5 @@ add_library(cardan-lib
 )
 
 target_include_directories(cardan-lib PUBLIC ${CMAKE_SOURCE_DIR}/v8/include)
-target_include_directories(cardan-lib PRIVATE src/)
+target_include_directories(cardan-lib PRIVATE .)
 target_link_libraries(cardan-lib PRIVATE pthread ${CMAKE_SOURCE_DIR}/v8/out.gn/x64.release.sample/obj/libv8_monolith.a ${CMAKE_DL_LIBS})

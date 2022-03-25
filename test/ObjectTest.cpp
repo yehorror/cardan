@@ -126,3 +126,21 @@ TEST(ObjectTest, CreateEmptyObject_setIntegerValueBySomeName_getValueByThatNameR
 
     EXPECT_EQ(23, object["some_value"].asInt());
 }
+
+TEST(ObjectTest, CreateEmptyObject_setStringValueBySomeName_getValueByThatNameReturnsValueWhichWasSet)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("{}") )");
+
+    object.set("some_value", "some string value");
+
+    EXPECT_EQ("some string value", object["some_value"].asString());
+}
+
+TEST(ObjectTest, CreateEmptyObject_setDoubleValueBySomeName_getValueByThatNameReturnsValueWhichWasSet)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("{}") )");
+
+    object.set("some_value", 2.71828);
+
+    EXPECT_DOUBLE_EQ(2.71828, object["some_value"].asDouble());
+}

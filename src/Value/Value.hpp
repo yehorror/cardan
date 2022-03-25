@@ -6,7 +6,6 @@
 #include <optional>
 
 #include "Array.hpp"
-#include "Object.hpp"
 
 namespace cardan
 {
