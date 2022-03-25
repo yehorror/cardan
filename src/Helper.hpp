@@ -6,6 +6,8 @@
 
 namespace cardan::details
 {
+    // TODO Add comments here to describe what happens
+    // Also, maybe refactor it in some way, so we won't need to forward-declare some functions
     template <size_t N, class... Types>
     struct getType;
 
