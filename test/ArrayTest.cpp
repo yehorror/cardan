@@ -132,3 +132,12 @@ TEST(ArrayTest, CreateArrayWith3Elements_IterateOverItViaRangeBasedFor_Predicate
         mockPredicate.Call(value);
     }
 }
+
+TEST(ArrayTest, CreateArrayWith3Elements_setFirstElementToOtherValue_ValueWhichWasSetIsAtFirstPosition)
+{
+    auto [ctx, array] = makeArrayFromJSCode("[1,2,3]");
+
+    array.set(0, 4);
+
+    EXPECT_EQ(4, array[0].asInt());
+}

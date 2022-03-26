@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Value.hpp"
+#include "Converters/Converters.hpp"
 
 namespace cardan
 {
@@ -35,6 +36,12 @@ namespace cardan
         // for iterating:
         ArrayIterator begin();
         ArrayIterator end();
+
+        template <class ValueType>
+        void set(uint32_t index, ValueType&& value)
+        {
+            m_array->Set(m_context, index, converters::convert(m_context, std::forward<ValueType>(value))).Check();
+        }
 
     private:
         Array(v8::Local<v8::Array> array, v8::Local<v8::Context>& context);
