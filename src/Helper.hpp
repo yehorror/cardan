@@ -1,7 +1,6 @@
 #pragma once
 
 #include "v8.h"
-#include "Converters/Converters.hpp"
 #include "Converters/ConvertersFromV8.hpp"
 
 namespace cardan::details

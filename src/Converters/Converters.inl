@@ -1,8 +1,4 @@
-namespace cardan::details
-{
-    template <class... Args>
-    static std::tuple<Args...> packArguments(const v8::FunctionCallbackInfo<v8::Value>& info);
-}
+#include "Helper.hpp"
 
 namespace cardan::converters
 {
