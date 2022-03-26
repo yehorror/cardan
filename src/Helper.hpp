@@ -45,22 +45,19 @@ namespace cardan::details
 
     //------------------------------------------------------------------------------------
 
-    template <size_t Idx=0, class... TupleT>
-    static void argumentsToVector(const std::tuple<TupleT...>& arguments, std::vector<v8::Local<v8::Value>>& values, v8::Isolate* isolate)
+    template <size_t Idx=0, class... TupleT, class Functor>
+    static void forEachElementInTuple(const std::tuple<TupleT...>& tuple, Functor callback)
     {
-        values.push_back(
-            converters::convert(isolate->GetCurrentContext(), std::get<Idx>(arguments))
-        );
+        callback(std::get<Idx>(tuple));
 
         if constexpr (Idx < (std::tuple_size<std::tuple<TupleT...>>::value - 1))
         {
-            argumentsToVector<Idx + 1, TupleT...>(arguments, values, isolate);
+            forEachElementInTuple<Idx + 1, TupleT...>(tuple, callback);
         }
     }
 
-    template <>
-    void argumentsToVector(const std::tuple<>&, std::vector<v8::Local<v8::Value>>&, v8::Isolate*)
+    template <class Functor>
+    void forEachElementInTuple(const std::tuple<>& tuple, Functor callback)
     {
     }
-
 }

@@ -9,11 +9,6 @@
 
 namespace cardan
 {
-    namespace converters
-    {
-        template <class Type>
-        Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
-    }
     class Value;
 
     // TODO This whole class consists on 90% of template functions
@@ -30,7 +25,10 @@ namespace cardan
 
             auto argsTuple = std::make_tuple(args...);
 
-            details::argumentsToVector(argsTuple, argumentsVector, m_context->GetIsolate());
+            details::forEachElementInTuple(argsTuple, [&] (const auto& argument)
+            {
+                argumentsVector.push_back(converters::convert(m_context, argument));
+            });
 
             auto result = m_function->Call(m_context, m_context->Global(), argumentsVector.size(), argumentsVector.data()).ToLocalChecked();
             return makeValue(result);
