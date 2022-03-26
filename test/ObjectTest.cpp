@@ -168,3 +168,16 @@ TEST(ObjectTest, CreateContext_CreateObject_setSomeValueViaAssignment_valueWhich
 
     EXPECT_EQ(35, object["age"].asInt());
 }
+
+TEST(ObjectTest, CreateContext_CreateObject_getValueViaSquaredBrackets_setNewValueToIt_ItHasValueWhichWasSet)
+{
+    Context ctx;
+
+    Object object;
+    object["age"] = 35;
+
+    Object::ValueReference ageValueRef = object["age"];
+    ageValueRef = 27;
+
+    EXPECT_EQ(27, ageValueRef.asInt());
+}

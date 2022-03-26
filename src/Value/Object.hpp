@@ -42,6 +42,7 @@ namespace cardan
             ValueReference& operator = (ValueType&& value)
             {
                 m_parentObject.set(m_fieldName, std::forward<ValueType>(value));
+                Value::m_value = m_parentObject[m_fieldName].m_value;
                 return *this;
             }
 
