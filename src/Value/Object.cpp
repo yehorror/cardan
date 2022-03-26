@@ -2,6 +2,12 @@
 
 namespace cardan
 {
+    Object::Object()
+        : m_object(v8::Object::New(v8::Isolate::GetCurrent()))
+        , m_context(v8::Isolate::GetCurrent()->GetCurrentContext())
+    {
+    }
+
     Value Object::operator[](const std::string& key)
     {
         auto v8Key = converters::convert(m_context, key);

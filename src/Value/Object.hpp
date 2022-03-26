@@ -31,6 +31,8 @@ namespace cardan
     class Object
     {
     public:
+        Object();
+
         Value operator[](const std::string& key);
         Array getKeys();
         std::pair<std::string, Value> getByIndex(uint32_t idx);
