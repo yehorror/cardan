@@ -109,6 +109,12 @@ namespace cardan
         return m_value->IsFunction();
     }
 
+    Value& Value::operator =(int newValue)
+    {
+        m_value = v8::Integer::New(m_context->GetIsolate(), newValue);
+        return *this;
+    }
+
     Value::Value(v8::Local<v8::Value> value, v8::Local<v8::Context>& context)
         : m_value(std::move(value))
         , m_context(context)

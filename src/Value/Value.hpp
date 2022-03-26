@@ -36,6 +36,8 @@ namespace cardan
         bool isObject();
         bool isFunction();
 
+        Value& operator = (int newValue);
+
     private:
         Value(v8::Local<v8::Value> value, v8::Local<v8::Context>& context);
 

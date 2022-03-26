@@ -202,3 +202,12 @@ TEST(ValueTest, CreateUndefinedValue_isUndefinedReturnsTrue)
 
     EXPECT_TRUE(value.isUndefined());
 }
+
+TEST(ValueTest, CreateSomeValue_AssignAnotherIntegerValue_ValueIsWhatItWasAssignedTo)
+{
+    auto [ctx, value] = makeValueFromJSCode("123");
+
+    value = 456;
+
+    EXPECT_EQ(456, value.asInt());
+}
