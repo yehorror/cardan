@@ -149,10 +149,7 @@ TEST(ObjectTest, CreateContext_CreateObject_setSomeValue_valueWhichWasSetCanBeRe
 {
     Context ctx;
 
-    ctx.runScript("");
-
     Object object;
-
     object.set("name", "John Smith");
 
     EXPECT_EQ("John Smith", object["name"].asString());
@@ -163,7 +160,6 @@ TEST(ObjectTest, CreateContext_CreateObject_setSomeValueViaAssignment_valueWhich
     Context ctx;
 
     Object object;
-
     object["age"] = 35;
 
     EXPECT_EQ(35, object["age"].asInt());
