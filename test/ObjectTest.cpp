@@ -157,3 +157,14 @@ TEST(ObjectTest, CreateContext_CreateObject_setSomeValue_valueWhichWasSetCanBeRe
 
     EXPECT_EQ("John Smith", object["name"].asString());
 }
+
+TEST(ObjectTest, CreateContext_CreateObject_setSomeValueViaAssignment_valueWhichWasSetCanBeRetrieved)
+{
+    Context ctx;
+
+    Object object;
+
+    object["age"] = 35;
+
+    EXPECT_EQ(35, object["age"].asInt());
+}

@@ -31,9 +31,29 @@ namespace cardan
     class Object
     {
     public:
+
+        class ValueReference : public Value
+        {
+        public:
+
+            ValueReference(Value value, const std::string& fieldName, Object& parentObject);
+
+            template <class ValueType>
+            ValueReference& operator = (ValueType&& value)
+            {
+                m_parentObject.set(m_fieldName, std::forward<ValueType>(value));
+                return *this;
+            }
+
+        private:
+            const std::string m_fieldName;
+            Object& m_parentObject;
+        };
+
+    public:
         Object();
 
-        Value operator[](const std::string& key);
+        ValueReference operator[](const std::string& key);
         Array getKeys();
         std::pair<std::string, Value> getByIndex(uint32_t idx);
 

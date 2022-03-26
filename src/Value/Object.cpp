@@ -8,10 +8,12 @@ namespace cardan
     {
     }
 
-    Value Object::operator[](const std::string& key)
+    Object::ValueReference Object::operator [](const std::string& key)
     {
         auto v8Key = converters::convert(m_context, key);
-        return Value(m_object->Get(m_context, v8Key).ToLocalChecked(), m_context);
+        auto v8Value = m_object->Get(m_context, v8Key).ToLocalChecked();
+
+        return ValueReference(Value(v8Value, m_context), key, *this);
     }
 
     Array Object::getKeys()
@@ -64,6 +66,13 @@ namespace cardan
     ObjectIterator::ObjectIterator(Object& object, uint32_t idx)
         : m_object(object)
         , m_idx(idx)
+    {
+    }
+
+    Object::ValueReference::ValueReference(Value value, const std::string& fieldName, Object& parentObject)
+        : Value(std::move(value))
+        , m_fieldName(fieldName)
+        , m_parentObject(parentObject)
     {
     }
 

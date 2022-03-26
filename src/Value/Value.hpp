@@ -38,7 +38,7 @@ namespace cardan
 
         Value& operator = (int newValue);
 
-    private:
+    protected:
         Value(v8::Local<v8::Value> value, v8::Local<v8::Context>& context);
 
         friend class Context;
@@ -46,7 +46,7 @@ namespace cardan
         friend class Object;
         friend class Function;
 
-    private:
+    protected:
         v8::Local<v8::Value> m_value;
         v8::Local<v8::Context> m_context;
     };
