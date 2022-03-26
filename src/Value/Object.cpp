@@ -4,7 +4,7 @@ namespace cardan
 {
     Value Object::operator[](const std::string& key)
     {
-        auto v8Key = v8::String::NewFromUtf8(m_context->GetIsolate(), key.c_str()).ToLocalChecked();
+        auto v8Key = converters::convert(m_context, key);
         return Value(m_object->Get(m_context, v8Key).ToLocalChecked(), m_context);
     }
 

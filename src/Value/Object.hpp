@@ -56,7 +56,7 @@ namespace cardan
     template <class ValueType>
     void Object::set(const std::string& name, ValueType&& value)
     {
-        v8::Local<v8::String> v8Name = v8::String::NewFromUtf8(m_context->GetIsolate(), name.c_str()).ToLocalChecked();
+        v8::Local<v8::Value> v8Name = converters::convert(m_context, name);
         v8::Local<v8::Value> v8Value = converters::convert(m_context, std::forward<ValueType>(value));
 
         m_object->Set(

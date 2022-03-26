@@ -51,7 +51,7 @@ namespace cardan
 
     Value Context::get(const std::string& valueName)
     {
-        v8::Local<v8::String> valueNameV8 = v8::String::NewFromUtf8(m_isolate.get(), valueName.c_str()).ToLocalChecked();
+        v8::Local<v8::Value> valueNameV8 = converters::convert(m_context, valueName);
         v8::Local<v8::Value> value = m_context->Global()->Get(m_context, valueNameV8).ToLocalChecked();
 
         return Value(value, m_context);
