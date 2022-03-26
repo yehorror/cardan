@@ -29,6 +29,8 @@ namespace cardan
     class Array
     {
     public:
+        Array();
+
         Value at(int idx);
         Value operator[](int idx);
         uint32_t length();

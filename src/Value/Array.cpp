@@ -2,6 +2,12 @@
 
 namespace cardan
 {
+    Array::Array()
+        : m_array(v8::Array::New(v8::Isolate::GetCurrent()))
+        , m_context(v8::Isolate::GetCurrent()->GetCurrentContext())
+    {
+    }
+
     Value Array::at(int idx)
     {
         return Value(m_array->Get(m_context, idx).ToLocalChecked(), m_context);

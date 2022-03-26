@@ -141,3 +141,13 @@ TEST(ArrayTest, CreateArrayWith3Elements_setFirstElementToOtherValue_ValueWhichW
 
     EXPECT_EQ(4, array[0].asInt());
 }
+
+TEST(ArrayTest, CreateContext_CreateArray_setSomeValue_valueWhichWasSetCanBeRetrieved)
+{
+    Context ctx;
+
+    Array array;
+    array.set(0, 4);
+
+    EXPECT_EQ(4, array[0].asInt());
+}
