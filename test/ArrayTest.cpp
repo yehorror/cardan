@@ -147,7 +147,7 @@ TEST(ArrayTest, CreateContext_CreateArray_setSomeValue_valueWhichWasSetCanBeRetr
     Context ctx;
 
     Array array;
-    array.set(0, 4);
+    array.set(1, 4);
 
-    EXPECT_EQ(4, array[0].asInt());
+    EXPECT_EQ(4, array[1].asInt());
 }
