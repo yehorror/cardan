@@ -8,12 +8,14 @@ namespace cardan
     {
     }
 
-    Value Array::at(int idx)
+    Array::ValueReference Array::at(int idx)
     {
-        return Value(m_array->Get(m_context, idx).ToLocalChecked(), m_context);
+        auto v8Value = m_array->Get(m_context, idx).ToLocalChecked();
+
+        return ValueReference(Value(v8Value, m_context), idx, *this);
     }
 
-    Value Array::operator[](int idx)
+    Array::ValueReference Array::operator [](int idx)
     {
         return at(idx);
     }
@@ -59,6 +61,13 @@ namespace cardan
     ArrayIterator::ArrayIterator(Array& array, uint32_t idx)
         : m_array(array)
         , m_idx(idx)
+    {
+    }
+
+    Array::ValueReference::ValueReference(Value value, uint32_t index, Array& parentArray)
+        : Value(value)
+        , m_index(index)
+        , m_parentArray(parentArray)
     {
     }
 

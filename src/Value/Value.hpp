@@ -5,8 +5,6 @@
 #include <string>
 #include <optional>
 
-#include "Array.hpp"
-
 namespace cardan
 {
     class Context;

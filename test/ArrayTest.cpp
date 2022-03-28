@@ -151,3 +151,26 @@ TEST(ArrayTest, CreateContext_CreateArray_setSomeValue_valueWhichWasSetCanBeRetr
 
     EXPECT_EQ(4, array[1].asInt());
 }
+
+TEST(ArrayTest, CreateContext_CreateArray_setSomeValueViaAssignment_valueWhichWasSetCanBeRetrieved)
+{
+    Context ctx;
+
+    Array array;
+    array[0] = "hello";
+
+    EXPECT_EQ("hello", array[0].asString());
+}
+
+TEST(ArrayTest, CreateContext_CreateArray_getValueViaSquaredBrackets_setNewValueToIt_ItHasValueWhichWasSet)
+{
+    Context ctx;
+
+    Array array;
+    array[2] = 42;
+
+    Array::ValueReference thridValueReference = array[2];
+    thridValueReference = 43;
+
+    EXPECT_EQ(43, thridValueReference.asInt());
+}

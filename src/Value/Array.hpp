@@ -29,10 +29,32 @@ namespace cardan
     class Array
     {
     public:
+        class ValueReference : public Value
+        {
+        public:
+
+            template <class ValueType>
+            ValueReference& operator = (ValueType&& value)
+            {
+                m_parentArray.set(m_index, std::forward<ValueType>(value));
+                Value::m_value = m_parentArray[m_index].m_value;
+                return *this;
+            }
+
+        private:
+            ValueReference(Value value, uint32_t index, Array& parentArray);
+
+            friend class Array;
+        private:
+            const uint32_t m_index;
+            Array& m_parentArray;
+        };
+
+    public:
         Array();
 
-        Value at(int idx);
-        Value operator[](int idx);
+        ValueReference at(int idx);
+        ValueReference operator[](int idx);
         uint32_t length();
 
         // for iterating:
