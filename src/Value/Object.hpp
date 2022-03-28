@@ -31,27 +31,7 @@ namespace cardan
     class Object
     {
     public:
-
-        class ValueReference : public Value
-        {
-        public:
-
-            template <class ValueType>
-            ValueReference& operator = (ValueType&& value)
-            {
-                m_parentObject.set(m_fieldName, std::forward<ValueType>(value));
-                Value::m_value = m_parentObject[m_fieldName].m_value;
-                return *this;
-            }
-
-        private:
-            ValueReference(Value value, const std::string& fieldName, Object& parentObject);
-
-            friend class Object;
-        private:
-            const std::string m_fieldName;
-            Object& m_parentObject;
-        };
+        using ValueReference = cardan::ValueReference<std::string, Object>;
 
     public:
         Object();

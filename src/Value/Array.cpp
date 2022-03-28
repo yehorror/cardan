@@ -64,11 +64,4 @@ namespace cardan
     {
     }
 
-    Array::ValueReference::ValueReference(Value value, uint32_t index, Array& parentArray)
-        : Value(value)
-        , m_index(index)
-        , m_parentArray(parentArray)
-    {
-    }
-
 }

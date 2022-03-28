@@ -120,4 +120,15 @@ namespace cardan
         , m_context(context)
     {
     }
+
+    template <class IndexType, class ContainerType>
+    ValueReference<IndexType, ContainerType>::ValueReference(cardan::Value value, IndexType index, ContainerType& parentContainer)
+        : Value(value)
+        , m_index(index)
+        , m_parentContainer(parentContainer)
+    {
+    }
+
+    template class ValueReference<uint32_t, Array>;
+    template class ValueReference<std::string, Object>;
 }

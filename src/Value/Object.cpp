@@ -68,12 +68,4 @@ namespace cardan
         , m_idx(idx)
     {
     }
-
-    Object::ValueReference::ValueReference(Value value, const std::string& fieldName, Object& parentObject)
-        : Value(std::move(value))
-        , m_fieldName(fieldName)
-        , m_parentObject(parentObject)
-    {
-    }
-
 }
