@@ -109,6 +109,11 @@ namespace cardan
         return m_value->IsFunction();
     }
 
+    bool Value::isNull()
+    {
+        return m_value->IsNull();
+    }
+
     Value& Value::operator =(int newValue)
     {
         m_value = v8::Integer::New(m_context->GetIsolate(), newValue);

@@ -33,6 +33,7 @@ namespace cardan
         bool isArray();
         bool isObject();
         bool isFunction();
+        bool isNull();
 
         Value& operator = (int newValue);
 

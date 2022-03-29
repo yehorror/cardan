@@ -211,3 +211,10 @@ TEST(ValueTest, CreateSomeValue_AssignAnotherIntegerValue_ValueIsWhatItWasAssign
 
     EXPECT_EQ(456, value.asInt());
 }
+
+TEST(ValueTest, CreateNullValue_isNull_ReturnsTrue)
+{
+    auto [ctx, value] = makeValueFromJSCode("null");
+
+    EXPECT_TRUE(value.isNull());
+}
