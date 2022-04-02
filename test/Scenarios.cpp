@@ -1,5 +1,14 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include "v8.h"
+
+struct Person;
+
+namespace cardan::converters
+{
+    v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person);
+}
+
 #include "Context.hpp"
 
 using namespace testing;
@@ -77,4 +86,75 @@ TEST(Scenarios, CppFunctionCallsBackToJS_CallThisFunctionFromJSCode_CallbackFunc
     auto wasFunctionCalled = context.get("functionWasCalled");
 
     EXPECT_EQ(true, wasFunctionCalled.asBool());
+}
+
+struct Person
+{
+    std::string name;
+    int age;
+};
+
+namespace cardan::converters
+{
+    v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person)
+    {
+        auto personObject = v8::Object::New(context->GetIsolate());
+
+        personObject->Set(context, convert(context, "name"), convert(context, person.name)).Check();
+        personObject->Set(context, convert(context, "age"), convert(context, person.age)).Check();
+
+        return personObject;
+    }
+
+    template <>
+    Person convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    {
+        Person p;
+        auto object = value.As<v8::Object>();
+        p.age = convertArgumentFromV8Value<int>(context, object->Get(context, convert(context, "age")).ToLocalChecked());
+        p.name = convertArgumentFromV8Value<std::string>(context, object->Get(context, convert(context, "name")).ToLocalChecked());
+        return p;
+    }
+
+}
+
+TEST(Scenarios, ConverterForStructureDefinedByUser_StructureCanBeSetToJSValue)
+{
+    Person person {"John", 42};
+
+    Context ctx;
+    ctx.set("person", person);
+
+    Object personObject = ctx.get("person").asObject();
+
+    EXPECT_EQ(person.name, personObject["name"].asString());
+    EXPECT_EQ(person.age,  personObject["age"].asInt());
+}
+
+TEST(Scenarios, ConverterFromJSObjectToStructureDefinedByUser_ValueCanBeReceivedViaCppFunctionCallFromJSCode)
+{
+    const std::string JS = R"JS(
+
+        var somePerson = {
+            name: "Lester",
+            age: 45
+        };
+
+        cppFunction(somePerson);
+
+    )JS";
+
+    Context ctx;
+
+    MockFunction<void(Person)> mockFunction;
+    auto stdMockFunction = mockFunction.AsStdFunction();
+
+    ctx.set("cppFunction", stdMockFunction);
+
+    EXPECT_CALL(mockFunction, Call(_)).WillOnce([] (Person p) {
+        EXPECT_EQ("Lester", p.name);
+        EXPECT_EQ(45, p.age);
+    });
+
+    ctx.runScript(JS);
 }
