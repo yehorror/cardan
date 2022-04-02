@@ -4,7 +4,7 @@
 
 struct Person;
 
-namespace cardan::converters
+namespace cardan::ToV8
 {
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person);
 }
@@ -96,7 +96,7 @@ struct Person
 
 namespace cardan
 {
-    namespace converters
+    namespace ToV8
     {
         v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person)
         {
@@ -116,8 +116,8 @@ namespace cardan
         {
             Person p;
             auto object = value.As<v8::Object>();
-            p.age = convert<int>(context, object->Get(context, converters::convert(context, "age")).ToLocalChecked());
-            p.name = convert<std::string>(context, object->Get(context, converters::convert(context, "name")).ToLocalChecked());
+            p.age = convert<int>(context, object->Get(context, ToV8::convert(context, "age")).ToLocalChecked());
+            p.name = convert<std::string>(context, object->Get(context, ToV8::convert(context, "name")).ToLocalChecked());
             return p;
         }
     }

@@ -27,7 +27,7 @@ namespace cardan
 
             details::forEachElementInTuple(argsTuple, [&] (const auto& argument)
             {
-                argumentsVector.push_back(converters::convert(m_context, argument));
+                argumentsVector.push_back(ToV8::convert(m_context, argument));
             });
 
             auto result = m_function->Call(m_context, m_context->Global(), argumentsVector.size(), argumentsVector.data()).ToLocalChecked();

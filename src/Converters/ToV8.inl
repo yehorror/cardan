@@ -1,6 +1,6 @@
 #include "Helper.hpp"
 
-namespace cardan::converters
+namespace cardan::ToV8
 {
     // TODO Research if we can implement same functions for lambdas, etc
     // Can we have some internal storage for these functions objects? And delete them when objects are deleted in JS context
@@ -18,7 +18,7 @@ namespace cardan::converters
 
             if (std::tuple_size<decltype(tupleWithArguments)>::value != info.Length())
             {
-                isolate->ThrowException(converters::convert(isolate->GetCurrentContext(), "Invalid number of arguments"));
+                isolate->ThrowException(ToV8::convert(isolate->GetCurrentContext(), "Invalid number of arguments"));
                 return;
             }
 
@@ -35,12 +35,12 @@ namespace cardan::converters
                     auto funcExecutionResult = std::apply(function, tupleWithArguments);
                     auto returnValue = info.GetReturnValue();
 
-                    returnValue.Set(converters::convert(info.GetIsolate()->GetCurrentContext(), funcExecutionResult));
+                    returnValue.Set(ToV8::convert(info.GetIsolate()->GetCurrentContext(), funcExecutionResult));
                 }
             }
             catch (const std::exception& exception)
             {
-                isolate->ThrowException(converters::convert(isolate->GetCurrentContext(), exception.what()));
+                isolate->ThrowException(ToV8::convert(isolate->GetCurrentContext(), exception.what()));
             }
         };
 

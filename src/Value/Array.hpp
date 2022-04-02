@@ -45,7 +45,7 @@ namespace cardan
         template <class ValueType>
         void set(uint32_t index, ValueType&& value)
         {
-            m_array->Set(m_context, index, converters::convert(m_context, std::forward<ValueType>(value))).Check();
+            m_array->Set(m_context, index, ToV8::convert(m_context, std::forward<ValueType>(value))).Check();
         }
 
     private:
