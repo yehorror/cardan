@@ -88,7 +88,7 @@ TEST(Scenarios, CppFunctionCallsBackToJS_CallThisFunctionFromJSCode_CallbackFunc
     EXPECT_EQ(true, wasFunctionCalled.asBool());
 }
 
-
+// Scenario where user has defined converter from C++ type to V8 value
 struct Person
 {
     std::string name;
@@ -112,8 +112,7 @@ TEST(Scenarios, ConverterForStructureDefinedByUser_StructureCanBeSetToJSValue)
 {
     Person person {"John", 42};
 
-    Context ctx;
-    ctx.set("person", person);
+    Context ctx; ctx.set("person", person);
 
     Object personObject = ctx.get("person").asObject();
 
@@ -121,7 +120,7 @@ TEST(Scenarios, ConverterForStructureDefinedByUser_StructureCanBeSetToJSValue)
     EXPECT_EQ(person.age,  personObject["age"].asInt());
 }
 
-
+// Scenario when user has defined converter from V8 value to C++ type
 namespace cardan::FromV8
 {
     template <>
