@@ -88,38 +88,23 @@ TEST(Scenarios, CppFunctionCallsBackToJS_CallThisFunctionFromJSCode_CallbackFunc
     EXPECT_EQ(true, wasFunctionCalled.asBool());
 }
 
+
 struct Person
 {
     std::string name;
     int age;
 };
 
-namespace cardan
+namespace cardan::ToV8
 {
-    namespace ToV8
+    v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person)
     {
-        v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person)
-        {
-            auto personObject = v8::Object::New(context->GetIsolate());
+        auto personObject = v8::Object::New(context->GetIsolate());
 
-            personObject->Set(context, convert(context, "name"), convert(context, person.name)).Check();
-            personObject->Set(context, convert(context, "age"), convert(context, person.age)).Check();
+        personObject->Set(context, convert(context, "name"), convert(context, person.name)).Check();
+        personObject->Set(context, convert(context, "age"), convert(context, person.age)).Check();
 
-            return personObject;
-        }
-    }
-
-    namespace FromV8
-    {
-        template <>
-        Person convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
-        {
-            Person p;
-            auto object = value.As<v8::Object>();
-            p.age = convert<int>(context, object->Get(context, ToV8::convert(context, "age")).ToLocalChecked());
-            p.name = convert<std::string>(context, object->Get(context, ToV8::convert(context, "name")).ToLocalChecked());
-            return p;
-        }
+        return personObject;
     }
 }
 
@@ -134,6 +119,20 @@ TEST(Scenarios, ConverterForStructureDefinedByUser_StructureCanBeSetToJSValue)
 
     EXPECT_EQ(person.name, personObject["name"].asString());
     EXPECT_EQ(person.age,  personObject["age"].asInt());
+}
+
+
+namespace cardan::FromV8
+{
+    template <>
+    Person convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    {
+        Person p;
+        auto object = value.As<v8::Object>();
+        p.age = convert<int>(context, object->Get(context, ToV8::convert(context, "age")).ToLocalChecked());
+        p.name = convert<std::string>(context, object->Get(context, ToV8::convert(context, "name")).ToLocalChecked());
+        return p;
+    }
 }
 
 TEST(Scenarios, ConverterFromJSObjectToStructureDefinedByUser_ValueCanBeReceivedViaCppFunctionCallFromJSCode)
