@@ -94,28 +94,33 @@ struct Person
     int age;
 };
 
-namespace cardan::converters
+namespace cardan
 {
-    v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person)
+    namespace converters
     {
-        auto personObject = v8::Object::New(context->GetIsolate());
+        v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const Person& person)
+        {
+            auto personObject = v8::Object::New(context->GetIsolate());
 
-        personObject->Set(context, convert(context, "name"), convert(context, person.name)).Check();
-        personObject->Set(context, convert(context, "age"), convert(context, person.age)).Check();
+            personObject->Set(context, convert(context, "name"), convert(context, person.name)).Check();
+            personObject->Set(context, convert(context, "age"), convert(context, person.age)).Check();
 
-        return personObject;
+            return personObject;
+        }
     }
 
-    template <>
-    Person convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    namespace FromV8
     {
-        Person p;
-        auto object = value.As<v8::Object>();
-        p.age = convertArgumentFromV8Value<int>(context, object->Get(context, convert(context, "age")).ToLocalChecked());
-        p.name = convertArgumentFromV8Value<std::string>(context, object->Get(context, convert(context, "name")).ToLocalChecked());
-        return p;
+        template <>
+        Person convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+        {
+            Person p;
+            auto object = value.As<v8::Object>();
+            p.age = convert<int>(context, object->Get(context, converters::convert(context, "age")).ToLocalChecked());
+            p.name = convert<std::string>(context, object->Get(context, converters::convert(context, "name")).ToLocalChecked());
+            return p;
+        }
     }
-
 }
 
 TEST(Scenarios, ConverterForStructureDefinedByUser_StructureCanBeSetToJSValue)

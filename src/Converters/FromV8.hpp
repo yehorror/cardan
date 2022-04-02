@@ -2,8 +2,8 @@
 
 #include <v8.h>
 
-namespace cardan::converters
+namespace cardan::FromV8
 {
     template <class Type>
-    Type convertArgumentFromV8Value(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
+    Type convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
 }
