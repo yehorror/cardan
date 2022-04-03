@@ -14,6 +14,11 @@ add_executable(cardan-test
     ObjectTest.cpp
     FunctionTest.cpp
     Scenarios.cpp
+
+    Scenarios/Converters/UserDefinedConverters.cpp
+    Scenarios/Converters/UserDefinedConverters.hpp
+
+    Scenarios/Converters/ValuesConversions.cpp
 )
 
 target_include_directories(cardan-test PRIVATE ../src googletest/googletest/include)

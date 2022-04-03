@@ -1,7 +1,7 @@
-#include "Converters.hpp"
+#include "ToV8.hpp"
 #include "Value/Function.hpp"
 
-namespace cardan::converters
+namespace cardan::ToV8
 {
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, int value)
     {

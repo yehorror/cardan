@@ -9,7 +9,7 @@ namespace cardan
     class Function;
 }
 
-namespace cardan::converters
+namespace cardan::ToV8
 {
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, int value);
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, double value);
@@ -20,4 +20,4 @@ namespace cardan::converters
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, std::function<FuncReturnType(FuncArgs...)>& func);
 }
 
-#include "Converters.inl"
+#include "ToV8.inl"

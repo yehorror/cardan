@@ -1,7 +1,7 @@
 #pragma once
 
 #include "v8.h"
-#include "Converters/ConvertersFromV8.hpp"
+#include "Converters/FromV8.hpp"
 
 namespace cardan::details
 {
@@ -26,7 +26,7 @@ namespace cardan::details
     static std::tuple<Args...> packArgumentsImpl(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<I...>)
     {
         return std::make_tuple<Args...>(
-            cardan::converters::convertArgumentFromV8Value<typename getType<I, Args...>::type>(info.GetIsolate()->GetCurrentContext(), info[I])...
+            cardan::FromV8::convert<typename getType<I, Args...>::type>(info.GetIsolate()->GetCurrentContext(), info[I])...
         );
     }
 

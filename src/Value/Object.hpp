@@ -3,7 +3,7 @@
 #include "Value.hpp"
 #include "Array.hpp"
 #include "Function.hpp"
-#include "Converters/Converters.hpp"
+#include "Converters/ToV8.hpp"
 
 namespace cardan
 {
@@ -61,8 +61,8 @@ namespace cardan
     template <class ValueType>
     void Object::set(const std::string& name, ValueType&& value)
     {
-        v8::Local<v8::Value> v8Name = converters::convert(m_context, name);
-        v8::Local<v8::Value> v8Value = converters::convert(m_context, std::forward<ValueType>(value));
+        v8::Local<v8::Value> v8Name = ToV8::convert(m_context, name);
+        v8::Local<v8::Value> v8Value = ToV8::convert(m_context, std::forward<ValueType>(value));
 
         m_object->Set(
             m_context,
