@@ -112,7 +112,8 @@ TEST(Scenarios, ConverterForStructureDefinedByUser_StructureCanBeSetToJSValue)
 {
     Person person {"John", 42};
 
-    Context ctx; ctx.set("person", person);
+    Context ctx;
+    ctx.set("person", person);
 
     Object personObject = ctx.get("person").asObject();
 
