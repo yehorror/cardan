@@ -5,6 +5,8 @@
 #include <string>
 #include <optional>
 
+#include "Converters/FromV8.hpp"
+
 namespace cardan
 {
     class Context;
@@ -24,6 +26,12 @@ namespace cardan
         Array asArray();
         Object asObject();
         Function asFunction();
+
+        template <typename Type>
+        Type as()
+        {
+            return cardan::FromV8::convert<Type>(m_context, m_value);
+        }
 
         bool isUndefined();
         bool isString() const;

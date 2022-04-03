@@ -10,6 +10,12 @@ namespace cardan::FromV8
     }
 
     template <>
+    double convert<double>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    {
+        return value->NumberValue(context).ToChecked();
+    }
+
+    template <>
     std::string convert<std::string>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
     {
         return *v8::String::Utf8Value(context->GetIsolate(), value);
