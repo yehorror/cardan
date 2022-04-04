@@ -1,7 +1,10 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "Context.hpp"
 #include "Converters/ToV8.hpp"
+
+using namespace testing;
 
 TEST(ToV8ConvertersTest, convertInt_v8ValueStoresInteger)
 {
@@ -40,4 +43,20 @@ TEST(ToV8ConvertersTest, convertDouble_v8ValueStoresDouble)
 
     ASSERT_TRUE(v8Double->IsNumber());
     EXPECT_EQ(doubleValue, v8Double->NumberValue(v8Context).ToChecked());
+}
+
+TEST(ToV8ConvertersTest, convertStdFunction_v8ValueStoresFunction)
+{
+    cardan::Context ctx;
+    auto v8Context = v8::Isolate::GetCurrent()->GetCurrentContext();
+
+    MockFunction<void()> mockFunction;
+    std::function<void()> stdFunction = mockFunction.AsStdFunction();
+
+    auto v8Function = cardan::ToV8::convert(v8Context, stdFunction);
+
+    ASSERT_TRUE(v8Function->IsFunction());
+    EXPECT_CALL(mockFunction, Call());
+
+    v8Function.As<v8::Function>()->Call(v8Context, v8Context->Global(), 0, nullptr).ToLocalChecked();
 }
