@@ -1,5 +1,4 @@
 #include "ToV8.hpp"
-#include "Value/Function.hpp"
 
 namespace cardan::ToV8
 {
@@ -16,10 +15,5 @@ namespace cardan::ToV8
     v8::Local<v8::Value> convert(v8::Local<v8::Context> context, const std::string& value)
     {
         return v8::String::NewFromUtf8(context->GetIsolate(), value.c_str()).ToLocalChecked();
-    }
-
-    v8::Local<v8::Value> convert(v8::Local<v8::Context> context, Function value)
-    {
-        return value.m_function;
     }
 }

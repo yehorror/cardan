@@ -13,6 +13,7 @@ add_executable(cardan-test
     ArrayTest.cpp
     ObjectTest.cpp
     FunctionTest.cpp
+    ConvertersTest.cpp
     Scenarios.cpp
 
     Scenarios/Converters/UserDefinedConverters.cpp
