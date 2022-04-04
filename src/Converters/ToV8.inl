@@ -12,15 +12,16 @@ namespace cardan::ToV8
         {
             auto funcPtr = info.Data().As<v8::External>()->Value();
             auto& function = *static_cast<std::function<FuncReturnType(FuncArgs...)>*>(funcPtr);
-
-            auto tupleWithArguments = details::packArguments<FuncArgs...>(info);
             auto isolate = info.GetIsolate();
 
-            if (std::tuple_size<decltype(tupleWithArguments)>::value != info.Length())
+            if (std::tuple_size<std::tuple<FuncArgs...>>::value != info.Length())
             {
                 isolate->ThrowException(ToV8::convert(isolate->GetCurrentContext(), "Invalid number of arguments"));
                 return;
             }
+
+            // TODO Catch possible exceptions here
+            auto tupleWithArguments = details::packArguments<FuncArgs...>(info);
 
             try
             {

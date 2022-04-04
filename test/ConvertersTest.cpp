@@ -1,3 +1,4 @@
+#include <iostream>
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -6,57 +7,76 @@
 
 using namespace testing;
 
-TEST(ToV8ConvertersTest, convertInt_v8ValueStoresInteger)
+class ConvertersTest : public Test
 {
-    cardan::Context ctx;
-    auto v8Context = v8::Isolate::GetCurrent()->GetCurrentContext();
+protected:
+    cardan::Context m_ctx;
+    v8::Isolate* m_isolate = v8::Isolate::GetCurrent();
+    v8::Local<v8::Context> m_v8Context = m_isolate->GetCurrentContext();
+};
 
+TEST_F(ConvertersTest, convertInt_v8ValueStoresInteger)
+{
     static const int integerValue = 1613;
 
-    auto v8Integer = cardan::ToV8::convert(v8Context, integerValue);
+    auto v8Integer = cardan::ToV8::convert(m_v8Context, integerValue);
 
     ASSERT_TRUE(v8Integer->IsNumber());
-    EXPECT_EQ(integerValue, v8Integer->IntegerValue(v8Context).ToChecked());
+    EXPECT_EQ(integerValue, v8Integer->IntegerValue(m_v8Context).ToChecked());
 }
 
-TEST(ToV8ConvertersTest, convertStdString_v8ValueStoresString)
+TEST_F(ConvertersTest, convertStdString_v8ValueStoresString)
 {
-    cardan::Context ctx;
-    auto v8Context = v8::Isolate::GetCurrent()->GetCurrentContext();
-
     static const std::string stdStringValue = "test string";
 
-    auto v8String = cardan::ToV8::convert(v8Context, stdStringValue);
+    auto v8String = cardan::ToV8::convert(m_v8Context, stdStringValue);
 
     ASSERT_TRUE(v8String->IsString());
-    EXPECT_EQ(stdStringValue, *v8::String::Utf8Value(v8Context->GetIsolate(), v8String));
+    EXPECT_EQ(stdStringValue, *v8::String::Utf8Value(m_v8Context->GetIsolate(), v8String));
 }
 
-TEST(ToV8ConvertersTest, convertDouble_v8ValueStoresDouble)
+TEST_F(ConvertersTest, convertDouble_v8ValueStoresDouble)
 {
-    cardan::Context ctx;
-    auto v8Context = v8::Isolate::GetCurrent()->GetCurrentContext();
-
     static const double doubleValue = 3.1415;
 
-    auto v8Double = cardan::ToV8::convert(v8Context, doubleValue);
+    auto v8Double = cardan::ToV8::convert(m_v8Context, doubleValue);
 
     ASSERT_TRUE(v8Double->IsNumber());
-    EXPECT_EQ(doubleValue, v8Double->NumberValue(v8Context).ToChecked());
+    EXPECT_EQ(doubleValue, v8Double->NumberValue(m_v8Context).ToChecked());
 }
 
-TEST(ToV8ConvertersTest, convertStdFunction_v8ValueStoresFunction)
+TEST_F(ConvertersTest, convertStdFunction_v8ValueStoresFunction)
 {
-    cardan::Context ctx;
-    auto v8Context = v8::Isolate::GetCurrent()->GetCurrentContext();
-
     MockFunction<void()> mockFunction;
     std::function<void()> stdFunction = mockFunction.AsStdFunction();
 
-    auto v8Function = cardan::ToV8::convert(v8Context, stdFunction);
+    auto v8Function = cardan::ToV8::convert(m_v8Context, stdFunction);
 
     ASSERT_TRUE(v8Function->IsFunction());
     EXPECT_CALL(mockFunction, Call());
 
-    v8Function.As<v8::Function>()->Call(v8Context, v8Context->Global(), 0, nullptr).ToLocalChecked();
+    v8Function.As<v8::Function>()->Call(m_v8Context, m_v8Context->Global(), 0, nullptr).ToLocalChecked();
+}
+
+TEST_F(ConvertersTest, v8Integer_convertToInt)
+{
+    static const int integerValue = 1613;
+
+    auto v8Integer = v8::Integer::New(m_isolate, integerValue);
+
+    ASSERT_TRUE(v8Integer->IsNumber());
+
+    int convertedInteger = cardan::FromV8::convert<int>(m_v8Context, v8Integer);
+
+    EXPECT_EQ(integerValue, convertedInteger);
+}
+
+TEST_F(ConvertersTest, v8ValueIsNotInt_convertToInt_ThrowsException)
+{
+    static const std::string stringValue = "hello";
+
+    auto v8String = v8::String::NewFromUtf8(m_isolate, stringValue.c_str()).ToLocalChecked();
+
+    ASSERT_FALSE(v8String->IsNumber());
+    EXPECT_THROW(cardan::FromV8::convert<int>(m_v8Context, v8String), std::exception);
 }

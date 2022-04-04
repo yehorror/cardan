@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "FromV8.hpp"
 #include "Value/Function.hpp"
 
@@ -6,7 +8,11 @@ namespace cardan::FromV8
     template <>
     int convert<int>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
     {
-        return value->Int32Value(context).ToChecked();
+        if (value->IsNumber())
+        {
+            return value->Int32Value(context).ToChecked();
+        }
+        throw std::runtime_error("Convertible value is not an integer");
     }
 
     template <>
