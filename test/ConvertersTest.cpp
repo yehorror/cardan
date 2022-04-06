@@ -65,10 +65,7 @@ TEST_F(ConvertersTest, v8Integer_convertToInt)
     auto v8Integer = v8::Integer::New(m_isolate, integerValue);
 
     ASSERT_TRUE(v8Integer->IsNumber());
-
-    int convertedInteger = cardan::FromV8::convert<int>(m_v8Context, v8Integer);
-
-    EXPECT_EQ(integerValue, convertedInteger);
+    EXPECT_EQ(integerValue, cardan::FromV8::convert<int>(m_v8Context, v8Integer));
 }
 
 TEST_F(ConvertersTest, v8ValueIsNotInt_convertToInt_ThrowsException)
@@ -79,4 +76,45 @@ TEST_F(ConvertersTest, v8ValueIsNotInt_convertToInt_ThrowsException)
 
     ASSERT_FALSE(v8String->IsNumber());
     EXPECT_THROW(cardan::FromV8::convert<int>(m_v8Context, v8String), std::exception);
+}
+
+TEST_F(ConvertersTest, v8ValueIsDouble_convertToDouble)
+{
+    static const double doubleValue = 1.4142;
+
+    auto v8Double = v8::Number::New(m_isolate, doubleValue);
+
+    ASSERT_TRUE(v8Double->IsNumber());
+    EXPECT_EQ(doubleValue, cardan::FromV8::convert<double>(m_v8Context, v8Double));
+}
+
+TEST_F(ConvertersTest, v8ValueIsNotDouble_convertToDouble_ThrowsException)
+{
+    static const std::string stringValue = "definitely not a double";
+
+    auto v8String = v8::String::NewFromUtf8(m_isolate, stringValue.c_str()).ToLocalChecked();
+
+    ASSERT_FALSE(v8String->IsNumber());
+    EXPECT_THROW(cardan::FromV8::convert<double>(m_v8Context, v8String), std::exception);
+}
+
+TEST_F(ConvertersTest, v8ValueIsString_convertToString)
+{
+    static const std::string stringValue = "definitely a string";
+
+    auto v8String = v8::String::NewFromUtf8(m_isolate, stringValue.c_str()).ToLocalChecked();
+
+    ASSERT_TRUE(v8String->IsString());
+    EXPECT_EQ(stringValue, cardan::FromV8::convert<std::string>(m_v8Context, v8String));
+}
+
+// TODO Should we throw an exception, or allow conversion to a string?
+TEST_F(ConvertersTest, v8ValueIsNumber_convertToString_valueIsConvertedToString)
+{
+    static const int integerValue = 288;
+
+    auto v8Integer = v8::Number::New(m_isolate, integerValue);
+
+    ASSERT_TRUE(v8Integer->IsNumber());
+    EXPECT_EQ("288", cardan::FromV8::convert<std::string>(m_v8Context, v8Integer));
 }

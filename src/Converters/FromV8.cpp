@@ -18,7 +18,11 @@ namespace cardan::FromV8
     template <>
     double convert<double>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
     {
-        return value->NumberValue(context).ToChecked();
+        if (value->IsNumber())
+        {
+            return value->NumberValue(context).ToChecked();
+        }
+        throw std::runtime_error("Convertible value is not a double");
     }
 
     template <>
