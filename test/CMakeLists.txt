@@ -4,7 +4,7 @@ project(cardan-test)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "-DV8_COMPRESS_POINTERS")
 
-add_subdirectory(${CMAKE_SOURCE_DIR}/googletest googletest)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../googletest googletest)
 
 add_executable(cardan-test
     ContextTest.cpp
