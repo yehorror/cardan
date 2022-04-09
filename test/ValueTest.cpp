@@ -218,3 +218,27 @@ TEST(ValueTest, CreateNullValue_isNull_ReturnsTrue)
 
     EXPECT_TRUE(value.isNull());
 }
+
+TEST(ValueTest, CreateIntValue_TemplatedAsInt_ReturnsIntValue)
+{
+    auto [ctx, value] = makeValueFromJSCode("17");
+
+    ASSERT_TRUE(value.isInt());
+    EXPECT_EQ(17, value.as<int>());
+}
+
+TEST(ValueTest, CreateDoubleValue_TemplatedAsDouble_ReturnsDoubleValue)
+{
+    auto [ctx, value] = makeValueFromJSCode("2.71828");
+
+    ASSERT_TRUE(value.isDouble());
+    EXPECT_DOUBLE_EQ(2.71828, value.as<double>());
+}
+
+TEST(ValueTest, CreateStringValue_TemplatedAsString_ReturnsStringValue)
+{
+    auto [ctx, value] = makeValueFromJSCode("'some string value'");
+
+    ASSERT_TRUE(value.isString());
+    EXPECT_EQ("some string value", value.as<std::string>());
+}

@@ -65,3 +65,28 @@ TEST(ValuesConversions, ConverterFromJSObjectToStructureDefinedByUser_ValueCanBe
 
     ctx.runScript(JS);
 }
+
+/*
+ * Also, ToV8 converter is used on Value::as<>() call
+ * So, it is possible to retrieve values of custom types from JS context directly
+ */
+
+TEST(ValuesConversions, ConverterFromJSObjectToStructureDefinedByUser_ValueCanBeConvertedViaTemplatedAsFunction)
+{
+    const std::string JS = R"JS(
+
+        var somePerson = {
+            name: "Simon",
+            age: 35
+        };
+
+    )JS";
+
+    cardan::Context ctx;
+    ctx.runScript(JS);
+
+    Person somePerson = ctx.get("somePerson").as<Person>();
+
+    EXPECT_EQ("Simon", somePerson.name);
+    EXPECT_EQ(35, somePerson.age);
+}
