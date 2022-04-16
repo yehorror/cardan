@@ -35,6 +35,7 @@ namespace cardan
 
     public:
         Object();
+        Object(v8::Local<v8::Object> object, v8::Local<v8::Context>& context);
 
         ValueReference operator[](const std::string& key);
         Array getKeys();
@@ -48,9 +49,6 @@ namespace cardan
         void set(const std::string& name, ValueType&& value);
 
     private:
-
-        Object(v8::Local<v8::Object> object, v8::Local<v8::Context>& context);
-
         friend class Value;
 
     private:

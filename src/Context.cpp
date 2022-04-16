@@ -67,10 +67,15 @@ namespace cardan
         v8::TryCatch& tryCatchHandler
     )
     {
-        // TODO Maybe extract some information about exception from JS and put it in JSException here?
+        // TODO Store whole exception object within JSException class
         if (tryCatchHandler.HasCaught())
         {
-            throw JSException();
+            Object exception(
+                tryCatchHandler.Exception().As<v8::Object>(),
+                m_context
+            );
+
+            throw JSException(exception["message"].as<std::string>());
         }
 
         auto resultValue = scriptRunResult.ToLocalChecked();

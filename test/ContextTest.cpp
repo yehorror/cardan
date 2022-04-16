@@ -405,3 +405,21 @@ TEST(ContextTest, CreateEmptyContext_global_ReturnsEmptyObject)
 
     EXPECT_EQ(0, global.getKeys().length());
 }
+
+TEST(ContextTest, JSCodeThrowsError_ExceptionRethrowedInCppWithMessageFromJSCode)
+{
+    Context ctx;
+
+    try
+    {
+        ctx.runScript("throw new TypeError('Out of creativity exception')");
+    }
+    catch (const JSException& jsException)
+    {
+        EXPECT_STREQ("Out of creativity exception", jsException.what());
+    }
+    catch (...)
+    {
+        FAIL() << "Wrong type of exception was thrown";
+    }
+}
