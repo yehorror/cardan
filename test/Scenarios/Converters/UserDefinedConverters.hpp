@@ -16,6 +16,5 @@ namespace cardan::ToV8
 
 namespace cardan::FromV8
 {
-    template <>
-    Person convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
+    Person convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<Person>);
 }

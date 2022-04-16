@@ -5,8 +5,7 @@
 
 namespace cardan::FromV8
 {
-    template <>
-    int convert<int>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    int convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<int>)
     {
         if (value->IsNumber())
         {
@@ -15,8 +14,7 @@ namespace cardan::FromV8
         throw std::runtime_error("Convertible value is not an integer");
     }
 
-    template <>
-    double convert<double>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    double convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<double>)
     {
         if (value->IsNumber())
         {
@@ -25,14 +23,12 @@ namespace cardan::FromV8
         throw std::runtime_error("Convertible value is not a double");
     }
 
-    template <>
-    std::string convert<std::string>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    std::string convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<std::string>)
     {
         return *v8::String::Utf8Value(context->GetIsolate(), value);
     }
 
-    template <>
-    cardan::Function convert<cardan::Function>(v8::Local<v8::Context> context, v8::Local<v8::Value> value)
+    cardan::Function convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<cardan::Function>)
     {
         return cardan::Function(value.As<v8::Function>(), context);
     }

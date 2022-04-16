@@ -17,6 +17,8 @@ namespace cardan
     {
     public:
 
+        Function(v8::Local<v8::Function> function, v8::Local<v8::Context>& context);
+
         // TODO Move to inl file
         template<class...Args>
         Value call(Args... args)
@@ -36,18 +38,6 @@ namespace cardan
 
     private:
         friend class Value;
-
-        // "friends" are weird here - it forces us to do forward-declarations of convertors above
-        // These constructions definitely makes code more messy
-        // TODO Consider changing this semantics; possible approaches:
-        //  - Make constructors public;
-        //  - Somehow make possible creation of these things via Context class (shall it lead to less "friend"liness?)
-        //  - Re-design everything in library?
-        // Need to get rid of this
-
-        friend Function FromV8::convert<>(v8::Local<v8::Context> context, v8::Local<v8::Value> value);
-
-        Function(v8::Local<v8::Function> function, v8::Local<v8::Context>& context);
 
         Value makeValue(v8::Local<v8::Value> value);
 

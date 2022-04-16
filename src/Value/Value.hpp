@@ -30,7 +30,7 @@ namespace cardan
         template <typename Type>
         Type as()
         {
-            return cardan::FromV8::convert<Type>(m_context, m_value);
+            return convert(m_context, m_value, cardan::FromV8::To<Type>{});
         }
 
         bool isUndefined();

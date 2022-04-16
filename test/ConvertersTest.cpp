@@ -65,7 +65,7 @@ TEST_F(ConvertersTest, v8Integer_convertToInt)
     auto v8Integer = v8::Integer::New(m_isolate, integerValue);
 
     ASSERT_TRUE(v8Integer->IsNumber());
-    EXPECT_EQ(integerValue, cardan::FromV8::convert<int>(m_v8Context, v8Integer));
+    EXPECT_EQ(integerValue, cardan::FromV8::convert(m_v8Context, v8Integer, cardan::FromV8::To<int>{}));
 }
 
 TEST_F(ConvertersTest, v8ValueIsNotInt_convertToInt_ThrowsException)
@@ -75,7 +75,7 @@ TEST_F(ConvertersTest, v8ValueIsNotInt_convertToInt_ThrowsException)
     auto v8String = v8::String::NewFromUtf8(m_isolate, stringValue.c_str()).ToLocalChecked();
 
     ASSERT_FALSE(v8String->IsNumber());
-    EXPECT_THROW(cardan::FromV8::convert<int>(m_v8Context, v8String), std::exception);
+    EXPECT_THROW(cardan::FromV8::convert(m_v8Context, v8String, cardan::FromV8::To<int>{}), std::exception);
 }
 
 TEST_F(ConvertersTest, v8ValueIsDouble_convertToDouble)
@@ -85,7 +85,7 @@ TEST_F(ConvertersTest, v8ValueIsDouble_convertToDouble)
     auto v8Double = v8::Number::New(m_isolate, doubleValue);
 
     ASSERT_TRUE(v8Double->IsNumber());
-    EXPECT_EQ(doubleValue, cardan::FromV8::convert<double>(m_v8Context, v8Double));
+    EXPECT_EQ(doubleValue, cardan::FromV8::convert(m_v8Context, v8Double, cardan::FromV8::To<double>{}));
 }
 
 TEST_F(ConvertersTest, v8ValueIsNotDouble_convertToDouble_ThrowsException)
@@ -95,7 +95,7 @@ TEST_F(ConvertersTest, v8ValueIsNotDouble_convertToDouble_ThrowsException)
     auto v8String = v8::String::NewFromUtf8(m_isolate, stringValue.c_str()).ToLocalChecked();
 
     ASSERT_FALSE(v8String->IsNumber());
-    EXPECT_THROW(cardan::FromV8::convert<double>(m_v8Context, v8String), std::exception);
+    EXPECT_THROW(cardan::FromV8::convert(m_v8Context, v8String, cardan::FromV8::To<double>{}), std::exception);
 }
 
 TEST_F(ConvertersTest, v8ValueIsString_convertToString)
@@ -105,7 +105,7 @@ TEST_F(ConvertersTest, v8ValueIsString_convertToString)
     auto v8String = v8::String::NewFromUtf8(m_isolate, stringValue.c_str()).ToLocalChecked();
 
     ASSERT_TRUE(v8String->IsString());
-    EXPECT_EQ(stringValue, cardan::FromV8::convert<std::string>(m_v8Context, v8String));
+    EXPECT_EQ(stringValue, cardan::FromV8::convert(m_v8Context, v8String, cardan::FromV8::To<std::string>{}));
 }
 
 // TODO Should we throw an exception, or allow conversion to a string?
@@ -116,5 +116,5 @@ TEST_F(ConvertersTest, v8ValueIsNumber_convertToString_valueIsConvertedToString)
     auto v8Integer = v8::Number::New(m_isolate, integerValue);
 
     ASSERT_TRUE(v8Integer->IsNumber());
-    EXPECT_EQ("288", cardan::FromV8::convert<std::string>(m_v8Context, v8Integer));
+    EXPECT_EQ("288", cardan::FromV8::convert(m_v8Context, v8Integer, cardan::FromV8::To<std::string>{}));
 }

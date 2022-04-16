@@ -26,7 +26,11 @@ namespace cardan::details
     static std::tuple<Args...> packArgumentsImpl(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<I...>)
     {
         return std::make_tuple<Args...>(
-            cardan::FromV8::convert<typename getType<I, Args...>::type>(info.GetIsolate()->GetCurrentContext(), info[I])...
+            convert(
+                info.GetIsolate()->GetCurrentContext(),
+                info[I],
+                cardan::FromV8::To<typename getType<I, Args...>::type>{}
+            )...
         );
     }
 
