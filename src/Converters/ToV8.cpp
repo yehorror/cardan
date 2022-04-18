@@ -16,4 +16,9 @@ namespace cardan::ToV8
     {
         return v8::String::NewFromUtf8(context->GetIsolate(), value.c_str()).ToLocalChecked();
     }
+
+    v8::Local<v8::Value> convert(v8::Local<v8::Context> context, v8::Local<v8::Function> function)
+    {
+        return function;
+    }
 }

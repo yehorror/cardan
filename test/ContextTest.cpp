@@ -423,3 +423,21 @@ TEST(ContextTest, JSCodeThrowsError_ExceptionRethrowedInCppWithMessageFromJSCode
         FAIL() << "Wrong type of exception was thrown";
     }
 }
+
+TEST(ContextTest, AddStdFunctionWhichIsDestroyedLater_FunctionIsCopiedSoItStillCanBeCalled)
+{
+    Context ctx;
+
+    MockFunction<void()> mockFunction;
+
+    {
+        // On scope leave stdFunction will be destroyed
+        // Test checks that even if added function is destroyed, it still can be called
+
+        auto stdFunction = mockFunction.AsStdFunction();
+        ctx.addFunction("cppFunction", stdFunction);
+    }
+
+    EXPECT_CALL(mockFunction, Call());
+    ctx.runScript("cppFunction()");
+}

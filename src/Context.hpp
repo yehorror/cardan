@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <variant>
+#include <unordered_set>
 
 #include <functional>
 #include <v8.h>
@@ -15,6 +15,11 @@
 
 namespace cardan
 {
+    struct ValueHolderBase
+    {
+        virtual ~ValueHolderBase() = default;
+    };
+
     // Context of script execution
     // TODO:
     // * C++ classes binding into JS
@@ -41,6 +46,9 @@ namespace cardan
         template <class ValueType>
         void set(const std::string& name, ValueType&& value);
 
+        template <class FuncReturnType, class... FuncArgs>
+        void addFunction(const std::string& name, std::function<FuncReturnType(FuncArgs...)> function);
+
     private:
 
         ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);
@@ -61,6 +69,8 @@ namespace cardan
 
         v8::Local<v8::Context> m_context;
         v8::Context::Scope m_contextScope;
+
+        std::unordered_set<std::unique_ptr<ValueHolderBase>> m_functions;
     };
 }
 
