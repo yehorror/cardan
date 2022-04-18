@@ -49,6 +49,9 @@ namespace cardan
         template <class FuncReturnType, class... FuncArgs>
         void addFunction(const std::string& name, std::function<FuncReturnType(FuncArgs...)> function);
 
+        template <class FunctorType>
+        void addFunction(const std::string& name, FunctorType function);
+
     private:
 
         ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);

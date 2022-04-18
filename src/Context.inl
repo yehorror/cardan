@@ -2,6 +2,7 @@
 
 #include "Converters/ToV8.hpp"
 #include "Context.hpp"
+#include "Helper.hpp"
 
 namespace cardan
 {
@@ -88,5 +89,12 @@ namespace cardan
         );
 
         set(name, funcTemplate->GetFunction(m_context).ToLocalChecked());
+    }
+
+    template <class FunctorType>
+    void Context::addFunction(const std::string& name, FunctorType func)
+    {
+        using StdFunctionType = typename details::FunctionTraits<FunctorType>::StdFunctionType;
+        addFunction(name, StdFunctionType(func));
     }
 }

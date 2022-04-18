@@ -2,6 +2,7 @@
 
 #include "v8.h"
 #include "Converters/FromV8.hpp"
+#include <functional>
 
 namespace cardan::details
 {
@@ -63,4 +64,18 @@ namespace cardan::details
     void forEachElementInTuple(const std::tuple<>& tuple, Functor callback)
     {
     }
+
+    //------------------------------------------------------------------------------------
+
+    template <typename T>
+    struct FunctionTraits
+        : public FunctionTraits<decltype(&T::operator())>
+    {};
+
+    // Functors
+    template <typename ClassType, typename ReturnType, typename... Args>
+    struct FunctionTraits<ReturnType(ClassType::*)(Args...) const>
+    {
+        using StdFunctionType = std::function<ReturnType(Args...)>;
+    };
 }

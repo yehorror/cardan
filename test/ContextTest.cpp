@@ -424,7 +424,7 @@ TEST(ContextTest, JSCodeThrowsError_ExceptionRethrowedInCppWithMessageFromJSCode
     }
 }
 
-TEST(ContextTest, AddStdFunctionWhichIsDestroyedLater_FunctionIsCopiedSoItStillCanBeCalled)
+TEST(ContextTest, AddStdFunctionWhichIsDestroyedLater_FunctionIsCopiedSoItStillCanBeCalledFromJSCode)
 {
     Context ctx;
 
@@ -440,4 +440,15 @@ TEST(ContextTest, AddStdFunctionWhichIsDestroyedLater_FunctionIsCopiedSoItStillC
 
     EXPECT_CALL(mockFunction, Call());
     ctx.runScript("cppFunction()");
+}
+
+TEST(ContextTest, AddLambdaFunction_FunctionCanBeCalledFromJSCode)
+{
+    Context ctx;
+
+    MockFunction<void()> mockFunction;
+    ctx.addFunction("lambda", [&] () { mockFunction.Call(); });
+
+    EXPECT_CALL(mockFunction, Call());
+    ctx.runScript("lambda()");
 }
