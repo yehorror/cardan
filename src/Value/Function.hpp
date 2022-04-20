@@ -17,24 +17,11 @@ namespace cardan
     {
     public:
 
-        Function(v8::Local<v8::Function> function, v8::Local<v8::Context>& context);
+        Function(v8::Local<v8::Function> function, Context& context);
 
         // TODO Move to inl file
         template<class...Args>
-        Value call(Args... args)
-        {
-            std::vector<v8::Local<v8::Value>> argumentsVector;
-
-            auto argsTuple = std::make_tuple(args...);
-
-            details::forEachElementInTuple(argsTuple, [&] (const auto& argument)
-            {
-                argumentsVector.push_back(ToV8::convert(m_context, argument));
-            });
-
-            auto result = m_function->Call(m_context, m_context->Global(), argumentsVector.size(), argumentsVector.data()).ToLocalChecked();
-            return makeValue(result);
-        }
+        Value call(Args... args);
 
     private:
         friend class Value;
@@ -43,6 +30,32 @@ namespace cardan
 
     public:
         v8::Local<v8::Function> m_function;
-        v8::Local<v8::Context> m_context;
+        Context& m_context;
     };
+}
+
+#include "Context.hpp"
+
+namespace cardan
+{
+    template<class...Args>
+    Value Function::call(Args... args)
+    {
+        std::vector<v8::Local<v8::Value>> argumentsVector;
+
+        auto argsTuple = std::make_tuple(args...);
+
+        details::forEachElementInTuple(argsTuple, [&] (const auto& argument)
+        {
+            argumentsVector.push_back(ToV8::convert(m_context, argument));
+        });
+
+        auto result = m_function->Call(
+            m_context.getContext(),
+            m_context.getContext()->Global(),
+            argumentsVector.size(),
+            argumentsVector.data()
+        ).ToLocalChecked();
+        return makeValue(result);
+    }
 }

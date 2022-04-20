@@ -31,7 +31,7 @@ namespace cardan
 
     Context::ScriptRunResult Context::runScript(const std::string& code)
     {
-        v8::Local<v8::String> source = ToV8::convert(m_context, code).As<v8::String>();
+        v8::Local<v8::String> source = ToV8::convert(*this, code).As<v8::String>();
 
         v8::MaybeLocal<v8::Script> scriptCompileResult = v8::Script::Compile(m_context, source);
 
@@ -51,15 +51,25 @@ namespace cardan
 
     Value Context::get(const std::string& valueName)
     {
-        v8::Local<v8::Value> valueNameV8 = ToV8::convert(m_context, valueName);
+        v8::Local<v8::Value> valueNameV8 = ToV8::convert(*this, valueName);
         v8::Local<v8::Value> value = m_context->Global()->Get(m_context, valueNameV8).ToLocalChecked();
 
-        return Value(value, m_context);
+        return Value(value, *this);
     }
 
     Object Context::global()
     {
-        return Value(m_context->Global(), m_context).asObject();
+        return Value(m_context->Global(), *this).asObject();
+    }
+
+    v8::Isolate* Context::getIsolate()
+    {
+        return m_isolate.get();
+    }
+
+    v8::Local<v8::Context> Context::getContext()
+    {
+        return m_context;
     }
 
     Context::ScriptRunResult Context::processRunResult(
@@ -72,7 +82,7 @@ namespace cardan
         {
             Object exception(
                 tryCatchHandler.Exception().As<v8::Object>(),
-                m_context
+                *this
             );
 
             throw JSException(exception["message"].as<std::string>());
@@ -80,6 +90,6 @@ namespace cardan
 
         auto resultValue = scriptRunResult.ToLocalChecked();
 
-        return Value(resultValue, m_context);
+        return Value(resultValue, *this);
     }
 }

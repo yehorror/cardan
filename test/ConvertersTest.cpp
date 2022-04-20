@@ -6,7 +6,7 @@
 #include "Converters/ToV8.hpp"
 
 using namespace testing;
-
+/*
 class ConvertersTest : public Test
 {
 protected:
@@ -118,3 +118,4 @@ TEST_F(ConvertersTest, v8ValueIsNumber_convertToString_valueIsConvertedToString)
     ASSERT_TRUE(v8Integer->IsNumber());
     EXPECT_EQ("288", cardan::FromV8::convert(m_v8Context, v8Integer, cardan::FromV8::To<std::string>{}));
 }
+*/

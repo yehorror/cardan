@@ -144,7 +144,7 @@ TEST(ObjectTest, CreateEmptyObject_setDoubleValueBySomeName_getValueByThatNameRe
 
     EXPECT_DOUBLE_EQ(2.71828, object["some_value"].asDouble());
 }
-
+/*
 TEST(ObjectTest, CreateContext_CreateObject_setSomeValue_valueWhichWasSetCanBeRetrieved)
 {
     Context ctx;
@@ -177,3 +177,4 @@ TEST(ObjectTest, CreateContext_CreateObject_getValueViaSquaredBrackets_setNewVal
 
     EXPECT_EQ(27, ageValueRef.asInt());
 }
+*/

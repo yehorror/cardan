@@ -4,7 +4,7 @@
 
 using namespace testing;
 using namespace cardan;
-
+/*
 TEST(Scenarios, ScriptHasMultipleFunctionsDeclarations_GetEachOfThem_CallEachFunction_ResultsCorrespondsWithReturnValues)
 {
     const std::string JS = R"JS(
@@ -78,3 +78,4 @@ TEST(Scenarios, CppFunctionCallsBackToJS_CallThisFunctionFromJSCode_CallbackFunc
 
     EXPECT_EQ(true, wasFunctionCalled.asBool());
 }
+*/

@@ -11,6 +11,7 @@ namespace cardan
     class Array;
     class Object;
     class Function;
+    class Context;
 
     class ObjectIterator
     {
@@ -34,8 +35,7 @@ namespace cardan
         using ValueReference = cardan::ValueReference<std::string, Object>;
 
     public:
-        Object();
-        Object(v8::Local<v8::Object> object, v8::Local<v8::Context>& context);
+        Object(v8::Local<v8::Object> object, Context& context);
 
         ValueReference operator[](const std::string& key);
         Array getKeys();
@@ -53,9 +53,15 @@ namespace cardan
 
     private:
         v8::Local<v8::Object> m_object;
-        v8::Local<v8::Context> m_context;
+        Context& m_context;
     };
 
+}
+
+#include "Context.hpp"
+
+namespace cardan
+{
     template <class ValueType>
     void Object::set(const std::string& name, ValueType&& value)
     {
@@ -63,7 +69,7 @@ namespace cardan
         v8::Local<v8::Value> v8Value = ToV8::convert(m_context, std::forward<ValueType>(value));
 
         m_object->Set(
-            m_context,
+            m_context.getContext(),
             v8Name,
             v8Value
         ).Check();

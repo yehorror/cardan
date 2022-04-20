@@ -46,7 +46,7 @@ namespace cardan
         Value& operator = (int newValue);
 
     protected:
-        Value(v8::Local<v8::Value> value, v8::Local<v8::Context>& context);
+        Value(v8::Local<v8::Value> value, Context& context);
 
         friend class Context;
         friend class Array;
@@ -55,7 +55,7 @@ namespace cardan
 
     protected:
         v8::Local<v8::Value> m_value;
-        v8::Local<v8::Context> m_context;
+        Context& m_context;
     };
 
     template <class IndexType, class ContainerType>

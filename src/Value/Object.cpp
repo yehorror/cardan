@@ -1,24 +1,19 @@
 #include "Object.hpp"
+#include "Context.hpp"
 
 namespace cardan
 {
-    Object::Object()
-        : m_object(v8::Object::New(v8::Isolate::GetCurrent()))
-        , m_context(v8::Isolate::GetCurrent()->GetCurrentContext())
-    {
-    }
-
     Object::ValueReference Object::operator [](const std::string& key)
     {
         auto v8Key = ToV8::convert(m_context, key);
-        auto v8Value = m_object->Get(m_context, v8Key).ToLocalChecked();
+        auto v8Value = m_object->Get(m_context.getContext(), v8Key).ToLocalChecked();
 
         return ValueReference(Value(v8Value, m_context), key, *this);
     }
 
     Array Object::getKeys()
     {
-        auto array = m_object->GetPropertyNames(m_context).ToLocalChecked();
+        auto array = m_object->GetPropertyNames(m_context.getContext()).ToLocalChecked();
         return Array(array, m_context);
     }
 
@@ -40,7 +35,7 @@ namespace cardan
         return ObjectIterator(*this, getKeys().length());
     }
 
-    Object::Object(v8::Local<v8::Object> object, v8::Local<v8::Context>& context)
+    Object::Object(v8::Local<v8::Object> object, Context& context)
         : m_object(object)
         , m_context(context)
     {

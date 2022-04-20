@@ -2,15 +2,9 @@
 
 namespace cardan
 {
-    Array::Array()
-        : m_array(v8::Array::New(v8::Isolate::GetCurrent()))
-        , m_context(v8::Isolate::GetCurrent()->GetCurrentContext())
-    {
-    }
-
     Array::ValueReference Array::at(int idx)
     {
-        auto v8Value = m_array->Get(m_context, idx).ToLocalChecked();
+        auto v8Value = m_array->Get(m_context.getContext(), idx).ToLocalChecked();
 
         return ValueReference(Value(v8Value, m_context), idx, *this);
     }
@@ -35,7 +29,7 @@ namespace cardan
         return ArrayIterator(*this, length());
     }
 
-    Array::Array(v8::Local<v8::Array> array, v8::Local<v8::Context>& context)
+    Array::Array(v8::Local<v8::Array> array, Context& context)
         : m_array(array)
         , m_context(context)
     {

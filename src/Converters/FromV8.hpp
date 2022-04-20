@@ -6,6 +6,7 @@
 namespace cardan
 {
     class Function;
+    class Context;
 }
 
 namespace cardan::FromV8
@@ -15,8 +16,8 @@ namespace cardan::FromV8
     {
     };
 
-    int convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<int>);
-    double convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<double>);
-    std::string convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<std::string>);
-    cardan::Function convert(v8::Local<v8::Context> context, v8::Local<v8::Value> value, To<cardan::Function>);
+    int convert(Context& context, v8::Local<v8::Value> value, To<int>);
+    double convert(Context& context, v8::Local<v8::Value> value, To<double>);
+    std::string convert(Context& context, v8::Local<v8::Value> value, To<std::string>);
+    cardan::Function convert(Context& context, v8::Local<v8::Value> value, To<cardan::Function>);
 }

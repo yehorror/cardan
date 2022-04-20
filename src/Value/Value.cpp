@@ -9,7 +9,7 @@ namespace cardan
     {
         if (isString())
         {
-            v8::String::Utf8Value utf8String(m_context->GetIsolate(), m_value);
+            v8::String::Utf8Value utf8String(m_context.getIsolate(), m_value);
             return std::string(*utf8String, utf8String.length());
         }
         throw std::runtime_error("Invalid value type");
@@ -19,7 +19,7 @@ namespace cardan
     {
         if (isInt())
         {
-            return m_value->ToInt32(m_context).ToLocalChecked()->Value();
+            return m_value->ToInt32(m_context.getContext()).ToLocalChecked()->Value();
         }
         throw std::runtime_error("Invalid value type");
     }
@@ -28,7 +28,7 @@ namespace cardan
     {
         if (isDouble())
         {
-            return m_value->ToNumber(m_context).ToLocalChecked()->Value();
+            return m_value->ToNumber(m_context.getContext()).ToLocalChecked()->Value();
         }
         throw std::runtime_error("Invalid value type");
     }
@@ -37,7 +37,7 @@ namespace cardan
     {
         if (isBool())
         {
-            return m_value->ToBoolean(m_context->GetIsolate())->Value();
+            return m_value->ToBoolean(m_context.getIsolate())->Value();
         }
         throw std::runtime_error("Invalid value type");
     }
@@ -116,11 +116,11 @@ namespace cardan
 
     Value& Value::operator =(int newValue)
     {
-        m_value = v8::Integer::New(m_context->GetIsolate(), newValue);
+        m_value = v8::Integer::New(m_context.getIsolate(), newValue);
         return *this;
     }
 
-    Value::Value(v8::Local<v8::Value> value, v8::Local<v8::Context>& context)
+    Value::Value(v8::Local<v8::Value> value, Context& context)
         : m_value(std::move(value))
         , m_context(context)
     {

@@ -9,12 +9,14 @@
 
 #include "Helper.hpp"
 #include "Exceptions.hpp"
-#include "Value/Value.hpp"
-#include "Value/Object.hpp"
-#include "Value/Function.hpp"
 
 namespace cardan
 {
+    class Value;
+    class Object;
+    class Array;
+    class Function;
+
     struct ValueHolderBase
     {
         virtual ~ValueHolderBase() = default;
@@ -41,16 +43,20 @@ namespace cardan
 
         Object global();
 
+        v8::Isolate* getIsolate();
+        v8::Local<v8::Context> getContext();
+
     public:
 
         template <class ValueType>
         void set(const std::string& name, ValueType&& value);
-
+        /*
         template <class FuncReturnType, class... FuncArgs>
         void addFunction(const std::string& name, std::function<FuncReturnType(FuncArgs...)> function);
 
         template <class FunctorType>
         void addFunction(const std::string& name, FunctorType function);
+        */
 
     private:
 

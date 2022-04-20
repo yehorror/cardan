@@ -1,12 +1,15 @@
+#pragma once
 #include "Helper.hpp"
+#include "Context.hpp"
 
 namespace cardan::ToV8
 {
     // TODO Research if we can implement same functions for lambdas, etc
     // Can we have some internal storage for these functions objects? And delete them when objects are deleted in JS context
     // TODO Also this method is too big. It is better to refactor it somehow
+    /*
     template <class FuncReturnType, class... FuncArgs>
-    v8::Local<v8::Value> convert(v8::Local<v8::Context> context, std::function<FuncReturnType(FuncArgs...)>& func)
+    v8::Local<v8::Value> convert(Context& context, std::function<FuncReturnType(FuncArgs...)>& func)
     {
         auto callbackLambda = [] (const v8::FunctionCallbackInfo<v8::Value>& info)
         {
@@ -51,4 +54,5 @@ namespace cardan::ToV8
 
         return funcTemplate->GetFunction(context).ToLocalChecked();
     }
+    */
 }

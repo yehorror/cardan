@@ -141,7 +141,7 @@ TEST(ArrayTest, CreateArrayWith3Elements_setFirstElementToOtherValue_ValueWhichW
 
     EXPECT_EQ(4, array[0].asInt());
 }
-
+/*
 TEST(ArrayTest, CreateContext_CreateArray_setSomeValue_valueWhichWasSetCanBeRetrieved)
 {
     Context ctx;
@@ -174,3 +174,4 @@ TEST(ArrayTest, CreateContext_CreateArray_getValueViaSquaredBrackets_setNewValue
 
     EXPECT_EQ(43, thridValueReference.asInt());
 }
+*/
