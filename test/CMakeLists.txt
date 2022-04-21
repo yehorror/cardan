@@ -8,6 +8,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../googletest googletest)
 
 add_executable(cardan-test
     ContextTest.cpp
+    ClassTest.cpp
     CardanTest.cpp
     ValueTest.cpp
     ArrayTest.cpp

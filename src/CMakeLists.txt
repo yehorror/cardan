@@ -9,6 +9,9 @@ add_library(cardan-lib
     Context.hpp
     #Context.inl
 
+    Class.inl
+    Class.hpp
+
     Exceptions.hpp
 
     Value/Value.cpp
