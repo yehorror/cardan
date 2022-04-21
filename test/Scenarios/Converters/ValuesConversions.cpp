@@ -3,20 +3,6 @@
 
 #include <v8.h>
 
-namespace cardan
-{
-    class Context;
-}
-
-struct Person;
-
-namespace cardan::ToV8
-{
-    struct To;
-
-    v8::Local<v8::Value> convert(Context& context, const Person& person, ToV8::To);
-}
-
 #include "UserDefinedConverters.hpp"
 #include "Context.hpp"
 
