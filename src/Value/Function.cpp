@@ -7,10 +7,4 @@ namespace cardan
         , m_context(context)
     {
     }
-
-    Value Function::makeValue(v8::Local<v8::Value> value)
-    {
-        return Value(value, m_context);
-    }
-
 }

@@ -23,6 +23,17 @@ namespace cardan::FromV8
         throw std::runtime_error("Convertible value is not a double");
     }
 
+    float convert(Context& context, v8::Local<v8::Value> value, To<float>)
+    {
+        // Sadly, but V8 does not support floats
+        // So conversion double -> float will take place anyway
+        if (value->IsNumber())
+        {
+            return value->NumberValue(context.getContext()).ToChecked();
+        }
+        throw std::runtime_error("Convertible value is not a float");
+    }
+
     std::string convert(Context& context, v8::Local<v8::Value> value, To<std::string>)
     {
         return *v8::String::Utf8Value(context.getIsolate(), value);

@@ -1,18 +1,9 @@
 #pragma once
 
-#include "Value.hpp"
-#include "Array.hpp"
-#include "Function.hpp"
-#include "Converters/ToV8.hpp"
+#include "Value/Value.hpp"
 
 namespace cardan
 {
-    class Value;
-    class Array;
-    class Object;
-    class Function;
-    class Context;
-
     class ObjectIterator
     {
     public:
@@ -55,23 +46,6 @@ namespace cardan
         v8::Local<v8::Object> m_object;
         Context& m_context;
     };
-
 }
 
-#include "Context.hpp"
-
-namespace cardan
-{
-    template <class ValueType>
-    void Object::set(const std::string& name, ValueType&& value)
-    {
-        v8::Local<v8::Value> v8Name = convert(m_context, name, ToV8::ADLTag{});
-        v8::Local<v8::Value> v8Value = convert(m_context, std::forward<ValueType>(value), ToV8::ADLTag{});
-
-        m_object->Set(
-            m_context.getContext(),
-            v8Name,
-            v8Value
-        ).Check();
-    }
-}
+#include "Object.inl"

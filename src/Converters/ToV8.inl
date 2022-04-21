@@ -55,12 +55,14 @@ namespace cardan::ToV8
 
             if (std::tuple_size<std::tuple<FuncArgs...>>::value != info.Length())
             {
-                isolate->ThrowException(convert(functionWithContext.m_context, "Invalid number of arguments", ToV8::ADLTag{}));
+                isolate->ThrowException(
+                    convert(functionWithContext.m_context, "Invalid number of arguments", ToV8::ADLTag{})
+                );
                 return;
             }
 
             // TODO Catch possible exceptions here
-            auto tupleWithArguments = details::packArguments<FuncArgs...>(functionWithContext.m_context, info);
+            auto tupleWithArguments = details::convertArgumentsFromV8<FuncArgs...>(functionWithContext.m_context, info);
 
             try
             {

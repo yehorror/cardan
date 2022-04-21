@@ -26,6 +26,7 @@ namespace cardan
     class Array;
     class Function;
 
+    // Is used to store some external values internally (e.g. functions, class pointers)
     struct ValueHolderBase
     {
         virtual ~ValueHolderBase() = default;
@@ -59,14 +60,6 @@ namespace cardan
 
         template <class ValueType>
         void set(const std::string& name, ValueType&& value);
-        /*
-        template <class FuncReturnType, class... FuncArgs>
-        void addFunction(const std::string& name, std::function<FuncReturnType(FuncArgs...)> function);
-
-        template <class FunctorType>
-        void addFunction(const std::string& name, FunctorType function);
-        */
-
 
     private:
 

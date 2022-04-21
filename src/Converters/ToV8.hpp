@@ -12,6 +12,7 @@ namespace cardan
 
 namespace cardan::ToV8
 {
+    // This struct is used to force compiler to use ADL on converters lookup
     struct ADLTag
     {
     };

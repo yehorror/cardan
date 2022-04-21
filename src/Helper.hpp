@@ -24,7 +24,11 @@ namespace cardan::details
     };
 
     template <class... Args, size_t... I>
-    static std::tuple<Args...> packArgumentsImpl(Context& context, const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<I...>)
+    static std::tuple<Args...> convertArgumentsFromV8Impl(
+        Context& context,
+        const v8::FunctionCallbackInfo<v8::Value>& info,
+        std::index_sequence<I...>
+    )
     {
         return std::make_tuple<Args...>(
             convert(
@@ -36,13 +40,17 @@ namespace cardan::details
     }
 
     template <class... Args>
-    static std::tuple<Args...> packArguments(Context& context, const v8::FunctionCallbackInfo<v8::Value>& info)
+    static std::tuple<Args...> convertArgumentsFromV8(Context& context, const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        return packArgumentsImpl<Args...>(context, info, std::make_index_sequence<std::tuple_size<std::tuple<Args...>>::value> {});
+        return convertArgumentsFromV8Impl<Args...>(
+            context,
+            info,
+            std::make_index_sequence<std::tuple_size<std::tuple<Args...>>::value> {}
+        );
     }
 
     template <>
-    std::tuple<> packArguments(Context& /*context*/, const v8::FunctionCallbackInfo<v8::Value>& /*info*/)
+    std::tuple<> convertArgumentsFromV8(Context& /*context*/, const v8::FunctionCallbackInfo<v8::Value>& /*info*/)
     {
         return std::tuple<>();
     }
