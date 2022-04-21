@@ -144,3 +144,29 @@ TEST(ObjectTest, CreateEmptyObject_setDoubleValueBySomeName_getValueByThatNameRe
 
     EXPECT_DOUBLE_EQ(2.71828, object["some_value"].asDouble());
 }
+
+TEST(ObjectTest, CreateEmptyObject_setFunction_callToFunction_FunctionIsCalled)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("{}") )");
+
+    MockFunction<void()> mockFunction;
+
+    object["mock"] = mockFunction.AsStdFunction();
+
+    EXPECT_CALL(mockFunction, Call());
+
+    object["mock"].asFunction().call();
+}
+
+TEST(ObjectTest, CreateEmptyObject_setLambdaFunction_callToFunction_FunctionIsCalled)
+{
+    auto [ctx, object] = makeObjectFromJSCode(R"( JSON.parse("{}") )");
+
+    MockFunction<void()> mockFunction;
+
+    object["lambda"] = [&] () { mockFunction.Call(); };
+
+    EXPECT_CALL(mockFunction, Call());
+
+    object["lambda"].asFunction().call();
+}
