@@ -91,6 +91,7 @@ namespace cardan::ToV8
         return funcTemplate->GetFunction(context.getContext()).ToLocalChecked();
     }
 
+    // Scary enable_if to force compiler not to use this function for non-invocable types
     template <class FunctorType, class... InvokeArgs>
     std::enable_if_t<
         std::is_invocable<FunctorType, InvokeArgs...>::value,
