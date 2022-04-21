@@ -21,7 +21,6 @@ TEST(ContextTest, RunScriptWhichAddsTwoNumbers_ReturnSumOfNumbers)
 
 TEST(ContextTest, RunScriptWhichThrowsException_ThrowExceptionInCpp)
 {
-    // TODO Add test for exception description, maybe other info
     const std::string JS = R"( throw 'This is exception'; )";
 
     Context ctx;
@@ -31,7 +30,7 @@ TEST(ContextTest, RunScriptWhichThrowsException_ThrowExceptionInCpp)
         JSException
     );
 }
-/*
+
 TEST(ContextTest, AddFunctionWithNoArguments_RunScriptWhichCallsThisFunction_FunctionWasCalled)
 {
     const std::string JS = R"( testFunction1(); )";
@@ -219,7 +218,7 @@ TEST(ContextTest, AddFunctionWhichReturnsDouble_RunScriptWhichCallsThisFunction_
         result.asDouble()
     );
 }
-*/
+
 
 TEST(ContextTest, RunScriptWhichAddsTwoRealNumbers_DoubleIsReturned)
 {
@@ -382,7 +381,7 @@ TEST(ContextTest, MakeDoubleValue_asDouble_ReturnsValueItWasMadeWith)
     ASSERT_TRUE(value.isDouble());
     EXPECT_DOUBLE_EQ(VALUE, value.asDouble());
 }
-/*
+
 TEST(ContextTest, MakeFunctionValue_asFunction_ReturnsFunctionWhichCanBeCalled)
 {
     MockFunction<void(int)> mockFunction;
@@ -398,7 +397,7 @@ TEST(ContextTest, MakeFunctionValue_asFunction_ReturnsFunctionWhichCanBeCalled)
 
     value.asFunction().call(42);
 }
-*/
+
 TEST(ContextTest, CreateEmptyContext_global_ReturnsEmptyObject)
 {
     Context ctx;
@@ -453,4 +452,3 @@ TEST(ContextTest, SetLambdaFunction_FunctionCanBeCalledFromJSCode)
     EXPECT_CALL(mockFunction, Call());
     ctx.runScript("lambda()");
 }
-
