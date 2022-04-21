@@ -47,7 +47,7 @@ namespace cardan
 
         details::forEachElementInTuple(argsTuple, [&] (const auto& argument)
         {
-            argumentsVector.push_back(ToV8::convert(m_context, argument));
+            argumentsVector.push_back(convert(m_context, argument, ToV8::ADLTag{}));
         });
 
         auto result = m_function->Call(

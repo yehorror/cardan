@@ -5,7 +5,7 @@ namespace cardan
 {
     Object::ValueReference Object::operator [](const std::string& key)
     {
-        auto v8Key = ToV8::convert(m_context, key);
+        auto v8Key = convert(m_context, key, ToV8::ADLTag{});
         auto v8Value = m_object->Get(m_context.getContext(), v8Key).ToLocalChecked();
 
         return ValueReference(Value(v8Value, m_context), key, *this);

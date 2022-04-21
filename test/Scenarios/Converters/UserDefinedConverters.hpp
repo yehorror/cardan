@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Converters/FromV8.hpp"
-#include "Converters/ToV8.hpp"
+#include "Context.hpp"
 
 struct Person
 {
@@ -11,8 +10,9 @@ struct Person
 
 namespace cardan::ToV8
 {
-    v8::Local<v8::Value> convert(Context& context, Person& person);
+    v8::Local<v8::Value> convert(cardan::Context& context, const Person& person, cardan::ToV8::ADLTag);
 }
+
 
 namespace cardan::FromV8
 {

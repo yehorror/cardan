@@ -12,6 +12,15 @@
 
 namespace cardan
 {
+    namespace ToV8
+    {
+        // This converter is forward-declared because it should have access to some cardan::Context`s internals
+        struct ADLTag;
+
+        template <class FuncReturnType, class... FuncArgs>
+        v8::Local<v8::Value> convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ToV8::ADLTag);
+    }
+
     class Value;
     class Object;
     class Array;
@@ -58,7 +67,14 @@ namespace cardan
         void addFunction(const std::string& name, FunctorType function);
         */
 
+
     private:
+
+        template <class FuncReturnType, class... FuncArgs>
+        friend v8::Local<v8::Value> cardan::ToV8::convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ToV8::ADLTag);
+
+        template <class FunctionWithContextType>
+        void saveFunction(std::unique_ptr<FunctionWithContextType> function);
 
         ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);
 
@@ -66,6 +82,7 @@ namespace cardan
         std::unique_ptr<v8::ArrayBuffer::Allocator> m_arrayBufferAllocator;
 
         // TODO Move isolate's guard declaration out of here
+        // TODO Actually, move v8::Isolate outside of Context
         struct IsolateDisposer
         {
             void operator() (v8::Isolate* isolate);

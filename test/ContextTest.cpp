@@ -424,8 +424,8 @@ TEST(ContextTest, JSCodeThrowsError_ExceptionRethrowedInCppWithMessageFromJSCode
         FAIL() << "Wrong type of exception was thrown";
     }
 }
-/*
-TEST(ContextTest, AddStdFunctionWhichIsDestroyedLater_FunctionIsCopiedSoItStillCanBeCalledFromJSCode)
+
+TEST(ContextTest, SetStdFunctionWhichIsDestroyedLater_FunctionIsCopiedSoItStillCanBeCalledFromJSCode)
 {
     Context ctx;
 
@@ -436,21 +436,21 @@ TEST(ContextTest, AddStdFunctionWhichIsDestroyedLater_FunctionIsCopiedSoItStillC
         // Test checks that even if added function is destroyed, it still can be called
 
         auto stdFunction = mockFunction.AsStdFunction();
-        ctx.addFunction("cppFunction", stdFunction);
+        ctx.set("cppFunction", stdFunction);
     }
 
     EXPECT_CALL(mockFunction, Call());
     ctx.runScript("cppFunction()");
 }
 
-TEST(ContextTest, AddLambdaFunction_FunctionCanBeCalledFromJSCode)
+TEST(ContextTest, SetLambdaFunction_FunctionCanBeCalledFromJSCode)
 {
     Context ctx;
 
     MockFunction<void()> mockFunction;
-    ctx.addFunction("lambda", [&] () { mockFunction.Call(); });
+    ctx.set("lambda", [&] () { mockFunction.Call(); });
 
     EXPECT_CALL(mockFunction, Call());
     ctx.runScript("lambda()");
 }
-*/
+

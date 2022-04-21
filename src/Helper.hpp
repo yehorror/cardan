@@ -24,11 +24,11 @@ namespace cardan::details
     };
 
     template <class... Args, size_t... I>
-    static std::tuple<Args...> packArgumentsImpl(const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<I...>)
+    static std::tuple<Args...> packArgumentsImpl(Context& context, const v8::FunctionCallbackInfo<v8::Value>& info, std::index_sequence<I...>)
     {
         return std::make_tuple<Args...>(
             convert(
-                info.GetIsolate()->GetCurrentContext(),
+                context,
                 info[I],
                 cardan::FromV8::To<typename getType<I, Args...>::type>{}
             )...
@@ -36,13 +36,13 @@ namespace cardan::details
     }
 
     template <class... Args>
-    static std::tuple<Args...> packArguments(const v8::FunctionCallbackInfo<v8::Value>& info)
+    static std::tuple<Args...> packArguments(Context& context, const v8::FunctionCallbackInfo<v8::Value>& info)
     {
-        return packArgumentsImpl<Args...>(info, std::make_index_sequence<std::tuple_size<std::tuple<Args...>>::value> {});
+        return packArgumentsImpl<Args...>(context, info, std::make_index_sequence<std::tuple_size<std::tuple<Args...>>::value> {});
     }
 
     template <>
-    std::tuple<> packArguments(const v8::FunctionCallbackInfo<v8::Value>& info)
+    std::tuple<> packArguments(Context& /*context*/, const v8::FunctionCallbackInfo<v8::Value>& /*info*/)
     {
         return std::tuple<>();
     }

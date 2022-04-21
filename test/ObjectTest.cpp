@@ -144,37 +144,3 @@ TEST(ObjectTest, CreateEmptyObject_setDoubleValueBySomeName_getValueByThatNameRe
 
     EXPECT_DOUBLE_EQ(2.71828, object["some_value"].asDouble());
 }
-/*
-TEST(ObjectTest, CreateContext_CreateObject_setSomeValue_valueWhichWasSetCanBeRetrieved)
-{
-    Context ctx;
-
-    Object object;
-    object.set("name", "John Smith");
-
-    EXPECT_EQ("John Smith", object["name"].asString());
-}
-
-TEST(ObjectTest, CreateContext_CreateObject_setSomeValueViaAssignment_valueWhichWasSetCanBeRetrieved)
-{
-    Context ctx;
-
-    Object object;
-    object["age"] = 35;
-
-    EXPECT_EQ(35, object["age"].asInt());
-}
-
-TEST(ObjectTest, CreateContext_CreateObject_getValueViaSquaredBrackets_setNewValueToIt_ItHasValueWhichWasSet)
-{
-    Context ctx;
-
-    Object object;
-    object["age"] = 35;
-
-    Object::ValueReference ageValueRef = object["age"];
-    ageValueRef = 27;
-
-    EXPECT_EQ(27, ageValueRef.asInt());
-}
-*/
