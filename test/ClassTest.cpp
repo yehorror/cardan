@@ -89,3 +89,31 @@ TEST_F(ClassTest, MakeClass_AddTwoParameterlessMethods_CreateInstance_CallTwoMet
     EXPECT_TRUE(method1WasCalled);
     EXPECT_TRUE(method2WasCalled);
 }
+
+TEST_F(ClassTest, MakeClass_AddMethodWithParametersAndReturnValue_CreateInstance_CallMethod_MethodIsCalled)
+{
+    class MockSummator : Mock
+    {
+    public:
+        MockSummator()
+        {
+            // Is it normal?..
+            EXPECT_CALL(*this, add(2, 3)).WillOnce(Return(5));
+        }
+
+        MOCK_METHOD2(add, int(int, int));
+    };
+
+    cardan::Class<MockSummator> summator;
+    summator.method("add", &MockSummator::add);
+
+    cardan::Context ctx;
+    ctx.set("Summator", summator);
+
+    auto result = ctx.runScript(R"JS(
+        var summator = new Summator();
+        summator.add(2, 3);
+    )JS");
+
+    EXPECT_EQ(2 + 3, result.as<int>());
+}

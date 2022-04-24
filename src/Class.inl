@@ -30,6 +30,7 @@ namespace cardan
                 return;
             }
 
+            // FIXME Memory leak here
             callInfo.This()->SetInternalField(0, v8::External::New(isolate, new ClassT));
             callInfo.GetReturnValue().Set(callInfo.This());
         });

@@ -21,18 +21,44 @@ namespace cardan::classDetails
         auto funcName = convert(context, m_name, ToV8::ADLTag{}).template As<v8::String>();
         auto memberFuncTemplate = v8::FunctionTemplate::New(context.getIsolate());
 
+        struct ContextWithMethodReference
+        {
+            MethodReferenceType m_methodReference;
+            Context& m_context;
+        };
+
         memberFuncTemplate->SetCallHandler([] (const v8::FunctionCallbackInfo<v8::Value>& callInfo)
         {
-            auto self = callInfo.This();
-            ClassT* classPtr = static_cast<ClassT*>(callInfo.This()->GetInternalField(0).As<v8::External>()->Value());
+            v8::Local<v8::Object> self = callInfo.This();
+            auto& contextWithMethodReference = *static_cast<ContextWithMethodReference*>(callInfo.Data().As<v8::External>()->Value());
+
+            ClassT* classPtr = static_cast<ClassT*>(self->GetInternalField(0).As<v8::External>()->Value());
             // ClassT* classPtr = static_cast<ClassT*>(callInfo.This()->GetAlignedPointerFromInternalField(0));
 
-            auto methodRef = *static_cast<MethodReferenceType*>(callInfo.Data().As<v8::External>()->Value());
+            auto arguments = details::convertArgumentsFromV8<Args...>(contextWithMethodReference.m_context, callInfo);
 
-            (classPtr->*methodRef)();
+            if constexpr (std::is_same_v<void, ReturnType>)
+            {
+                // Cannot call non-static member functions directly in std::apply, so had to do this 'proxy'
+                auto memberFunctionCallProxy = [&] (Args... arguments)
+                {
+                    ((*classPtr).*(contextWithMethodReference.m_methodReference))(arguments...);
+                };
 
-            //callInfo.GetReturnValue().Set(228);
-        }, v8::External::New(context.getIsolate(), &m_methodReference));
+                std::apply(memberFunctionCallProxy, arguments);
+            }
+            else
+            {
+                auto memberFunctionCallProxy = [&] (Args... arguments)
+                {
+                    return ((*classPtr).*(contextWithMethodReference.m_methodReference))(arguments...);
+                };
+
+                auto result = std::apply(memberFunctionCallProxy, arguments);
+                callInfo.GetReturnValue().Set(result);
+            }
+
+        }, v8::External::New(context.getIsolate(), new ContextWithMethodReference {m_methodReference, context}));
 
         objectTemplate->Set(funcName, memberFuncTemplate);
     }
