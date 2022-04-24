@@ -11,6 +11,9 @@
 namespace cardan
 {
     template <class ClassT>
+    v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
+
+    template <class ClassT>
     class Class
     {
     public:
@@ -19,15 +22,11 @@ namespace cardan
         void method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...));
 
     private:
+        template <class T>
+        friend v8::Local<v8::Value> cardan::convert(Context& context, Class<T>& classDef, ToV8::ADLTag);
 
-
-    private:
         std::unordered_set<std::unique_ptr<classDetails::Member>> m_members;
     };
-
-    template <class ClassT>
-    v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
-
 }
 
 #include "Class.inl"

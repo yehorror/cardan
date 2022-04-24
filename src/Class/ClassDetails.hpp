@@ -2,6 +2,12 @@
 
 #include <string>
 #include <functional>
+#include <v8.h>
+
+namespace cardan
+{
+    class Context;
+}
 
 namespace cardan::classDetails
 {
@@ -9,7 +15,7 @@ namespace cardan::classDetails
     class Member
     {
     public:
-        virtual void registerMember() = 0;
+        virtual void registerMember(Context& context, v8::Local<v8::ObjectTemplate>& objectTemplate) = 0;
         virtual ~Member() = default;
     };
 
@@ -17,11 +23,13 @@ namespace cardan::classDetails
     class Method : public Member
     {
     public:
-        Method(const std::string& name, std::function<ReturnType(ClassT*, Args...)> function);
-        void registerMember() override;
+        Method(const std::string& name, ReturnType(ClassT::* methodReference )(Args...));
+        void registerMember(Context& context, v8::Local<v8::ObjectTemplate>& objectTemplate) override;
 
     private:
-        std::function<ReturnType(ClassT*, Args...)> m_function;
+        using MethodReferenceType = ReturnType(ClassT::*)(Args...);
+
+        MethodReferenceType m_methodReference;
         const std::string m_name;
     };
 }
