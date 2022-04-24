@@ -1,5 +1,6 @@
 #include "ToV8.hpp"
 #include "Context.hpp"
+#include "Class.hpp"
 
 namespace cardan::ToV8
 {

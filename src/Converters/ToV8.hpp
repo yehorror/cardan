@@ -8,6 +8,8 @@ namespace cardan
 {
     class Function;
     class Context;
+
+    template <class ClassT> class Class;
 }
 
 namespace cardan::ToV8

@@ -30,7 +30,7 @@ TEST(ClassTest, MakeClass_addParameterlessMethod_AddClassToContext_CreateInstanc
     ASSERT_FALSE(methodWasCalled);
 
     ctx.runScript(R"JS(
-        var obj = new MockClass();
+        var obj = new StubClass();
         obj.parameterlessMethod();
     )JS");
 
