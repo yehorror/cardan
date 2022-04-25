@@ -309,7 +309,7 @@ TEST(ContextTest, ExecuteTwoScriptsWithinOneContextWhichChangesVariable_Variable
 
     EXPECT_EQ("second script executed", state.asString());
 }
-/*
+
 TEST(ContextTest, AddCppFunction_CallThisFunctionFromJSCodeWithWrongArgumentsCount_ExceptionIsThrown)
 {
     const std::string JS = R"( cppFunction(1, 2); )";
@@ -348,7 +348,7 @@ TEST(ContextTest, AddCppFunctionWhichThrowsException_CallFunctionFromJSCode_Exce
 
     EXPECT_TRUE(value.asBool());
 }
-*/
+
 TEST(ContextTest, MakeIntegerValue_asInt_ReturnsValueItWasMadeWith)
 {
     const int VALUE = 52375;
