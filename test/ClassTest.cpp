@@ -117,3 +117,46 @@ TEST_F(ClassTest, MakeClass_AddMethodWithParametersAndReturnValue_CreateInstance
 
     EXPECT_EQ(2 + 3, result.as<int>());
 }
+
+TEST_F(ClassTest, MakeIncrementerClassWithInternalState_AddClass_CallIncrementMethodTwice_ValueOfAClassIsTwo)
+{
+    class Incrementer
+    {
+    public:
+        void increment()
+        {
+            ++m_value;
+        }
+
+        int value()
+        {
+            return m_value;
+        }
+
+    private:
+        int m_value = 0;
+    };
+
+    cardan::Class<Incrementer> incrementer;
+    incrementer.method("increment", &Incrementer::increment);
+    incrementer.method("value", &Incrementer::value);
+
+    cardan::Context ctx;
+    ctx.set("Incrementer", incrementer);
+
+    auto initialState = ctx.runScript(R"JS(
+        var incrementer = new Incrementer();
+        incrementer.value();
+    )JS");
+
+    ASSERT_EQ(0, initialState.as<int>());
+
+    auto stateAfterTwoIncrements = ctx.runScript(R"JS(
+        incrementer.increment();
+        incrementer.increment();
+
+        incrementer.value();
+    )JS");
+
+    EXPECT_EQ(2, stateAfterTwoIncrements.as<int>());
+}
