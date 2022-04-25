@@ -15,6 +15,17 @@ namespace cardan
     }
 
     template <class ClassT>
+    template <typename PropertyType>
+    void Class<ClassT>::property(
+        const std::string& name,
+        PropertyType(ClassT::*getter)(),
+        void(ClassT::*setter)(PropertyType)
+    )
+    {
+        m_members.emplace(std::make_unique<classDetails::Property<ClassT, PropertyType>>(name, getter, setter));
+    }
+
+    template <class ClassT>
     v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag)
     {
         auto constructorFuncTemplate = v8::FunctionTemplate::New(context.getIsolate());

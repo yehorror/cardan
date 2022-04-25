@@ -21,6 +21,9 @@ namespace cardan
         template <typename ReturnType, typename... Args>
         void method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...));
 
+        template <typename PropertyType>
+        void property(const std::string& name, PropertyType(ClassT::*getter)(), void(ClassT::*setter)(PropertyType));
+
     private:
         template <class T>
         friend v8::Local<v8::Value> cardan::convert(Context& context, Class<T>& classDef, ToV8::ADLTag);

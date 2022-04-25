@@ -32,6 +32,28 @@ namespace cardan::classDetails
         MethodReferenceType m_methodReference;
         const std::string m_name;
     };
+
+    template <class ClassT, typename PropertyType>
+    class Property : public Member
+    {
+    public:
+        Property(
+            const std::string& name,
+            PropertyType(ClassT::*getter)(),
+            void(ClassT::*setter)(PropertyType)
+        );
+
+        void registerMember(Context& context, v8::Local<v8::ObjectTemplate>& objectTemplate) override;
+
+    private:
+        using MethodGetterType = PropertyType(ClassT::*)();
+        using MethodSetterType = void(ClassT::*)(PropertyType);
+
+        MethodGetterType m_getter;
+        MethodSetterType m_setter;
+
+        const std::string m_name;
+    };
 }
 
 #include "ClassDetails.inl"

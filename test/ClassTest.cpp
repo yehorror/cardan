@@ -92,7 +92,7 @@ TEST_F(ClassTest, MakeClass_AddTwoParameterlessMethods_CreateInstance_CallTwoMet
 
 TEST_F(ClassTest, MakeClass_AddMethodWithParametersAndReturnValue_CreateInstance_CallMethod_MethodIsCalled)
 {
-    class MockSummator : Mock
+    class MockSummator : public Mock
     {
     public:
         MockSummator()
@@ -159,4 +159,32 @@ TEST_F(ClassTest, MakeIncrementerClassWithInternalState_AddClass_CallIncrementMe
     )JS");
 
     EXPECT_EQ(2, stateAfterTwoIncrements.as<int>());
+}
+
+TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_CreateInstanceOfAClass_GetValue_GetterCalled)
+{
+    class ValueStorage : public Mock
+    {
+    public:
+        ValueStorage()
+        {
+            EXPECT_CALL(*this, get()).WillOnce(Return(41));
+        }
+
+        MOCK_METHOD0(get, int());
+        MOCK_METHOD1(set, void(int));
+    };
+
+    cardan::Class<ValueStorage> valueClass;
+    valueClass.property("value", &ValueStorage::get, &ValueStorage::set);
+
+    cardan::Context ctx;
+    ctx.set("ValueStorage", valueClass);
+
+    auto value = ctx.runScript(R"JS(
+        let storage = new ValueStorage();
+        storage.value;
+    )JS");
+
+    EXPECT_EQ(41, value.as<int>());
 }
