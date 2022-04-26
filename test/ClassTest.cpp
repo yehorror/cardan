@@ -161,18 +161,19 @@ TEST_F(ClassTest, MakeIncrementerClassWithInternalState_AddClass_CallIncrementMe
     EXPECT_EQ(2, stateAfterTwoIncrements.as<int>());
 }
 
-TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_CreateInstanceOfAClass_GetValue_GetterCalled)
+TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_GetValue_ReturnsValueFromGetter)
 {
-    class ValueStorage : public Mock
+    class ValueStorage
     {
     public:
-        ValueStorage()
+        int get()
         {
-            EXPECT_CALL(*this, get()).WillOnce(Return(41));
+            return 41;
         }
 
-        MOCK_METHOD0(get, int());
-        MOCK_METHOD1(set, void(int));
+        void set(int)
+        {
+        }
     };
 
     cardan::Class<ValueStorage> valueClass;
@@ -188,3 +189,39 @@ TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_CreateInstanc
 
     EXPECT_EQ(41, value.as<int>());
 }
+
+TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_AssignSomeValue_GetValue_ReturnsValueWhichWasSet)
+{
+    static int value;
+    class ValueStorage
+    {
+    public:
+        void set(int newVal)
+        {
+            m_val = newVal;
+        }
+
+        int get()
+        {
+            return m_val;
+        }
+    private:
+        int m_val = 0;
+    };
+
+    cardan::Class<ValueStorage> valueClass;
+    valueClass.property("value", &ValueStorage::get, &ValueStorage::set);
+
+    cardan::Context ctx;
+    ctx.set("ValueStorage", valueClass);
+
+    auto result = ctx.runScript(R"JS(
+        let storage = new ValueStorage();
+        storage.value = 37;
+
+        storage.value;
+    )JS");
+
+    EXPECT_EQ(37, result.as<int>());
+}
+

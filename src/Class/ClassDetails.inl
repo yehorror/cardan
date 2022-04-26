@@ -78,33 +78,51 @@ namespace cardan::classDetails
     template <class ClassT, typename PropertyType>
     void Property<ClassT, PropertyType>::registerMember(Context& context, v8::Local<v8::ObjectTemplate>& objectTemplate)
     {
-        struct ContextWithMethodsReference
+        struct ContextWithMethodsReferences
         {
             MethodGetterType m_getter;
             MethodSetterType m_setter;
             Context& m_context;
         };
 
-        auto getterLambda = [] (v8::Local<v8::Name> /*name*/, const v8::PropertyCallbackInfo<v8::Value>& propertyInfo)
+        auto getterLambda = [] (v8::Local<v8::String> /*name*/, const v8::PropertyCallbackInfo<v8::Value>& propertyInfo)
         {
             v8::Local<v8::Object> self = propertyInfo.This();
             ClassT* classPtr = static_cast<ClassT*>(self->GetInternalField(0).As<v8::External>()->Value());
 
-            ContextWithMethodsReference& getter =
-                *static_cast<ContextWithMethodsReference*>(propertyInfo.Data().As<v8::External>()->Value());
+            ContextWithMethodsReferences& contextWithMethodsReferences =
+                *static_cast<ContextWithMethodsReferences*>(propertyInfo.Data().As<v8::External>()->Value());
 
-            auto value = (classPtr->*(getter.m_getter))();
+            auto value = (classPtr->*(contextWithMethodsReferences.m_getter))();
 
-            propertyInfo.GetReturnValue().Set(value);
+            propertyInfo.GetReturnValue().Set(convert(contextWithMethodsReferences.m_context, value, ToV8::ADLTag{}));
         };
 
-        auto v8Name = convert(context, m_name, ToV8::ADLTag{}).As<v8::Name>();
+        auto setterLambda = [] (
+            v8::Local<v8::String> /*name*/,
+            v8::Local<v8::Value> newValue,
+            const v8::PropertyCallbackInfo<void>& propertyInfo
+        )
+        {
+            v8::Local<v8::Object> self = propertyInfo.This();
+            ClassT* classPtr = static_cast<ClassT*>(self->GetInternalField(0).As<v8::External>()->Value());
+
+            ContextWithMethodsReferences& contextWithMethodsReferences =
+                *static_cast<ContextWithMethodsReferences*>(propertyInfo.Data().As<v8::External>()->Value());
+
+            auto convertedValue = convert(contextWithMethodsReferences.m_context, newValue, FromV8::To<PropertyType>{});
+
+            (classPtr->*(contextWithMethodsReferences.m_setter))(convertedValue);
+        };
+
+
+        auto v8Name = convert(context, m_name, ToV8::ADLTag{}).As<v8::String>();
 
         objectTemplate->SetAccessor(
             v8Name,
             getterLambda,
-            nullptr,
-            v8::External::New(context.getIsolate(), new ContextWithMethodsReference{ m_getter, m_setter, context })
+            setterLambda,
+            v8::External::New(context.getIsolate(), new ContextWithMethodsReferences{ m_getter, m_setter, context })
         );
     }
 }
