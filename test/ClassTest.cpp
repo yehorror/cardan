@@ -192,7 +192,6 @@ TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_GetValue_Retu
 
 TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_AssignSomeValue_GetValue_ReturnsValueWhichWasSet)
 {
-    static int value;
     class ValueStorage
     {
     public:
@@ -225,3 +224,23 @@ TEST_F(ClassTest, ClassHasGetterAndSetter_AddThemAsPropertyToClass_AssignSomeVal
     EXPECT_EQ(37, result.as<int>());
 }
 
+TEST_F(ClassTest, StructHasFieldWithDefaultValue_AddThisFieldAsProperty_GetValue_ValueIsReturned)
+{
+    struct Employee
+    {
+        std::string name = "Yehor";
+    };
+
+    cardan::Class<Employee> valueClass;
+    valueClass.property("name", &Employee::name);
+
+    cardan::Context ctx;
+    ctx.set("ValueStorage", valueClass);
+
+    auto result = ctx.runScript(R"JS(
+        let storage = new ValueStorage();
+        storage.name;
+    )JS");
+
+    EXPECT_EQ("Yehor", result.as<std::string>());
+}

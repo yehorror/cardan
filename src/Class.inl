@@ -15,14 +15,21 @@ namespace cardan
     }
 
     template <class ClassT>
-    template <typename PropertyType>
+    template <typename PropertyGetterSetterType>
     void Class<ClassT>::property(
         const std::string& name,
-        PropertyType(ClassT::*getter)(),
-        void(ClassT::*setter)(PropertyType)
+        PropertyGetterSetterType(ClassT::*getter)(),
+        void(ClassT::*setter)(PropertyGetterSetterType)
     )
     {
-        m_members.emplace(std::make_unique<classDetails::Property<ClassT, PropertyType>>(name, getter, setter));
+        m_members.emplace(std::make_unique<classDetails::PropertyGetterSetter<ClassT, PropertyGetterSetterType>>(name, getter, setter));
+    }
+
+    template <class ClassT>
+    template <typename PropertyType>
+    void Class<ClassT>::property(const std::string& name, PropertyType ClassT::* field)
+    {
+        m_members.emplace(std::make_unique<classDetails::Property<ClassT, PropertyType>>(name, field));
     }
 
     template <class ClassT>

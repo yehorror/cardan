@@ -34,10 +34,10 @@ namespace cardan::classDetails
     };
 
     template <class ClassT, typename PropertyType>
-    class Property : public Member
+    class PropertyGetterSetter : public Member
     {
     public:
-        Property(
+        PropertyGetterSetter(
             const std::string& name,
             PropertyType(ClassT::*getter)(),
             void(ClassT::*setter)(PropertyType)
@@ -52,6 +52,21 @@ namespace cardan::classDetails
         MethodGetterType m_getter;
         MethodSetterType m_setter;
 
+        const std::string m_name;
+    };
+
+    template <class ClassT, typename PropertyType>
+    class Property : public Member
+    {
+    public:
+        Property(const std::string& name, PropertyType ClassT::* memberReference);
+
+        void registerMember(Context& context, v8::Local<v8::ObjectTemplate>& objectTemplate) override;
+
+    private:
+        using PropertyMemberType = PropertyType ClassT::*;
+
+        PropertyMemberType m_memberReference;
         const std::string m_name;
     };
 }
