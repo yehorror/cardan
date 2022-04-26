@@ -72,6 +72,11 @@ namespace cardan
         return m_context;
     }
 
+    void Context::saveData(std::unique_ptr<ValueHolderBase> dataPtr)
+    {
+        m_values.emplace(std::move(dataPtr));
+    }
+
     Context::ScriptRunResult Context::processRunResult(
         v8::MaybeLocal<v8::Value>& scriptRunResult,
         v8::TryCatch& tryCatchHandler

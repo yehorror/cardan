@@ -45,7 +45,7 @@ namespace cardan::ToV8
 
         FunctionWithContext* savedFunctionWithContextPtr = savedFunctionWithContext.get();
 
-        context.saveFunction(std::move(savedFunctionWithContext));
+        context.saveData(std::move(savedFunctionWithContext));
 
         auto callbackLambda = [] (const v8::FunctionCallbackInfo<v8::Value>& info)
         {

@@ -8,6 +8,16 @@
 namespace cardan
 {
     template <class ClassT>
+    struct ClassInstanceHolder : public ValueHolderBase
+    {
+        ClassInstanceHolder(std::unique_ptr<ClassT> classInstance)
+            : m_classInstance(std::move(classInstance))
+        {
+        }
+        std::unique_ptr<ClassT> m_classInstance;
+    };
+
+    template <class ClassT>
     template <typename ReturnType, typename... Args>
     void Class<ClassT>::method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...))
     {
@@ -37,9 +47,12 @@ namespace cardan
     {
         auto constructorFuncTemplate = v8::FunctionTemplate::New(context.getIsolate());
 
+        // TODO Move to static function
         constructorFuncTemplate->SetCallHandler([] (const v8::FunctionCallbackInfo<v8::Value>& callInfo)
         {
             auto isolate = callInfo.GetIsolate();
+            auto& context = *static_cast<Context*>(callInfo.Data().As<v8::External>()->Value());
+
             if (!callInfo.IsConstructCall())
             {
                 isolate->ThrowError(
@@ -48,10 +61,16 @@ namespace cardan
                 return;
             }
 
+            auto instanceHolder = std::make_unique<ClassInstanceHolder<ClassT>>(std::make_unique<ClassT>());
+            auto instancePtr = instanceHolder->m_classInstance.get();
+
+            context.saveData(std::move(instanceHolder));
+
             // FIXME Memory leak here
-            callInfo.This()->SetInternalField(0, v8::External::New(isolate, new ClassT));
+            callInfo.This()->SetInternalField(0, v8::External::New(isolate, instancePtr));
             callInfo.GetReturnValue().Set(callInfo.This());
-        });
+
+        }, v8::External::New(context.getIsolate(), &context));
 
         auto instanceTemplate = constructorFuncTemplate->InstanceTemplate();
 

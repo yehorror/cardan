@@ -28,10 +28,4 @@ namespace cardan
         v8::Local<v8::Value> v8Value = convert(*this, std::forward<ValueType>(value), ToV8::ADLTag{});
         return Value(v8Value, *this);
     }
-
-    template <class FunctionWithContextType>
-    void Context::saveFunction(std::unique_ptr<FunctionWithContextType> functionWithContext)
-    {
-        m_functions.emplace(std::move(functionWithContext));
-    }
 }

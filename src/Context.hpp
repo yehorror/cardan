@@ -21,10 +21,16 @@ namespace cardan
         v8::Local<v8::Value> convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ToV8::ADLTag);
     }
 
+    template <class ClassT>
+    class Class;
+
     class Value;
     class Object;
     class Array;
     class Function;
+
+//    template <class ClassT>
+//    v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
 
     // Is used to store some external values internally (e.g. functions, class pointers)
     struct ValueHolderBase
@@ -66,8 +72,10 @@ namespace cardan
         template <class FuncReturnType, class... FuncArgs>
         friend v8::Local<v8::Value> cardan::ToV8::convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ToV8::ADLTag);
 
-        template <class FunctionWithContextType>
-        void saveFunction(std::unique_ptr<FunctionWithContextType> function);
+        template <class ClassT>
+        friend v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
+
+        void saveData(std::unique_ptr<ValueHolderBase> dataPtr);
 
         ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);
 
@@ -89,7 +97,7 @@ namespace cardan
         v8::Local<v8::Context> m_context;
         v8::Context::Scope m_contextScope;
 
-        std::unordered_set<std::unique_ptr<ValueHolderBase>> m_functions;
+        std::unordered_set<std::unique_ptr<ValueHolderBase>> m_values;
     };
 }
 
