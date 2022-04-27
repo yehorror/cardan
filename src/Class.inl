@@ -19,6 +19,13 @@ namespace cardan
     };
 
     template <class ClassT>
+    template <typename... Args>
+    void Class<ClassT>::constructor()
+    {
+        // TODO
+    }
+
+    template <class ClassT>
     template <typename ReturnType, typename... Args>
     void Class<ClassT>::method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...))
     {
@@ -70,7 +77,6 @@ namespace cardan
             auto instanceHolder = std::make_unique<ClassInstanceHolder<ClassT>>(std::move(instance), context);
 
             instanceHolder->m_persistentHolder.Reset(isolate, externalInstanceHolder);
-
             instanceHolder->m_persistentHolder.SetWeak(
                 instanceHolder.get(),
                 [] (const v8::WeakCallbackInfo<ClassInstanceHolder<ClassT>>& info)

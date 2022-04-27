@@ -307,3 +307,41 @@ TEST_F(ClassTest, CreateObject_LeaveScopeWithContext_DestructorIsCalled)
 
     EXPECT_TRUE(destructorWasCalled);
 }
+
+TEST_F(ClassTest, ClassHasNonDefaultConstructor_ParametersFromObjectCreatinInJSPassedToCppConstructor)
+{
+    class Employee
+    {
+    public:
+        Employee(std::string name)
+            : m_name(name)
+        {
+        }
+
+        std::string getName()
+        {
+            return m_name;
+        }
+
+        void setName(std::string newName)
+        {
+            m_name = newName;
+        }
+    private:
+        std::string m_name;
+    };
+
+    cardan::Class<Employee> employeeClass;
+    employeeClass.constructor<std::string>();
+    employeeClass.property("name", &Employee::getName, &Employee::setName);
+
+    cardan::Context ctx;
+    ctx.set("Employee", employeeClass);
+
+    auto result = ctx.runScript(R"JS(
+        let employee = new Employee('Yehor');
+        employee.name;
+    )JS");
+
+    EXPECT_EQ("Yehor", result.as<std::string>());
+}
