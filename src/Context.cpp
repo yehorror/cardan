@@ -77,6 +77,16 @@ namespace cardan
         m_values.emplace(std::move(dataPtr));
     }
 
+    void Context::removeData(ValueHolderBase* dataPtr)
+    {
+        // Trick to be able to remove a pointer from set
+        // Temporarily guard raw pointer with unique_ptr
+        std::unique_ptr<ValueHolderBase> dataPtrAsUnique(dataPtr);
+        m_values.erase(dataPtrAsUnique);
+        // And release to avoid double-free
+        dataPtrAsUnique.release();
+    }
+
     Context::ScriptRunResult Context::processRunResult(
         v8::MaybeLocal<v8::Value>& scriptRunResult,
         v8::TryCatch& tryCatchHandler

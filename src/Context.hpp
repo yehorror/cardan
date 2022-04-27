@@ -76,6 +76,7 @@ namespace cardan
         friend v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
 
         void saveData(std::unique_ptr<ValueHolderBase> dataPtr);
+        void removeData(ValueHolderBase* dataPtr);
 
         ScriptRunResult processRunResult(v8::MaybeLocal<v8::Value>& value, v8::TryCatch& tryCatchHandler);
 

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #include "Class.hpp"
 #include "Converters/ToV8.hpp"
 
@@ -10,11 +8,14 @@ namespace cardan
     template <class ClassT>
     struct ClassInstanceHolder : public ValueHolderBase
     {
-        ClassInstanceHolder(std::unique_ptr<ClassT> classInstance)
+        ClassInstanceHolder(std::unique_ptr<ClassT> classInstance, Context& context)
             : m_classInstance(std::move(classInstance))
+            , m_context(context)
         {
         }
         std::unique_ptr<ClassT> m_classInstance;
+        v8::Persistent<v8::External> m_persistentHolder;
+        Context& m_context;
     };
 
     template <class ClassT>
@@ -61,13 +62,30 @@ namespace cardan
                 return;
             }
 
-            auto instanceHolder = std::make_unique<ClassInstanceHolder<ClassT>>(std::make_unique<ClassT>());
-            auto instancePtr = instanceHolder->m_classInstance.get();
+            auto instance = std::make_unique<ClassT>();
+            ClassT* instanceRawPtr = instance.get();
+
+            auto externalInstanceHolder = v8::External::New(isolate, instanceRawPtr);
+
+            auto instanceHolder = std::make_unique<ClassInstanceHolder<ClassT>>(std::move(instance), context);
+
+            instanceHolder->m_persistentHolder.Reset(isolate, externalInstanceHolder);
+
+            instanceHolder->m_persistentHolder.SetWeak(
+                instanceHolder.get(),
+                [] (const v8::WeakCallbackInfo<ClassInstanceHolder<ClassT>>& info)
+                {
+                    ClassInstanceHolder<ClassT>* instanceHolder = info.GetParameter();
+                    instanceHolder->m_classInstance.reset();
+                    instanceHolder->m_persistentHolder.ClearWeak();
+                    instanceHolder->m_context.removeData(instanceHolder);
+                },
+                v8::WeakCallbackType::kFinalizer
+            );
 
             context.saveData(std::move(instanceHolder));
 
-            // FIXME Memory leak here
-            callInfo.This()->SetInternalField(0, v8::External::New(isolate, instancePtr));
+            callInfo.This()->SetInternalField(0, externalInstanceHolder);
             callInfo.GetReturnValue().Set(callInfo.This());
 
         }, v8::External::New(context.getIsolate(), &context));

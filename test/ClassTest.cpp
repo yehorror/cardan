@@ -244,3 +244,66 @@ TEST_F(ClassTest, StructHasFieldWithDefaultValue_AddThisFieldAsProperty_GetValue
 
     EXPECT_EQ("Yehor", result.as<std::string>());
 }
+
+// TODO This test probably may be not stable
+// It is not guaranteed that GC of V8 will be called even in case we create 10k objects in loop
+TEST_F(ClassTest, CreateObjectInLoop10kTimes_AtLeastOnceDestructorIsCalled)
+{
+    static bool destructorWasCalled = false;
+
+    struct Employee
+    {
+        std::string name;
+
+        ~Employee()
+        {
+            destructorWasCalled = true;
+        }
+    };
+
+    cardan::Class<Employee> valueClass;
+    valueClass.property("name", &Employee::name);
+
+    cardan::Context ctx;
+    ctx.set("Employee", valueClass);
+
+    ASSERT_FALSE(destructorWasCalled);
+
+    ctx.runScript(R"JS(
+        for (let i = 0; i < 10000; ++i) {
+            let employee = new Employee();
+        }
+    )JS");
+
+    EXPECT_TRUE(destructorWasCalled);
+}
+
+TEST_F(ClassTest, CreateObject_LeaveScopeWithContext_DestructorIsCalled)
+{
+    static bool destructorWasCalled = false;
+
+    struct Employee
+    {
+        std::string name;
+
+        ~Employee()
+        {
+            destructorWasCalled = true;
+        }
+    };
+
+    cardan::Class<Employee> valueClass;
+    valueClass.property("name", &Employee::name);
+
+    ASSERT_FALSE(destructorWasCalled);
+
+    {
+        cardan::Context ctx;
+        ctx.set("Employee", valueClass);
+
+        ctx.runScript(" let employee = new Employee(); ");
+    }
+    // On scope leave, Context is destroyed, and, henceforth, all the objects created within this Context
+
+    EXPECT_TRUE(destructorWasCalled);
+}
