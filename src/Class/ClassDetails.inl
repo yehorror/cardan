@@ -55,7 +55,7 @@ namespace cardan::classDetails
                 };
 
                 auto result = std::apply(memberFunctionCallProxy, arguments);
-                callInfo.GetReturnValue().Set(result);
+                callInfo.GetReturnValue().Set(convert(contextWithMethodReference.m_context, result, ToV8::ADLTag{}));
             }
 
         }, v8::External::New(context.getIsolate(), new ContextWithMethodReference {m_methodReference, context}));

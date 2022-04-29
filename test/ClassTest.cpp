@@ -310,10 +310,11 @@ TEST_F(ClassTest, CreateObject_LeaveScopeWithContext_DestructorIsCalled)
 
 TEST_F(ClassTest, ClassHasNonDefaultConstructor_ParametersFromObjectCreatinInJSPassedToCppConstructor)
 {
+    // TODO Maybe add test to be sure that values during construction are not being copied
     class Employee
     {
     public:
-        Employee(std::string name)
+        Employee(const std::string& name)
             : m_name(name)
         {
         }
@@ -323,24 +324,20 @@ TEST_F(ClassTest, ClassHasNonDefaultConstructor_ParametersFromObjectCreatinInJSP
             return m_name;
         }
 
-        void setName(std::string newName)
-        {
-            m_name = newName;
-        }
     private:
         std::string m_name;
     };
 
     cardan::Class<Employee> employeeClass;
     employeeClass.constructor<std::string>();
-    employeeClass.property("name", &Employee::getName, &Employee::setName);
+    employeeClass.method("getName", &Employee::getName);
 
     cardan::Context ctx;
     ctx.set("Employee", employeeClass);
 
     auto result = ctx.runScript(R"JS(
         let employee = new Employee('Yehor');
-        employee.name;
+        employee.getName();
     )JS");
 
     EXPECT_EQ("Yehor", result.as<std::string>());

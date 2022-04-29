@@ -6,6 +6,7 @@
 #include <unordered_set>
 
 #include "Class/ClassDetails.hpp"
+#include "Class/Constructor.hpp"
 #include "Converters/ToV8.hpp"
 
 namespace cardan
@@ -17,6 +18,10 @@ namespace cardan
     class Class
     {
     public:
+        Class();
+
+        template <typename... Args>
+        void constructor();
 
         template <typename ReturnType, typename... Args>
         void method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...));
@@ -30,6 +35,9 @@ namespace cardan
     private:
         template <class T>
         friend v8::Local<v8::Value> cardan::convert(Context& context, Class<T>& classDef, ToV8::ADLTag);
+
+    private:
+        std::unique_ptr<classDetails::Constructor> m_constructor;
 
         std::unordered_set<std::unique_ptr<classDetails::Member>> m_members;
     };

@@ -11,6 +11,7 @@ namespace cardan
 
 namespace cardan::classDetails
 {
+
     // Internal representation of some class member
     class Member
     {

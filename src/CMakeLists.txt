@@ -15,6 +15,9 @@ add_library(cardan-lib
     Class/ClassDetails.inl
     Class/ClassDetails.hpp
 
+    Class/Constructor.inl
+    Class/Constructor.hpp
+
     Exceptions.hpp
 
     Value/Value.cpp

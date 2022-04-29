@@ -21,6 +21,15 @@ namespace cardan
         v8::Local<v8::Value> convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ToV8::ADLTag);
     }
 
+    namespace classDetails
+    {
+        template <class ClassT>
+        class DefaultConstructor;
+
+        template <class ClassT, typename... Args>
+        class ConstructorWithArgs;
+    }
+
     template <class ClassT>
     class Class;
 
@@ -28,9 +37,6 @@ namespace cardan
     class Object;
     class Array;
     class Function;
-
-//    template <class ClassT>
-//    v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
 
     // Is used to store some external values internally (e.g. functions, class pointers)
     struct ValueHolderBase
@@ -73,7 +79,10 @@ namespace cardan
         friend v8::Local<v8::Value> cardan::ToV8::convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ToV8::ADLTag);
 
         template <class ClassT>
-        friend v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
+        friend class classDetails::DefaultConstructor;
+
+        template <class ClassT, typename... Args>
+        friend class classDetails::ConstructorWithArgs;
 
         void saveData(std::unique_ptr<ValueHolderBase> dataPtr);
         void removeData(ValueHolderBase* dataPtr);

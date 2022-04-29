@@ -34,7 +34,9 @@ namespace cardan::details
             convert(
                 context,
                 info[I],
-                cardan::FromV8::To<typename getType<I, Args...>::type>{}
+                cardan::FromV8::To<
+                    typename getType<I, Args...>::type
+                >{}
             )...
         );
     }
@@ -45,7 +47,7 @@ namespace cardan::details
         return convertArgumentsFromV8Impl<Args...>(
             context,
             info,
-            std::make_index_sequence<std::tuple_size<std::tuple<Args...>>::value> {}
+            std::make_index_sequence<std::tuple_size_v<std::tuple<Args...>>> {}
         );
     }
 
