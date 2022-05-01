@@ -24,6 +24,9 @@ add_library(cardan-lib
     Class/Constructors/ConstructorWithArgs.inl
     Class/Constructors/ConstructorWithArgs.hpp
 
+    Class/Constructors/ConstructorWithBindings.inl
+    Class/Constructors/ConstructorWithBindings.hpp
+
     Exceptions.hpp
 
     Value/Value.cpp

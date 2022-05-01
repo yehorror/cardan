@@ -342,7 +342,7 @@ TEST_F(ClassTest, ClassHasNonDefaultConstructor_ParametersFromObjectCreatinInJSP
 
     EXPECT_EQ("Yehor", result.as<std::string>());
 }
-/*
+
 TEST_F(ClassTest, ClassHasConstructorWithReference_UserCanBindExistingReferencesSoTheyWillBeInjectedInConstructor)
 {
     class SomeClass
@@ -365,7 +365,7 @@ TEST_F(ClassTest, ClassHasConstructorWithReference_UserCanBindExistingReferences
     int valueWhichIsReferenced = 0;
 
     cardan::Class<SomeClass> someClass;
-    someClass.constructorWithBounds<int&>(reference);
+    someClass.constructorWithBindings<int&>(valueWhichIsReferenced);
     someClass.method("getValueOfReference", &SomeClass::getValueOfReference);
 
     cardan::Context ctx;
@@ -373,15 +373,15 @@ TEST_F(ClassTest, ClassHasConstructorWithReference_UserCanBindExistingReferences
 
     auto firstResult = ctx.runScript(R"JS(
         let something = new SomeClass();
-        employee.getValueOfReference();
+        something.getValueOfReference();
     )JS");
 
     EXPECT_EQ(valueWhichIsReferenced, firstResult.as<int>());
 
     valueWhichIsReferenced = 15;
 
-    auto secondResult = ctx.runScript(" employee.getValueOfReference(); ");
+    auto secondResult = ctx.runScript(" something.getValueOfReference(); ");
 
     EXPECT_EQ(valueWhichIsReferenced, secondResult.as<int>());
 }
-*/
+

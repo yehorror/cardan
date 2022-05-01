@@ -23,6 +23,9 @@ namespace cardan
         template <typename... Args>
         void constructor();
 
+        template <typename... Args>
+        void constructorWithBindings(Args&&... args);
+
         template <typename ReturnType, typename... Args>
         void method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...));
 

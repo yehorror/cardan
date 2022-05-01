@@ -28,6 +28,9 @@ namespace cardan
 
         template <class ClassT, typename... Args>
         class ConstructorWithArgs;
+
+        template <class ClassT, typename... Args>
+        class ConstructorWithBindings;
     }
 
     template <class ClassT>
@@ -83,6 +86,9 @@ namespace cardan
 
         template <class ClassT, typename... Args>
         friend class classDetails::ConstructorWithArgs;
+
+        template <class ClassT, typename... Args>
+        friend class classDetails::ConstructorWithBindings;
 
         void saveData(std::unique_ptr<ValueHolderBase> dataPtr);
         void removeData(ValueHolderBase* dataPtr);

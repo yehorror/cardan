@@ -4,6 +4,7 @@
 #include "Converters/ToV8.hpp"
 #include "Class/Constructors/DefaultConstructor.hpp"
 #include "Class/Constructors/ConstructorWithArgs.hpp"
+#include "Class/Constructors/ConstructorWithBindings.hpp"
 
 namespace cardan
 {
@@ -18,6 +19,13 @@ namespace cardan
     void Class<ClassT>::constructor()
     {
         m_constructor.reset(new classDetails::ConstructorWithArgs<ClassT, Args...>());
+    }
+
+    template <class ClassT>
+    template <typename... Args>
+    void Class<ClassT>::constructorWithBindings(Args&&... args)
+    {
+        m_constructor.reset(new classDetails::ConstructorWithBindings<ClassT, Args...>(std::forward<Args>(args)...));
     }
 
     template <class ClassT>
