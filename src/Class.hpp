@@ -6,7 +6,7 @@
 #include <unordered_set>
 
 #include "Class/ClassDetails.hpp"
-#include "Class/Constructor.hpp"
+#include "Class/Constructors/Constructor.hpp"
 #include "Converters/ToV8.hpp"
 
 namespace cardan
@@ -38,7 +38,6 @@ namespace cardan
 
     private:
         std::unique_ptr<classDetails::Constructor> m_constructor;
-
         std::unordered_set<std::unique_ptr<classDetails::Member>> m_members;
     };
 }

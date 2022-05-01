@@ -2,6 +2,8 @@
 
 #include "Class.hpp"
 #include "Converters/ToV8.hpp"
+#include "Class/Constructors/DefaultConstructor.hpp"
+#include "Class/Constructors/ConstructorWithArgs.hpp"
 
 namespace cardan
 {
