@@ -343,13 +343,14 @@ TEST_F(ClassTest, ClassHasNonDefaultConstructor_ParametersFromObjectCreatinInJSP
     EXPECT_EQ("Yehor", result.as<std::string>());
 }
 
-TEST_F(ClassTest, ClassHasConstructorWithReference_UserCanBindExistingReferencesSoTheyWillBeInjectedInConstructor)
+TEST_F(ClassTest, ClassHasConstructorWithReferenceAndParameter_ReferenceIsSetInClassBuilder_ParameterSetFromJS)
 {
     class SomeClass
     {
     public:
-        SomeClass(int& reference)
-            : m_reference(reference)
+        SomeClass(int value, int& reference)
+            : m_value(value)
+            , m_reference(reference)
         {
         }
 
@@ -358,30 +359,32 @@ TEST_F(ClassTest, ClassHasConstructorWithReference_UserCanBindExistingReferences
             return m_reference;
         }
 
+        int getValue()
+        {
+            return m_reference;
+        }
+
     private:
+        int m_value;
         int& m_reference;
     };
 
     int valueWhichIsReferenced = 0;
 
     cardan::Class<SomeClass> someClass;
-    someClass.constructorWithBindings<int&>(valueWhichIsReferenced);
+    someClass.constructorWithBindings<int, int&>(cardan::Placeholder<0>{}, valueWhichIsReferenced);
     someClass.method("getValueOfReference", &SomeClass::getValueOfReference);
+    someClass.method("getValue", &SomeClass::getValue);
 
     cardan::Context ctx;
     ctx.set("SomeClass", someClass);
 
-    auto firstResult = ctx.runScript(R"JS(
-        let something = new SomeClass();
-        something.getValueOfReference();
-    )JS");
+    ctx.runScript(" let something = new SomeClass(123); ");
 
-    EXPECT_EQ(valueWhichIsReferenced, firstResult.as<int>());
+    auto referenceValue = ctx.runScript(" something.getValueOfReference(); ");
+    EXPECT_EQ(valueWhichIsReferenced, referenceValue.as<int>());
 
-    valueWhichIsReferenced = 15;
-
-    auto secondResult = ctx.runScript(" something.getValueOfReference(); ");
-
-    EXPECT_EQ(valueWhichIsReferenced, secondResult.as<int>());
+    auto valueFromConstructor = ctx.runScript(" something.getValue(); ");
+    EXPECT_EQ(123, valueFromConstructor.as<int>());
 }
 
