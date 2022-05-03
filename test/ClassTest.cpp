@@ -343,7 +343,7 @@ TEST_F(ClassTest, ClassHasNonDefaultConstructor_ParametersFromObjectCreatinInJSP
     EXPECT_EQ("Yehor", result.as<std::string>());
 }
 
-TEST_F(ClassTest, ClassHasConstructorWithReferenceAndParameter_ReferenceIsSetInClassBuilder_ParameterSetFromJS)
+TEST_F(ClassTest, ConstructorOfAClassCanBeSetAsLambda)
 {
     class SomeClass
     {
@@ -361,7 +361,7 @@ TEST_F(ClassTest, ClassHasConstructorWithReferenceAndParameter_ReferenceIsSetInC
 
         int getValue()
         {
-            return m_reference;
+            return m_value;
         }
 
     private:
@@ -369,10 +369,15 @@ TEST_F(ClassTest, ClassHasConstructorWithReferenceAndParameter_ReferenceIsSetInC
         int& m_reference;
     };
 
-    int valueWhichIsReferenced = 0;
+    int valueWhichIsReferenced = 22;
 
     cardan::Class<SomeClass> someClass;
-    someClass.constructorWithBindings<int, int&>(cardan::Placeholder<0>{}, valueWhichIsReferenced);
+
+    someClass.constructorMethod([&valueWhichIsReferenced] (int value)
+    {
+        return new SomeClass(value, valueWhichIsReferenced);
+    });
+
     someClass.method("getValueOfReference", &SomeClass::getValueOfReference);
     someClass.method("getValue", &SomeClass::getValue);
 
@@ -380,6 +385,8 @@ TEST_F(ClassTest, ClassHasConstructorWithReferenceAndParameter_ReferenceIsSetInC
     ctx.set("SomeClass", someClass);
 
     ctx.runScript(" let something = new SomeClass(123); ");
+
+    valueWhichIsReferenced = 321;
 
     auto referenceValue = ctx.runScript(" something.getValueOfReference(); ");
     EXPECT_EQ(valueWhichIsReferenced, referenceValue.as<int>());

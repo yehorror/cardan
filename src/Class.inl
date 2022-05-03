@@ -1,10 +1,12 @@
 #pragma once
 
+#include <type_traits>
+
 #include "Class.hpp"
 #include "Converters/ToV8.hpp"
 #include "Class/Constructors/DefaultConstructor.hpp"
 #include "Class/Constructors/ConstructorWithArgs.hpp"
-#include "Class/Constructors/ConstructorWithBindings.hpp"
+#include "Class/Constructors/ConstructorWithMethod.hpp"
 
 namespace cardan
 {
@@ -22,12 +24,12 @@ namespace cardan
     }
 
     template <class ClassT>
-    template <typename... Args>
-    void Class<ClassT>::constructorWithBindings(Args&&... args)
+    template <class MethodT>
+    void Class<ClassT>::constructorMethod(MethodT&& method)
     {
-        m_constructor.reset(new classDetails::ConstructorWithBindings<ClassT, Args...>(std::forward<Args>(args)...));
-    }
-
+        m_constructor.reset(
+            new classDetails::ConstructorWithMethod<ClassT, MethodT>(std::forward<MethodT>(method))
+        ); }
     template <class ClassT>
     template <typename ReturnType, typename... Args>
     void Class<ClassT>::method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...)) {
