@@ -24,7 +24,6 @@ namespace cardan::classDetails
     void DefaultConstructor<ClassT>::v8Constructor(const v8::FunctionCallbackInfo<v8::Value>& callInfo)
     {
         v8::Isolate* isolate = callInfo.GetIsolate();
-        Context& context = *static_cast<Context*>(callInfo.Data().As<v8::External>()->Value());
 
         if (!callInfo.IsConstructCall())
         {
@@ -33,6 +32,8 @@ namespace cardan::classDetails
             );
             return;
         }
+
+        Context& context = *static_cast<Context*>(callInfo.Data().As<v8::External>()->Value());
 
         auto instance = std::make_unique<ClassT>();
         ClassT* instanceRawPtr = instance.get();
