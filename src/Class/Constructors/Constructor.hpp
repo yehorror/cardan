@@ -1,14 +1,23 @@
 #pragma once
 
-#include <v8-function.h>
-
-namespace cardan
-{
-    class Context;
-}
+#include "Context.hpp"
 
 namespace cardan::classDetails
 {
+    template <class ClassT>
+    struct ClassInstanceHolder : public ValueHolderBase
+    {
+        ClassInstanceHolder(std::unique_ptr<ClassT> classInstance, Context& context)
+            : m_classInstance(std::move(classInstance))
+            , m_context(context)
+        {
+        }
+
+        std::unique_ptr<ClassT> m_classInstance;
+        v8::Persistent<v8::External> m_persistentHolder;
+        Context& m_context;
+    };
+
     class Constructor
     {
     public:
@@ -16,5 +25,3 @@ namespace cardan::classDetails
         virtual ~Constructor() = default;
     };
 }
-
-#include "Constructor.inl"

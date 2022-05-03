@@ -9,6 +9,9 @@ namespace cardan::classDetails
     {
     public:
         void addConstructor(Context& context, v8::Local<v8::FunctionTemplate>& constructorFuncTemplate) override;
+
+    private:
+        static void v8Constructor(const v8::FunctionCallbackInfo<v8::Value>& callInfo);
     };
 }
 

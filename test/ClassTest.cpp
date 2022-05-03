@@ -395,3 +395,4 @@ TEST_F(ClassTest, ConstructorOfAClassCanBeSetAsLambda)
     EXPECT_EQ(123, valueFromConstructor.as<int>());
 }
 
+// TODO Calling of default constructor implentation on non-default constructible class
