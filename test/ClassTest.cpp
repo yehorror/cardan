@@ -395,4 +395,18 @@ TEST_F(ClassTest, ConstructorOfAClassCanBeSetAsLambda)
     EXPECT_EQ(123, valueFromConstructor.as<int>());
 }
 
-// TODO Calling of default constructor implentation on non-default constructible class
+TEST_F(ClassTest, ClassIsNotDefaultConstructible_DontAddConstructor_TryToAddThisClassToContext_ExceptionThrown)
+{
+    struct NonDefaultConstructible
+    {
+        NonDefaultConstructible(int)
+        {
+        }
+    };
+
+    cardan::Class<NonDefaultConstructible> nonDefConstrClass;
+
+    cardan::Context ctx;
+
+    EXPECT_THROW(ctx.set("NonDefaultConstructible", nonDefConstrClass), std::logic_error);
+}
