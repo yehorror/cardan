@@ -395,7 +395,7 @@ TEST_F(ClassTest, ConstructorOfAClassCanBeSetAsLambda)
     EXPECT_EQ(123, valueFromConstructor.as<int>());
 }
 
-TEST_F(ClassTest, ClassIsNotDefaultConstructible_DontAddConstructor_TryToAddThisClassToContext_ExceptionThrown)
+TEST_F(ClassTest, ClassIsNotDefaultConstructible_DontAddConstructor_TryToCreateInstanceOfThisClass_ExceptionIsThrown)
 {
     struct NonDefaultConstructible
     {
@@ -408,5 +408,42 @@ TEST_F(ClassTest, ClassIsNotDefaultConstructible_DontAddConstructor_TryToAddThis
 
     cardan::Context ctx;
 
-    EXPECT_THROW(ctx.set("NonDefaultConstructible", nonDefConstrClass), std::logic_error);
+    ctx.set("NonDefaultConstructible", nonDefConstrClass);
+
+    EXPECT_THROW(
+        ctx.runScript(" new NonDefaultConstructible(); "),
+        std::exception
+    );
+}
+
+TEST_F(ClassTest, CreateClass_SetDestructorMethod_ThisFunctionIsCalledOnContextDestruction)
+{
+    class MockClass : public Mock
+    {
+    public:
+        MOCK_METHOD0(Die, void());
+    };
+
+    cardan::Class<MockClass> mockClass;
+
+    MockClass* mockClassInstance = new MockClass;
+
+    mockClass.constructorMethod([mockClassInstance] ()
+    {
+        return mockClassInstance;
+    });
+
+    mockClass.destructionMethod([] (MockClass* instance)
+    {
+        instance->Die();
+        delete instance;
+    });
+
+    EXPECT_CALL(*mockClassInstance, Die());
+    {
+        cardan::Context ctx;
+        ctx.set("MockClass", mockClass);
+
+        ctx.runScript("let mockInstance = new MockClass()");
+    }
 }

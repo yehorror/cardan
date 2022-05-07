@@ -26,6 +26,9 @@ namespace cardan
         template <class MethodT>
         void constructorMethod(MethodT&& method);
 
+        template <class MethodT>
+        void destructionMethod(MethodT&& method);
+
         template <typename ReturnType, typename... Args>
         void method(const std::string& name, ReturnType(ClassT::*methodRef)(Args...));
 
@@ -40,8 +43,10 @@ namespace cardan
         friend v8::Local<v8::Value> cardan::convert(Context& context, Class<T>& classDef, ToV8::ADLTag);
 
     private:
-        std::unique_ptr<classDetails::Constructor> m_constructor;
+        std::unique_ptr<classDetails::Constructor<ClassT>> m_constructor;
         std::unordered_set<std::unique_ptr<classDetails::Member>> m_members;
+
+        std::function<void(ClassT*)> m_destructor;
     };
 }
 

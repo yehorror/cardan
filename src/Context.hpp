@@ -24,13 +24,7 @@ namespace cardan
     namespace classDetails
     {
         template <class ClassT>
-        class DefaultConstructor;
-
-        template <class ClassT, typename... Args>
-        class ConstructorWithArgs;
-
-        template <class ClassT, class MethodT>
-        class ConstructorWithMethod;
+        void instanceConstructor(const v8::FunctionCallbackInfo<v8::Value>& callInfo);
     }
 
     template <class ClassT>
@@ -82,13 +76,10 @@ namespace cardan
         friend v8::Local<v8::Value> cardan::ToV8::convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ToV8::ADLTag);
 
         template <class ClassT>
-        friend class classDetails::DefaultConstructor;
+        friend v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag);
 
-        template <class ClassT, typename... Args>
-        friend class classDetails::ConstructorWithArgs;
-
-        template <class ClassT, class MethodT>
-        friend class classDetails::ConstructorWithMethod;
+        template <class ClassT>
+        friend void classDetails::instanceConstructor(const v8::FunctionCallbackInfo<v8::Value>& callInfo);
 
         void saveData(std::unique_ptr<ValueHolderBase> dataPtr);
         void removeData(ValueHolderBase* dataPtr);

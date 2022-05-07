@@ -1,27 +1,23 @@
 #pragma once
 
-#include <functional>
 #include "Constructor.hpp"
 
 namespace cardan::classDetails
 {
     template <class ClassT, class MethodT>
-    class ConstructorWithMethod : public Constructor
+    class ConstructorWithMethod : public Constructor<ClassT>
     {
     public:
         ConstructorWithMethod(MethodT&& method);
-        void addConstructor(Context& context, v8::Local<v8::FunctionTemplate>& constructorFuncTemplate) override;
+        ClassT* construct(Context& context, const v8::FunctionCallbackInfo<v8::Value>& callInfo) override;
 
     private:
         template <typename... Args>
-        void addConstructorInternal(
+        ClassT* createInstance(
             Context& context,
-            v8::Local<v8::FunctionTemplate>& constructorFuncTemplate,
-            std::function<ClassT*(Args...)> constructFunction
+            const v8::FunctionCallbackInfo<v8::Value>& callInfo,
+            std::function<ClassT*(Args...)> creationFunction
         );
-
-        template <typename... Args>
-        static void v8Constructor(const v8::FunctionCallbackInfo<v8::Value>& callInfo);
 
     private:
         MethodT m_method;

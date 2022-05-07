@@ -5,13 +5,10 @@
 namespace cardan::classDetails
 {
     template <class ClassT>
-    class DefaultConstructor : public Constructor
+    class DefaultConstructor : public Constructor<ClassT>
     {
     public:
-        void addConstructor(Context& context, v8::Local<v8::FunctionTemplate>& constructorFuncTemplate) override;
-
-    private:
-        static void v8Constructor(const v8::FunctionCallbackInfo<v8::Value>& callInfo);
+        ClassT* construct(Context& context, const v8::FunctionCallbackInfo<v8::Value>& callInfo) override;
     };
 }
 

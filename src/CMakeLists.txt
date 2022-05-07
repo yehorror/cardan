@@ -15,7 +15,8 @@ add_library(cardan-lib
     Class/ClassDetails.inl
     Class/ClassDetails.hpp
 
-    Class/Constructors/Constructor.inl
+    Class/ConstructMethod.hpp
+
     Class/Constructors/Constructor.hpp
 
     Class/Constructors/DefaultConstructor.inl

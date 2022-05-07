@@ -3,6 +3,8 @@
 #include "ClassDetails.hpp"
 #include "Converters/ToV8.hpp"
 
+#include <Class/Constructors/Constructor.hpp>
+
 namespace cardan::classDetails
 {
     template <class ClassT, typename ReturnType, typename... Args>
