@@ -473,3 +473,14 @@ TEST(ContextTest, SetStaticFunction_FunctionCanBeCalledFromJSCode)
 
     ASSERT_TRUE(getFiveWasCalled);
 }
+
+TEST(ContextTest, SetLambdaFunctionWithStringArgument_FunctionCanBeCalledFromJSCode)
+{
+    Context ctx;
+
+    MockFunction<void(std::string)> mockFunction;
+    ctx.set("lambda", [&] (std::string something) { mockFunction.Call(something); });
+
+    EXPECT_CALL(mockFunction, Call("string"));
+    ctx.runScript("lambda('string')");
+}
