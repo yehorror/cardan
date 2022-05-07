@@ -88,4 +88,11 @@ namespace cardan::details
     {
         using StdFunctionType = std::function<ReturnType(Args...)>;
     };
+
+    // Static functions
+    template <typename ReturnType, typename... Args>
+    struct FunctionTraits<ReturnType(*)(Args...)>
+    {
+        using StdFunctionType = std::function<ReturnType(Args...)>;
+    };
 }

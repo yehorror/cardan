@@ -452,3 +452,24 @@ TEST(ContextTest, SetLambdaFunction_FunctionCanBeCalledFromJSCode)
     EXPECT_CALL(mockFunction, Call());
     ctx.runScript("lambda()");
 }
+
+static bool getFiveWasCalled = false;
+
+static int getFive()
+{
+    getFiveWasCalled = true;
+    return 5;
+}
+
+TEST(ContextTest, SetStaticFunction_FunctionCanBeCalledFromJSCode)
+{
+    Context ctx;
+
+    ctx.set("staticFunction", getFive);
+
+    ASSERT_FALSE(getFiveWasCalled);
+
+    ctx.runScript("staticFunction()");
+
+    ASSERT_TRUE(getFiveWasCalled);
+}
