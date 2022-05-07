@@ -395,7 +395,7 @@ TEST_F(ClassTest, ConstructorOfAClassCanBeSetAsLambda)
     EXPECT_EQ(123, valueFromConstructor.as<int>());
 }
 
-TEST_F(ClassTest, DISABLED_ClassIsNotDefaultConstructible_DontAddConstructor_TryToCreateInstanceOfThisClass_ExceptionIsThrown)
+TEST_F(ClassTest, ClassIsNotDefaultConstructible_DontAddConstructor_TryToCreateInstanceOfThisClass_ExceptionIsThrown)
 {
     struct NonDefaultConstructible
     {

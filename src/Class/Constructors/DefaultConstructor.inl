@@ -11,6 +11,6 @@ namespace cardan::classDetails
         {
             return new ClassT;
         }
-        throw std::logic_error("Think about this message");
+        throw std::logic_error("Cannot create instance of non-default constructible class with no constructor provided");
     }
 }

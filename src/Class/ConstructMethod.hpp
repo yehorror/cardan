@@ -54,7 +54,16 @@ namespace cardan::classDetails
         ConstructionContext<ClassT>& constructionContext =
             *static_cast<ConstructionContext<ClassT>*>(callInfo.Data().As<v8::External>()->Value());
 
-        ClassT* instanceRawPtr = constructionContext.m_constructor->construct(constructionContext.m_context, callInfo);
+        ClassT* instanceRawPtr = nullptr;
+        try
+        {
+            instanceRawPtr = constructionContext.m_constructor->construct(constructionContext.m_context, callInfo);
+        }
+        catch (const std::exception& exception)
+        {
+            isolate->ThrowError(v8::String::NewFromUtf8(isolate, exception.what()).ToLocalChecked());
+            return;
+        }
 
         auto externalInstanceHolder = v8::External::New(isolate, instanceRawPtr);
 
