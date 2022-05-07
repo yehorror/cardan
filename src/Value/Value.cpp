@@ -120,6 +120,11 @@ namespace cardan
         return *this;
     }
 
+    v8::Local<v8::Value> Value::v8()
+    {
+        return m_value;
+    }
+
     Value::Value(v8::Local<v8::Value> value, Context& context)
         : m_value(std::move(value))
         , m_context(context)

@@ -242,3 +242,13 @@ TEST(ValueTest, CreateStringValue_TemplatedAsString_ReturnsStringValue)
     ASSERT_TRUE(value.isString());
     EXPECT_EQ("some string value", value.as<std::string>());
 }
+
+TEST(ValueTest, CreateValueViaConstructor_v8_ReturnedValueIsSameToValueWhichWasWrapped)
+{
+    Context ctx;
+    v8::Local<v8::Value> someValue = v8::String::NewFromUtf8(ctx.getIsolate(), "some value").ToLocalChecked();
+
+    Value wrappedValue(someValue, ctx);
+
+    EXPECT_TRUE(someValue->SameValue(wrappedValue.v8()));
+}

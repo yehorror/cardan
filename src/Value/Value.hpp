@@ -19,6 +19,8 @@ namespace cardan
     class Value
     {
     public:
+        Value(v8::Local<v8::Value> value, Context& context);
+
         std::string asString() const;
         int asInt() const;
         double asDouble();
@@ -45,9 +47,9 @@ namespace cardan
 
         Value& operator = (int newValue);
 
-    protected:
-        Value(v8::Local<v8::Value> value, Context& context);
+        v8::Local<v8::Value> v8();
 
+    protected:
         friend class Context;
         friend class Array;
         friend class Object;
