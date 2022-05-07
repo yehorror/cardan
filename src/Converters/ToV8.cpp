@@ -22,4 +22,9 @@ namespace cardan::ToV8
     {
         return function;
     }
+
+    v8::Local<v8::Value> convert(Context& context, Value value, ADLTag)
+    {
+        return value.v8();
+    }
 }

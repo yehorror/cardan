@@ -57,6 +57,16 @@ TEST_F(ConvertersTest, convertStdFunction_v8ValueStoresFunction)
     v8Function.As<v8::Function>()->Call(m_ctx.getContext(), m_ctx.getContext()->Global(), 0, nullptr).ToLocalChecked();
 }
 
+TEST_F(ConvertersTest, convertWrappedValue_ReturnsV8ValueItWraps)
+{
+    v8::Local<v8::Value> someValue = v8::Integer::New(m_ctx.getIsolate(), 37);
+    cardan::Value wrappedSomeValue(someValue, m_ctx);
+
+    auto unwrappedValue = cardan::ToV8::convert(m_ctx, wrappedSomeValue, cardan::ToV8::ADLTag{});
+
+    EXPECT_TRUE(someValue->SameValue(unwrappedValue));
+}
+
 TEST_F(ConvertersTest, v8Integer_convertToInt)
 {
     static const int integerValue = 1613;
