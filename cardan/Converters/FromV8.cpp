@@ -43,4 +43,10 @@ namespace cardan::FromV8
     {
         return cardan::Function(value.As<v8::Function>(), context);
     }
+
+    cardan::Value convert(Context& context, v8::Local<v8::Value> value, To<Value>)
+    {
+        return cardan::Value(value, context);
+    }
+
 }

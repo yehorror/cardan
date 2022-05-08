@@ -7,6 +7,7 @@ namespace cardan
 {
     class Function;
     class Context;
+    class Value;
 }
 
 namespace cardan::FromV8
@@ -22,4 +23,5 @@ namespace cardan::FromV8
     float convert(Context& context, v8::Local<v8::Value> value, To<float>);
     std::string convert(Context& context, v8::Local<v8::Value> value, To<std::string>);
     cardan::Function convert(Context& context, v8::Local<v8::Value> value, To<cardan::Function>);
+    cardan::Value convert(Context& context, v8::Local<v8::Value> value, To<cardan::Value>);
 }

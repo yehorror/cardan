@@ -35,7 +35,7 @@ namespace cardan::details
                 context,
                 info[I],
                 cardan::FromV8::To<
-                    typename getType<I, Args...>::type
+                    std::decay_t<typename getType<I, Args...>::type>
                 >{}
             )...
         );
