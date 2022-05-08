@@ -95,4 +95,15 @@ namespace cardan::details
     {
         using StdFunctionType = std::function<ReturnType(Args...)>;
     };
+
+    template<typename T, typename = void>
+    struct is_callable : std::is_function<T> { };
+
+    template<typename T>
+    struct is_callable<T, typename std::enable_if<
+        std::is_same<decltype(void(&T::operator())), void>::value
+        >::type> : std::true_type { };
+
+    template<typename T, typename... Args>
+    struct is_callable<T(*)(Args...)> : std::true_type { };
 }

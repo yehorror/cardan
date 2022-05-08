@@ -30,11 +30,13 @@ namespace cardan::ToV8
     template <class FuncReturnType, class... FuncArgs>
     v8::Local<v8::Value> convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ADLTag);
 
-    template <class FunctorType, class... InvokeArgs>
+    /*
+    template <class FunctorType>
     std::enable_if_t<
-        std::is_invocable<FunctorType, InvokeArgs...>::value,
+        std::is_convertible_v<FunctorType, std::
         v8::Local<v8::Value>
     > convert(Context& context, FunctorType func, ToV8::ADLTag);
+    */
 }
 
 #include "ToV8.inl"

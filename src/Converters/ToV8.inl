@@ -94,9 +94,9 @@ namespace cardan::ToV8
     }
 
     // Scary enable_if to force compiler not to use this function for non-invocable types
-    template <class FunctorType, class... InvokeArgs>
+    template <class FunctorType>
     std::enable_if_t<
-        std::is_invocable<FunctorType, InvokeArgs...>::value,
+        details::is_callable<FunctorType>::value,
         v8::Local<v8::Value>
     > convert(Context& context, FunctorType func, ToV8::ADLTag)
     {
