@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include "Context.hpp"
-#include "Value/Object.hpp"
+#include "cardan/Context.hpp"
+#include "cardan/Value/Object.hpp"
 
 using namespace testing;
 using namespace cardan;

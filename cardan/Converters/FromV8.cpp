@@ -1,7 +1,7 @@
 #include <stdexcept>
 
 #include "FromV8.hpp"
-#include "Value/Function.hpp"
+#include "cardan/Value/Function.hpp"
 
 namespace cardan::FromV8
 {

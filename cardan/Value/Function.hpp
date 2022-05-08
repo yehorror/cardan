@@ -4,8 +4,8 @@
 #include <string>
 
 #include "Value.hpp"
-#include "Converters/ToV8.hpp"
-#include "Helper.hpp"
+#include "cardan/Converters/ToV8.hpp"
+#include "cardan/Helper.hpp"
 
 namespace cardan
 {

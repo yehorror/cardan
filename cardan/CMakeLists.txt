@@ -52,5 +52,5 @@ add_library(cardan-lib
 )
 
 target_include_directories(cardan-lib PUBLIC ${CARDAN_V8_INCLUDE_DIR})
-target_include_directories(cardan-lib PUBLIC .)
+target_include_directories(cardan-lib PRIVATE .)
 target_link_libraries(cardan-lib PRIVATE pthread ${CARDAN_V8_LIBRARY} ${CMAKE_DL_LIBS})

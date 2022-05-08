@@ -2,12 +2,12 @@
 
 #include <type_traits>
 
-#include "Class.hpp"
-#include "Converters/ToV8.hpp"
-#include "Class/ConstructMethod.hpp"
-#include "Class/Constructors/DefaultConstructor.hpp"
-#include "Class/Constructors/ConstructorWithArgs.hpp"
-#include "Class/Constructors/ConstructorWithMethod.hpp"
+#include "cardan/Class.hpp"
+#include "cardan/Converters/ToV8.hpp"
+#include "cardan/Class/ConstructMethod.hpp"
+#include "cardan/Class/Constructors/DefaultConstructor.hpp"
+#include "cardan/Class/Constructors/ConstructorWithArgs.hpp"
+#include "cardan/Class/Constructors/ConstructorWithMethod.hpp"
 
 namespace cardan
 {

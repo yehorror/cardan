@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConstructorWithMethod.hpp"
-#include "Helper.hpp"
+#include "cardan/Helper.hpp"
 
 namespace cardan::classDetails
 {

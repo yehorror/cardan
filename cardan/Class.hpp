@@ -5,9 +5,9 @@
 #include <functional>
 #include <unordered_set>
 
-#include "Class/ClassDetails.hpp"
-#include "Class/Constructors/Constructor.hpp"
-#include "Converters/ToV8.hpp"
+#include "cardan/Class/ClassDetails.hpp"
+#include "cardan/Class/Constructors/Constructor.hpp"
+#include "cardan/Converters/ToV8.hpp"
 
 namespace cardan
 {

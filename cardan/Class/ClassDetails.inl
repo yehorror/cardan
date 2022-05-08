@@ -1,9 +1,8 @@
 #pragma once
 
 #include "ClassDetails.hpp"
-#include "Converters/ToV8.hpp"
-
-#include <Class/Constructors/Constructor.hpp>
+#include "cardan/Converters/ToV8.hpp"
+#include "Constructors/Constructor.hpp"
 
 namespace cardan::classDetails
 {

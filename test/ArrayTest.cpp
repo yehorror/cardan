@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "Context.hpp"
-#include "Value/Array.hpp"
+#include "cardan/Context.hpp"
+#include "cardan/Value/Array.hpp"
 
 using namespace testing;
 using namespace cardan;

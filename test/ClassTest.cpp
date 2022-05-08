@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "Context.hpp"
-#include "Class.hpp"
+#include "cardan/Context.hpp"
+#include "cardan/Class.hpp"
 
 using namespace testing;
 
