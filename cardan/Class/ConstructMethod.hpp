@@ -80,10 +80,10 @@ namespace cardan::classDetails
             [] (const v8::WeakCallbackInfo<ClassInstanceHolder<ClassT>>& info)
             {
                 ClassInstanceHolder<ClassT>* instanceHolder = info.GetParameter();
-                instanceHolder->m_persistentHolder.ClearWeak();
+                instanceHolder->m_persistentHolder.Reset();
                 instanceHolder->m_context.removeData(instanceHolder);
             },
-            v8::WeakCallbackType::kFinalizer
+            v8::WeakCallbackType::kParameter
         );
 
         constructionContext.m_context.saveData(std::move(instanceHolder));
