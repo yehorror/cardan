@@ -247,7 +247,7 @@ TEST_F(ClassTest, StructHasFieldWithDefaultValue_AddThisFieldAsProperty_GetValue
 
 // TODO This test probably may be not stable
 // It is not guaranteed that GC of V8 will be called even in case we create 10k objects in loop
-TEST_F(ClassTest, CreateObjectInLoop10kTimes_AtLeastOnceDestructorIsCalled)
+TEST_F(ClassTest, CreateObjectInLoop100kTimes_AtLeastOnceDestructorIsCalled)
 {
     static bool destructorWasCalled = false;
 
@@ -270,7 +270,7 @@ TEST_F(ClassTest, CreateObjectInLoop10kTimes_AtLeastOnceDestructorIsCalled)
     ASSERT_FALSE(destructorWasCalled);
 
     ctx.runScript(R"JS(
-        for (let i = 0; i < 10000; ++i) {
+        for (let i = 0; i < 100000; ++i) {
             let employee = new Employee();
         }
     )JS");
