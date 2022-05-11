@@ -35,6 +35,11 @@ namespace cardan
         return ObjectIterator(*this, getKeys().length());
     }
 
+    v8::Local<v8::Object> Object::v8()
+    {
+        return m_object;
+    }
+
     Object::Object(v8::Local<v8::Object> object, Context& context)
         : m_object(object)
         , m_context(context)

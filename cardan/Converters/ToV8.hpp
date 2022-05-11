@@ -26,6 +26,7 @@ namespace cardan::ToV8
     v8::Local<v8::Value> convert(Context& context, const std::string& value, ADLTag);
     v8::Local<v8::Value> convert(Context& context, v8::Local<v8::Function> function, ADLTag);
     v8::Local<v8::Value> convert(Context& context, Value value, ADLTag);
+    v8::Local<v8::Value> convert(Context& context, Object value, ADLTag);
 
     template <class FuncReturnType, class... FuncArgs>
     v8::Local<v8::Value> convert(Context& context, std::function<FuncReturnType(FuncArgs...)> func, ADLTag);

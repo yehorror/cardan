@@ -95,12 +95,17 @@ namespace cardan
         // TODO Store whole exception object within JSException class
         if (tryCatchHandler.HasCaught())
         {
+            /*
             Object exception(
                 tryCatchHandler.Exception().As<v8::Object>(),
                 *this
             );
 
             throw JSException(exception["message"].as<std::string>());
+            */
+
+            cardan::Value value(tryCatchHandler.Exception(), *this);
+            throw JSException(value.as<std::string>());
         }
 
         auto resultValue = scriptRunResult.ToLocalChecked();

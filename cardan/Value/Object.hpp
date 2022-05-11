@@ -39,6 +39,8 @@ namespace cardan
         template <class ValueType>
         void set(const std::string& name, ValueType&& value);
 
+        v8::Local<v8::Object> v8();
+
     private:
         friend class Value;
 
