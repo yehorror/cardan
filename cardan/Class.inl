@@ -66,14 +66,14 @@ namespace cardan
         m_members.emplace(std::make_unique<classDetails::Property<ClassT, PropertyType>>(name, field));
     }
 
-    template <class ClassT>
-    v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag)
+    template<class ClassT>
+    Function Class<ClassT>::build(Context& context)
     {
         auto constructorFuncTemplate = v8::FunctionTemplate::New(context.getIsolate());
 
         auto constructionContext = std::make_unique<classDetails::ConstructionContext<ClassT>>(
-            std::move(classDef.m_constructor),
-            classDef.m_destructor,
+            std::move(m_constructor),
+            m_destructor,
             context
         );
 
@@ -88,13 +88,20 @@ namespace cardan
 
         auto instanceTemplate = constructorFuncTemplate->InstanceTemplate();
 
-        for (const auto& member : classDef.m_members)
+        for (const auto& member : m_members)
         {
             member->registerMember(context, instanceTemplate);
         }
 
         constructorFuncTemplate->InstanceTemplate()->SetInternalFieldCount(1);
 
-        return constructorFuncTemplate->GetFunction(context.getContext()).ToLocalChecked();
+        return Function(constructorFuncTemplate->GetFunction(context.getContext()).ToLocalChecked(), context);
+    }
+
+    template <class ClassT>
+    v8::Local<v8::Value> convert(Context& context, Class<ClassT>& classDef, ToV8::ADLTag)
+    {
+        auto builtClass = classDef.build(context);
+        return builtClass.v8();
     }
 }

@@ -7,4 +7,9 @@ namespace cardan
         , m_context(context)
     {
     }
+
+    v8::Local<v8::Function> Function::v8()
+    {
+        return m_function;
+    }
 }

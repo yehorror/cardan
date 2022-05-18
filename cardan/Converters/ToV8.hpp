@@ -22,6 +22,7 @@ namespace cardan::ToV8
     };
 
     v8::Local<v8::Value> convert(Context& context, int value, ADLTag);
+    v8::Local<v8::Value> convert(Context& context, unsigned int value, ADLTag);
     v8::Local<v8::Value> convert(Context& context, double value, ADLTag);
     v8::Local<v8::Value> convert(Context& context, const std::string& value, ADLTag);
     v8::Local<v8::Value> convert(Context& context, v8::Local<v8::Function> function, ADLTag);

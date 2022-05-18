@@ -8,6 +8,11 @@ namespace cardan::ToV8
         return v8::Integer::New(context.getIsolate(), value);
     }
 
+    v8::Local<v8::Value> convert(Context& context, unsigned int value, ADLTag)
+    {
+        return v8::Integer::New(context.getIsolate(), value);
+    }
+
     v8::Local<v8::Value> convert(Context& context, double value, ADLTag)
     {
         return v8::Number::New(context.getIsolate(), value);
@@ -32,5 +37,4 @@ namespace cardan::ToV8
     {
         return value.v8();
     }
-
 }

@@ -18,11 +18,19 @@ namespace cardan
     public:
         Function(v8::Local<v8::Function> function, Context& context);
 
-        // TODO Move to inl file
-        template<class...Args>
-        Value call(Args... args);
+        template <class...Args>
+        Value call(Args&&... args);
 
-    public:
+        template <class...Args>
+        Value callAsConstructor(Args&&... args);
+
+        v8::Local<v8::Function> v8();
+
+    private:
+        template <class... Args>
+        std::vector<v8::Local<v8::Value>> argumentsToV8(Args&&... args);
+
+    private:
         v8::Local<v8::Function> m_function;
         Context& m_context;
     };

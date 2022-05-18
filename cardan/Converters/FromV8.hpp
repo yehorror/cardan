@@ -19,6 +19,7 @@ namespace cardan::FromV8
     };
 
     int convert(Context& context, v8::Local<v8::Value> value, To<int>);
+    unsigned int convert(Context& context, v8::Local<v8::Value> value, To<unsigned int>);
     double convert(Context& context, v8::Local<v8::Value> value, To<double>);
     float convert(Context& context, v8::Local<v8::Value> value, To<float>);
     std::string convert(Context& context, v8::Local<v8::Value> value, To<std::string>);

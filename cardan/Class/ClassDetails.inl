@@ -52,7 +52,7 @@ namespace cardan::classDetails
             {
                 auto memberFunctionCallProxy = [&] (Args... arguments)
                 {
-                    return ((*classPtr).*(contextWithMethodReference.m_methodReference))(arguments...);
+                    return ((*classPtr).*(contextWithMethodReference.m_methodReference))(std::forward<Args>(arguments)...);
                 };
 
                 auto result = std::apply(memberFunctionCallProxy, arguments);

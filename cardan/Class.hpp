@@ -38,6 +38,8 @@ namespace cardan
         template <typename PropertyType>
         void property(const std::string& name, PropertyType ClassT::* field);
 
+        Function build(Context& context);
+
     private:
         template <class T>
         friend v8::Local<v8::Value> cardan::convert(Context& context, Class<T>& classDef, ToV8::ADLTag);

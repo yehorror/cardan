@@ -81,6 +81,9 @@ namespace cardan
         template <class ClassT>
         friend void classDetails::instanceConstructor(const v8::FunctionCallbackInfo<v8::Value>& callInfo);
 
+        template <class ClassT>
+        friend class Class;
+
         void saveData(std::unique_ptr<ValueHolderBase> dataPtr);
         void removeData(ValueHolderBase* dataPtr);
 

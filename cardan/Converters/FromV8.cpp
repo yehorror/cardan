@@ -14,6 +14,15 @@ namespace cardan::FromV8
         throw std::runtime_error("Convertible value is not an integer");
     }
 
+    unsigned int convert(Context& context, v8::Local<v8::Value> value, To<unsigned int>)
+    {
+        if (value->IsNumber())
+        {
+            return value->Int32Value(context.getContext()).ToChecked();
+        }
+        throw std::runtime_error("Convertible value is not an integer");
+    }
+
     double convert(Context& context, v8::Local<v8::Value> value, To<double>)
     {
         if (value->IsNumber())
@@ -48,5 +57,4 @@ namespace cardan::FromV8
     {
         return cardan::Value(value, context);
     }
-
 }
